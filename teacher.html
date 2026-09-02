@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-zunMG8r3Bk1PPhM/szBHg+zFMNTo8gevnozXyT2RkyY='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <title>教师积分台 · Cloud Score</title>
+  <style>
+    :root{color-scheme:light;--ink:#18332f;--muted:#647773;--paper:#f5f5ee;--surface:#fffef9;--line:#dce4df;--brand:#176b61;--brand-dark:#104b45;--brand-soft:#dceeea;--amber:#c98424;--amber-soft:#fff0d4;--danger:#b3473d;--danger-soft:#fae7e3;--shadow:0 18px 50px rgba(24,51,47,.12);--radius:14px;--name-width:140px;--total-width:80px;--project-width:120px;--control-bg:#fff;--table-bg:#fff;--table-head-bg:#f1f5f2;--table-head-color:#49615c;--name-cell-bg:#fbfcf8;--total-cell-bg:#e8f2ef;--group-total-bg:#fff8e9;--group-total-color:#8c5c15;--hover-bg:#f6faf8;--preview-card-bg:#edf5f2;--modal-bg:#fff;--empty-bg:rgba(255,255,255,.55);--dialog-backdrop:rgba(15,33,30,.46)}
+    :root[data-theme="dark"]{color-scheme:dark;--ink:#e3edea;--muted:#8ea5a0;--paper:#121b19;--surface:#182523;--line:#273e3a;--brand:#29a091;--brand-dark:#3ec4b3;--brand-soft:#1c3d37;--amber:#e59d38;--amber-soft:#382914;--danger:#e06053;--danger-soft:#381a17;--shadow:0 18px 50px rgba(0,0,0,.5);--control-bg:#14201e;--table-bg:#162421;--table-head-bg:#1c2e2a;--table-head-color:#9abdb6;--name-cell-bg:#14211e;--total-cell-bg:#1b3933;--group-total-bg:#2d281a;--group-total-color:#efbe67;--hover-bg:#1e312d;--preview-card-bg:#192c28;--modal-bg:#182523;--empty-bg:rgba(24,37,35,.55);--dialog-backdrop:rgba(0,0,0,.7)}
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--ink:#e3edea;--muted:#8ea5a0;--paper:#121b19;--surface:#182523;--line:#273e3a;--brand:#29a091;--brand-dark:#3ec4b3;--brand-soft:#1c3d37;--amber:#e59d38;--amber-soft:#382914;--danger:#e06053;--danger-soft:#381a17;--shadow:0 18px 50px rgba(0,0,0,.5);--control-bg:#14201e;--table-bg:#162421;--table-head-bg:#1c2e2a;--table-head-color:#9abdb6;--name-cell-bg:#14211e;--total-cell-bg:#1b3933;--group-total-bg:#2d281a;--group-total-color:#efbe67;--hover-bg:#1e312d;--preview-card-bg:#192c28;--modal-bg:#182523;--empty-bg:rgba(24,37,35,.55);--dialog-backdrop:rgba(0,0,0,.7)}}
+    *{box-sizing:border-box}html,body{min-height:100%;margin:0}body{font-family:Inter,"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;background:radial-gradient(circle at 8% 0,var(--brand-soft) 0,transparent 28rem),var(--paper);color:var(--ink);transition:background .2s,color .2s}button,input,select,textarea{font:inherit}button,select{min-height:38px}button{cursor:pointer}.hidden,[hidden]{display:none!important}
+    .topbar{height:58px;padding:0 clamp(12px,2.5vw,28px);display:flex;align-items:center;justify-content:space-between;background:var(--surface);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.03em}.brand-mark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(23,107,97,.2)}.brand small{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:700;text-transform:uppercase}.user-cluster{display:flex;align-items:center;gap:8px}.user-pill{padding:5px 9px;border-radius:999px;background:var(--brand-soft);font-size:12px;font-weight:700;color:var(--brand-dark)}
+    main{padding:14px clamp(8px,2vw,24px) 30px;max-width:1800px;margin:auto}.workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}.workspace-head h1{font-size:clamp(20px,2.5vw,28px);margin:0 0 4px;letter-spacing:-.03em}.workspace-head p{margin:0;color:var(--muted);font-size:13px}.revision-card{display:flex;gap:12px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)}.revision-card strong{display:block;color:var(--ink);font-size:13px;margin-top:1px}
+    .toolbar{position:sticky;top:66px;z-index:30;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--surface);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);margin-bottom:10px}.toolbar-main,.toolbar-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.field-inline{display:flex;align-items:center;gap:6px}.field-inline label{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}.select{border:1px solid var(--line);background:var(--control-bg);border-radius:9px;padding:0 24px 0 9px;color:var(--ink);font-weight:700;height:36px;min-height:36px}.segmented{display:flex;background:var(--paper);padding:3px;border-radius:10px;gap:2px}.segmented button{border:0;background:transparent;color:var(--muted);border-radius:7px;padding:0 11px;font-weight:800;height:30px;min-height:30px;font-size:12px}.segmented button.active{background:var(--surface);color:var(--brand-dark);box-shadow:0 2px 8px rgba(0,0,0,.1)}.toolbar-status{min-width:0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.status-dot{width:8px;height:8px;border-radius:50%;background:#8b9a97;flex:0 0 auto}.status-dot.dirty{background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}.status-dot.saved{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}.status-dot.error{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}.toolbar-sub-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);background:var(--control-bg);color:var(--ink);border-radius:9px;padding:0 12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;min-height:36px;font-size:12px}.btn.small{min-height:30px;height:30px;padding:0 9px;font-size:11px;border-radius:8px}.btn:hover{border-color:var(--brand);background:var(--hover-bg)}.btn:focus-visible,.score-button:focus-visible,.icon-btn:focus-visible{outline:3px solid rgba(23,107,97,.24);outline-offset:2px}.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.primary:hover{background:var(--brand-dark)}.btn.danger{color:var(--danger);border-color:var(--danger-soft);background:var(--danger-soft)}.btn:disabled{opacity:.55;cursor:not-allowed}.icon-btn{width:30px;min-height:30px;height:30px;padding:0;display:grid;place-items:center}.toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}.toggle input{accent-color:var(--brand);width:15px;height:15px}
+    .notice{padding:10px 12px;border-radius:11px;background:var(--amber-soft);border:1px solid var(--amber);color:var(--amber);font-size:12px;margin-bottom:10px}.empty{min-height:280px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:var(--radius);background:var(--empty-bg);padding:24px}.empty-icon{font-size:28px;margin-bottom:8px}.empty h2{margin:0 0 6px;font-size:18px}.empty p{margin:0;color:var(--muted);max-width:380px;font-size:13px}
+    .table-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.table-meta{min-height:36px;padding:6px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}.legend{display:flex;gap:10px;align-items:center}.legend span{display:flex;align-items:center;gap:4px}.legend i{width:7px;height:7px;border-radius:50%;background:var(--brand)}.legend .draft i{background:var(--amber)}.table-scroll{max-height:calc(100vh - 210px);min-height:260px;overflow:auto;position:relative;scrollbar-gutter:stable;-webkit-overflow-scrolling:touch}.score-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}.score-table th,.score-table td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;background:var(--table-bg)}.score-table th{height:42px;background:var(--table-head-bg);font-size:11px;color:var(--table-head-color);text-align:center;font-weight:850;position:sticky;top:0;z-index:10;padding:0!important}.th-sort-btn{width:100%;height:100%;min-height:100%;border:0;background:transparent;padding:2px 4px;display:flex;align-items:center;justify-content:center;gap:3px;font:inherit;font-weight:850;color:inherit;cursor:pointer;border-radius:4px;transition:background .15s,color .15s;text-align:center}.th-sort-btn:hover{background:rgba(23,107,97,.12);color:var(--brand-dark)}.th-sort-btn.is-sorted{background:rgba(23,107,97,.18);color:var(--brand-dark)}.th-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}.th-sort-icon{font-size:10px;font-weight:900;line-height:1;color:var(--muted);flex:0 0 auto;display:inline-flex;align-items:center}.th-sort-btn.is-sorted .th-sort-icon{color:var(--brand);font-weight:900}.score-table tr:last-child td{border-bottom:0}.score-table th:last-child,.score-table td:last-child{border-right:0}.name-head,.name-cell{position:sticky!important;left:0;z-index:20!important;width:var(--name-width);min-width:var(--name-width);max-width:var(--name-width)}.name-head{z-index:25!important}.name-cell{padding:5px 7px!important;background:var(--name-cell-bg)!important}.name-main{font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.group-chip{display:inline-flex;margin-top:2px;padding:1px 5px;border-radius:999px;background:var(--brand-soft);color:var(--brand-dark);font-size:9px;font-weight:800}.group-chip.none{background:var(--paper);color:var(--muted)}.project-head{width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);padding:0!important}.total-head,.total-cell{position:sticky!important;right:0;z-index:20!important;width:var(--total-width);min-width:var(--total-width);max-width:var(--total-width);background:var(--total-cell-bg)!important}.total-head{z-index:25!important;padding:0!important}.total-cell{text-align:center;font-weight:900;color:var(--brand-dark);font-size:15px}.group-total-head,.group-total-cell{width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);text-align:center;background:var(--group-total-bg)!important;font-weight:850;color:var(--group-total-color)}.group-total-head{padding:0!important}.score-button{border:0;width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);min-height:56px;background:var(--table-bg);padding:4px 6px;text-align:center;color:var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;position:relative}.score-button:hover{background:var(--hover-bg)}.score-button.active-cell{box-shadow:inset 0 0 0 2px var(--brand)}.score-button.draft-cell{background:var(--amber-soft)}.score-button.draft-cell:after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--amber)}.cell-text{font-size:11px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.cell-text.placeholder{color:var(--muted);opacity:.7}.cell-score{font-size:11px;font-weight:900;color:var(--brand);display:flex;align-items:center;gap:3px}.cell-score.negative{color:var(--danger)}.cell-warning{color:var(--amber);font-size:9px}
+    .editor{position:fixed;inset:0;z-index:80;pointer-events:none;display:grid;place-items:center}.editor.open{pointer-events:auto}.editor-backdrop{position:absolute;inset:0;background:var(--dialog-backdrop);opacity:0;transition:.18s}.editor.open .editor-backdrop{opacity:1}.editor-panel{position:relative;width:min(440px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.3);padding:20px;opacity:0;transform:scale(.95);transition:.2s cubic-bezier(.16,1,.3,1)}.editor.open .editor-panel{opacity:1;transform:scale(1)}.editor-title{display:flex;justify-content:space-between;gap:10px;align-items:start}.editor-title h2{font-size:18px;margin:0 0 2px}.editor-title p{margin:0;color:var(--muted);font-size:12px}.editor textarea{width:100%;min-height:120px;margin:12px 0 8px;padding:11px;border:1px solid var(--line);border-radius:11px;resize:vertical;line-height:1.5;background:var(--control-bg);color:var(--ink);font-size:13px}.editor textarea:focus{outline:3px solid rgba(23,107,97,.18);border-color:var(--brand)}.preview-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--preview-card-bg);border-radius:10px;padding:9px 11px;margin-bottom:12px}.preview-card small{color:var(--muted);font-size:11px}.preview-score{font-size:22px;font-weight:900;color:var(--brand)}.editor-nav,.editor-actions{display:flex;gap:7px}.editor-actions{justify-content:flex-end;margin-top:10px}.editor-nav .btn{flex:1}.close-btn{border:0;background:var(--paper);border-radius:9px;width:34px;height:34px;color:var(--muted)}
+    dialog{border:0;padding:0;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.3);max-width:min(660px,calc(100vw - 24px));width:100%;color:var(--ink);background:var(--surface)}dialog::backdrop{background:var(--dialog-backdrop)}.dialog-body{padding:18px}.dialog-body h2{margin:0 0 6px;font-size:18px}.dialog-body>p{margin:0 0 14px;color:var(--muted);font-size:12px}.conflict-list{display:grid;gap:8px;max-height:48vh;overflow:auto}.conflict-item{border:1px solid var(--line);border-radius:11px;padding:10px}.conflict-context{font-weight:850;margin-bottom:6px;font-size:12px}.conflict-values{display:grid;grid-template-columns:1fr 1fr;gap:6px}.conflict-value{background:var(--preview-card-bg);border-radius:8px;padding:7px;min-width:0}.conflict-value small{display:block;color:var(--muted);margin-bottom:3px;font-size:10px}.conflict-value div{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px}.conflict-actions{display:flex;gap:6px;margin-top:8px}.dialog-footer{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:var(--brand-dark);color:#fff;padding:9px 13px;border-radius:9px;box-shadow:var(--shadow);z-index:100;opacity:0;pointer-events:none;transition:.2s;font-size:12px}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .modal{padding:20px;background:var(--surface)}.modal h2{margin:0 0 5px;font-size:18px}.modal>p{margin:0 0 14px;color:var(--muted);font-size:12px;line-height:1.5}.modal-fields{display:grid;gap:10px}.modal-field label,.field-label{display:block;font-size:11px;font-weight:850;margin-bottom:4px}.modal-field label span{color:var(--muted);font-weight:600;font-size:10px}.modal-field input,.modal-field select{width:100%;min-height:38px;height:38px;border:1px solid var(--line);border-radius:9px;padding:0 10px;background:var(--control-bg);color:var(--ink);font-size:13px}.modal-field input:focus,.modal-field select:focus{outline:3px solid rgba(23,107,97,.16);border-color:var(--brand)}.modal-error{margin-top:8px;padding:8px 10px;background:var(--danger-soft);color:var(--danger);border-radius:8px;font-size:11px}.modal-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
+    .structure-tabs{display:flex;gap:4px;padding:8px 0;border-bottom:1px solid var(--line);overflow:auto;margin-bottom:8px}.structure-tabs button{white-space:nowrap;border:0;background:transparent;padding:6px 10px;border-radius:8px;color:var(--muted);font-size:12px;font-weight:850;min-height:32px;height:32px}.structure-tabs button.active{background:var(--brand-soft);color:var(--brand-dark)}
+    .entity-list{display:grid;max-height:48vh;overflow:auto;border:1px solid var(--line);border-radius:11px;background:var(--table-bg)}.entity-row{display:grid;grid-template-columns:44px minmax(110px,1fr) minmax(70px,.5fr) auto;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}.entity-row:last-child{border-bottom:0}.entity-row.archived{background:var(--paper);color:var(--muted)}.order-buttons{display:flex;gap:2px}.entity-name{font-weight:850;font-size:13px}.entity-meta{font-size:11px;color:var(--muted)}.entity-row .row-actions{display:flex;gap:4px;justify-content:flex-end}.list-caption{padding:6px 10px;background:var(--table-head-bg);color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line)}.structure-top{display:flex;justify-content:space-between;align-items:center;padding:2px 0 8px}
+    @media(max-width:980px){.workspace-head{align-items:center}.revision-card{display:none}}
+    @media(max-width:768px){:root{--name-width:58px;--total-width:38px;--project-width:46px}.topbar{height:44px;padding:0 10px}.brand{gap:6px;font-size:13px}.brand-mark{width:24px;height:24px;border-radius:7px;font-size:12px}.brand small{display:none}.user-cluster{gap:5px}.user-pill{padding:3px 6px;font-size:11px;max-width:80px;overflow:hidden;text-overflow:ellipsis}.topbar .btn{min-height:28px;height:28px;padding:0 6px;font-size:11px;border-radius:8px}main{padding:8px 6px 20px}.workspace-head{display:none}.toolbar{position:sticky;top:48px;padding:6px 8px;gap:6px;border-radius:12px;margin-bottom:8px;flex-direction:column;align-items:stretch}.toolbar-main{display:flex;align-items:center;gap:4px;width:100%}.toolbar-main .field-inline{flex:1;min-width:68px}.toolbar-main .field-inline label{display:none}.toolbar-main .select{height:32px;min-height:32px;padding:0 18px 0 6px;font-size:12px;font-weight:800;border-radius:8px}.toolbar-main .segmented{height:32px;padding:2px;border-radius:8px;gap:2px}.toolbar-main .segmented button{height:28px;min-height:28px;padding:0 6px;font-size:11px;font-weight:800;border-radius:6px}.toolbar-main #structureBtn{height:32px;min-height:32px;padding:0 7px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #saveButton{height:32px;min-height:32px;padding:0 9px;font-size:12px;font-weight:900;white-space:nowrap;border-radius:8px}.toolbar-sub{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}.toolbar-status{flex:1;min-width:0;font-size:10px;gap:4px}.status-dot{width:6px;height:6px}.toolbar-status #statusText{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-sub-actions{display:flex;align-items:center;gap:6px}.toolbar-sub-actions .toggle{font-size:10px;gap:3px}.toolbar-sub-actions .toggle input{width:13px;height:13px}.toolbar-sub-actions #refreshButton{height:24px;min-height:24px;padding:0 6px;font-size:10px;border-radius:6px}.table-meta{min-height:28px;height:28px;padding:3px 8px;font-size:10px}.legend{gap:6px}.legend i{width:6px;height:6px}.table-scroll{max-height:calc(100vh - 150px);min-height:200px;-webkit-overflow-scrolling:touch}.score-table th{height:34px!important;padding:0!important}.th-sort-btn{padding:1px;gap:1px;flex-direction:column;justify-content:center;line-height:1}.th-label{font-size:10px;line-height:1.1;max-width:44px;text-align:center}.th-sort-icon{font-size:8px;line-height:1}.th-sort-btn:not(.is-sorted) .th-sort-icon{opacity:.35;font-size:7px}.name-cell{padding:3px 2px!important}.name-main{font-size:11px;font-weight:800;text-align:center;line-height:1.2}.group-chip{font-size:8px;padding:1px 3px;margin:1px auto 0;max-width:52px;display:block;text-align:center}.score-button{height:38px;min-height:38px;padding:2px 1px;gap:1px}.score-button.draft-cell:after{top:2px;right:2px;width:4px;height:4px}.cell-text{font-size:9px;line-height:1.1;max-width:44px;text-align:center}.cell-text.placeholder{font-size:8px;opacity:.5}.cell-score{font-size:10px;font-weight:850;line-height:1.1;justify-content:center;gap:0}.cell-warning{font-size:7px}.total-cell{font-size:11px!important;font-weight:900;padding:2px!important}.group-total-cell{font-size:10px!important;font-weight:850;padding:2px!important}.editor{display:block}.editor-panel{position:absolute;top:12px;left:50%;right:auto;bottom:auto;width:calc(100vw - 20px);max-width:390px;max-height:calc(100dvh - 24px);overflow:auto;border-radius:16px;padding:14px 12px;opacity:0;transform:translate(-50%,-12px);transition:.2s ease}.editor.open .editor-panel{opacity:1;transform:translate(-50%,0)}.editor textarea{min-height:72px;height:76px;margin:8px 0 6px;padding:8px 10px;font-size:13px}.preview-card{padding:6px 9px;margin-bottom:8px}.preview-score{font-size:18px}.editor-nav,.editor-actions{gap:6px}.editor-actions{margin-top:8px}.editor-nav .btn,.editor-actions .btn{min-height:32px;height:32px;font-size:12px}.editor-title h2{font-size:16px}.editor-title p{font-size:11px}.conflict-values{grid-template-columns:1fr}.entity-row{grid-template-columns:36px 1fr;padding:6px 8px}.entity-row>div:nth-child(3){grid-column:2}.entity-row .row-actions{grid-column:2;justify-content:flex-start}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">分</span><span>Cloud Score<small>Classroom ledger</small></span></div>
+    <div class="user-cluster"><span class="user-pill" id="userPill">正在验证…</span><button class="btn small icon-btn" id="themeBtn" title="切换浅色/深色主题" aria-label="切换浅色/深色主题" type="button"><span id="themeIcon">🌓</span></button><button class="btn small" id="passwordBtn" type="button">修改密码</button><button class="btn small" id="logoutButton" type="button">退出登录</button></div>
+  </header>
+  <main>
+    <section class="workspace-head">
+      <div><h1 id="pageTitle">教师积分台</h1><p id="pageSubtitle">选择班级后即可开始记录，所有修改在点击保存前只留在本机。</p></div>
+      <div class="revision-card" aria-label="版本信息"><span>当前版本<strong id="revisionValue">—</strong></span><span>最后保存<strong id="updatedValue">—</strong></span></div>
+    </section>
+    <section class="toolbar" aria-label="积分工具栏">
+      <div class="toolbar-main">
+        <div class="field-inline"><label for="classSelect">班级</label><select class="select" id="classSelect" aria-label="选择班级"></select></div>
+        <div class="segmented" aria-label="计分范围"><button type="button" id="studentTab" class="active" aria-pressed="true">个人积分</button><button type="button" id="groupTab" aria-pressed="false">小组积分</button></div>
+        <button class="btn small" id="structureBtn" type="button">班级设置</button>
+        <button class="btn primary small" id="saveButton" type="button">保存 <span id="dirtyCount">0</span></button>
+      </div>
+      <div class="toolbar-sub">
+        <div class="toolbar-status" role="status" aria-live="polite"><span class="status-dot" id="statusDot"></span><span id="statusText">正在加载登录状态…</span></div>
+        <div class="toolbar-sub-actions">
+          <label class="toggle" title="仅影响当前浏览器"><input id="groupTotalToggle" type="checkbox">显示小组总分</label>
+          <button class="btn small" id="refreshButton" type="button">刷新</button>
+        </div>
+      </div>
+    </section>
+    <div class="notice hidden" id="notice" role="alert"></div>
+    <section class="empty" id="emptyState"><div><div class="empty-icon" aria-hidden="true">▦</div><h2>正在准备积分表</h2><p>正在读取班级、学生和评分项目，请稍候。</p></div></section>
+    <section class="table-card hidden" id="tableCard">
+      <div class="table-meta"><span id="tableSummary">—</span><div class="legend"><span><i></i>已保存</span><span class="draft"><i></i>未保存</span></div></div>
+      <div class="table-scroll" id="tableScroll"><table class="score-table" id="scoreTable"><caption class="hidden">班级积分表</caption></table></div>
+    </section>
+  </main>
+
+  <div class="editor" id="cellEditor" aria-hidden="true">
+    <div class="editor-backdrop" id="editorBackdrop"></div>
+    <section class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorHeading">
+      <div class="editor-title"><div><h2 id="editorHeading">编辑积分</h2><p id="editorContext">—</p></div><button class="close-btn" id="editorClose" type="button" aria-label="关闭编辑器">×</button></div>
+      <label class="hidden" for="scoreInput">积分注释</label><textarea id="scoreInput" maxlength="500" placeholder="例如：［主动回答+2］上课睡觉-1"></textarea>
+      <div class="preview-card"><div><strong>解析预览</strong><small id="parserHint">只统计带有 + 或 - 的数字</small></div><span class="preview-score" id="scorePreview">0</span></div>
+      <div class="editor-nav"><button class="btn" id="previousCell" type="button">上一格</button><button class="btn" id="nextCell" type="button">下一格</button></div>
+      <div class="editor-actions"><button class="btn" id="editorCancel" type="button">取消</button><button class="btn primary" id="editorApply" type="button">应用到草稿</button></div>
+    </section>
+  </div>
+
+  <dialog id="conflictDialog" aria-labelledby="conflictTitle" aria-describedby="conflictDescription"><div class="dialog-body"><h2 id="conflictTitle">发现多人编辑冲突</h2><p id="conflictDescription">服务器中的同一单元格已经改变。请逐项选择要保留的版本，然后再次保存。</p><div class="conflict-list" id="conflictList"></div><div class="dialog-footer"><button class="btn" id="useServerAll" type="button">全部采用服务器</button><button class="btn" id="keepLocalAll" type="button">全部保留本地</button><button class="btn primary" id="conflictDone" type="button">完成处理</button></div></div></dialog>
+
+  <dialog id="passwordDialog" aria-labelledby="passwordTitle">
+    <form class="modal" id="passwordForm" method="dialog">
+      <h2 id="passwordTitle">修改登录密码</h2>
+      <p>密码须为 6–128 个字符；修改后当前设备自动更新登录凭据。</p>
+      <div class="modal-fields">
+        <div class="modal-field"><label for="currentPasswordInput">当前密码</label><input id="currentPasswordInput" name="currentPassword" type="password" required autocomplete="current-password" maxlength="128"></div>
+        <div class="modal-field"><label for="newPasswordInput">新密码 <span>6–128 个字符</span></label><input id="newPasswordInput" name="newPassword" type="password" minlength="6" maxlength="128" required autocomplete="new-password"></div>
+        <div class="modal-field"><label for="confirmPasswordInput">确认新密码</label><input id="confirmPasswordInput" name="confirmPassword" type="password" minlength="6" maxlength="128" required autocomplete="new-password"></div>
+      </div>
+      <div class="modal-error hidden" id="passwordError" role="alert"></div>
+      <div class="modal-actions">
+        <button class="btn" id="passwordCancel" type="button">取消</button>
+        <button class="btn primary" id="passwordSubmit" type="submit">确认修改</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="structureDialog" aria-labelledby="structureTitle">
+    <div class="dialog-body">
+      <div class="editor-title">
+        <div>
+          <h2 id="structureTitle">班级学生与评分项目</h2>
+          <p id="structureSubTitle">管理当前班级的学生、评分项目与小组；调整后积分表自动同步。</p>
+        </div>
+        <button class="close-btn" id="structureClose" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="structure-tabs" id="structureTabs">
+        <button type="button" class="active" id="tabStudent">学生</button>
+        <button type="button" id="tabProject">评分项目</button>
+        <button type="button" id="tabGroup">小组</button>
+      </div>
+      <div class="structure-top">
+        <span class="entity-meta" id="structureCountInfo">使用中</span>
+        <button class="btn primary small" id="addEntityBtn" type="button">新增学生</button>
+      </div>
+      <div class="entity-list" id="structureList"></div>
+    </div>
+  </dialog>
+
+  <dialog id="entityDialog">
+    <form class="modal" id="entityForm" method="dialog">
+      <h2 id="entityFormTitle">新增</h2>
+      <p id="entityFormDesc">填写信息后保存。</p>
+      <div class="modal-fields" id="entityFormFields"></div>
+      <div class="modal-error hidden" id="entityFormError" role="alert"></div>
+      <div class="modal-actions">
+        <button class="btn" id="entityCancel" type="button">取消</button>
+        <button class="btn primary" id="entitySubmit" type="submit">保存</button>
+      </div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    "use strict";
+    const $ = (id) => document.getElementById(id);
+    const state = { session:null, classData:null, etag:"", scope:"student", drafts:new Map(), draftStructureRevision:null, positions:[], activeIndex:0, editor:null, conflicts:[], saving:false, lastSaveAttempt:0, structureTab:"student", sort:{column:null, direction:null} };
+    const isLocalDemo = ["localhost","127.0.0.1"].includes(location.hostname) && new URLSearchParams(location.search).get("demo") === "1";
+    const pinyinCollator = new Intl.Collator("zh-Hans-CN", { numeric: true, sensitivity: "base" });
+    const els = { userPill:$("userPill"), themeBtn:$("themeBtn"), themeIcon:$("themeIcon"), classSelect:$("classSelect"), studentTab:$("studentTab"), groupTab:$("groupTab"), statusDot:$("statusDot"), statusText:$("statusText"), refreshButton:$("refreshButton"), saveButton:$("saveButton"), dirtyCount:$("dirtyCount"), groupTotalToggle:$("groupTotalToggle"), notice:$("notice"), emptyState:$("emptyState"), tableCard:$("tableCard"), scoreTable:$("scoreTable"), tableSummary:$("tableSummary"), revisionValue:$("revisionValue"), updatedValue:$("updatedValue"), pageTitle:$("pageTitle"), cellEditor:$("cellEditor"), editorHeading:$("editorHeading"), editorContext:$("editorContext"), scoreInput:$("scoreInput"), scorePreview:$("scorePreview"), parserHint:$("parserHint"), conflictDialog:$("conflictDialog"), conflictTitle:$("conflictTitle"), conflictDescription:$("conflictDescription"), conflictList:$("conflictList"), passwordDialog:$("passwordDialog"), passwordForm:$("passwordForm"), passwordError:$("passwordError"), structureDialog:$("structureDialog"), structureTabs:$("structureTabs"), structureList:$("structureList"), structureCountInfo:$("structureCountInfo"), addEntityBtn:$("addEntityBtn"), tabStudent:$("tabStudent"), tabProject:$("tabProject"), tabGroup:$("tabGroup"), entityDialog:$("entityDialog"), entityForm:$("entityForm"), entityFormTitle:$("entityFormTitle"), entityFormDesc:$("entityFormDesc"), entityFormFields:$("entityFormFields"), entityFormError:$("entityFormError"), toast:$("toast") };
+    let entitySubmitCallback = null;
+
+    function node(tag, className, text) { const element=document.createElement(tag); if(className) element.className=className; if(text!==undefined) element.textContent=String(text); return element; }
+    function btn(label, className, action, title="") { const element=node("button", className||"btn small", label); element.type="button"; if(title) element.title=title; element.addEventListener("click", action); return element; }
+    function formatScore(value) { const number=Number(value)||0; return Number.isInteger(number)?String(number):number.toFixed(2).replace(/0+$/,"").replace(/\.$/,""); }
+    function parseScore(text) { const raw=String(text||""); if(raw.length>500)return {score:0,warning:false,error:"单元格最多 500 个字符"}; const source=raw.normalize("NFKC").replace(/[−–—﹣]/g,"-").replace(/[﹢]/g,"+"); const pattern=/[+\-]\s*(?:\d+(?:\.\d{1,2})?|\.\d{1,2})(?![\d.])/g; let total=0; let match; while((match=pattern.exec(source))!==null){const value=Number(match[0].replace(/\s+/g,""));const hundredths=Math.round(value*100);if(!Number.isFinite(value)||Math.abs(value)>1000000||!Number.isSafeInteger(hundredths)||!Number.isSafeInteger(total+hundredths)||Math.abs(total+hundredths)>100000000)return {score:0,warning:false,error:"单元格合计绝对值不能超过 1000000"};total+=hundredths;} const rest=source.replace(pattern," "); return { score:Number((total/100).toFixed(2)), warning:/(?:^|[^+\-\d.])\d+(?:\.\d+)?/.test(rest), error:null }; }
+    function setStatus(kind,text){ els.statusDot.className=`status-dot ${kind||""}`; els.statusText.textContent=text; }
+    let toastTimer=0; function toast(text){ clearTimeout(toastTimer); els.toast.textContent=text; els.toast.classList.add("show"); toastTimer=setTimeout(()=>els.toast.classList.remove("show"),2200); }
+    function apiError(data,status){ const error=new Error(data?.error?.message||`请求失败（${status}）`); error.status=status; error.code=data?.error?.code; error.details=data?.error?.details; return error; }
+    async function api(path,options={}) { const headers={Accept:"application/json",...(options.headers||{})}; if(options.body!==undefined){headers["Content-Type"]="application/json"; options.body=JSON.stringify(options.body);} const response=await fetch(path,{credentials:"same-origin",...options,headers}); let data; try{data=await response.json();}catch{data={ok:false,error:{message:"服务器返回了无法识别的响应。"}};} if(!response.ok){if(response.status===401 && !isLocalDemo) location.replace("/login.html"); throw apiError(data,response.status);} return {body:data,etag:response.headers.get("ETag")||data.etag||""}; }
+    function demoClass(){ const stamp=new Date().toISOString(); return {schemaVersion:1,classId:"class-a",name:"示范班",revision:12,structureRevision:5,updatedAt:stamp,students:[{id:"s_demo_001234567890",name:"林晓雨",groupId:"g_demo_001234567890",active:true,order:0,version:1},{id:"s_demo_001234567891",name:"陈子安",groupId:"g_demo_001234567890",active:true,order:1,version:1},{id:"s_demo_001234567892",name:"周予晴",groupId:"g_demo_001234567891",active:true,order:2,version:1},{id:"s_demo_001234567893",name:"许明哲",groupId:null,active:true,order:3,version:1}],groups:[{id:"g_demo_001234567890",name:"晨星组",active:true,order:0,version:1},{id:"g_demo_001234567891",name:"远航组",active:true,order:1,version:1}],projects:[{id:"p_demo_001234567890",name:"语文",active:true,order:0,version:1},{id:"p_demo_001234567891",name:"数学",active:true,order:1,version:1},{id:"p_demo_001234567892",name:"英语",active:true,order:2,version:1},{id:"p_demo_001234567893",name:"课堂表现",active:true,order:3,version:1}],personalScores:{"s_demo_001234567890":{"p_demo_001234567890":{raw:"主动回答+2",score:2,revision:2},"p_demo_001234567891":{raw:"作业整洁+1",score:1,revision:1}},"s_demo_001234567891":{"p_demo_001234567892":{raw:"单词听写+2迟到-1",score:1,revision:3}},"s_demo_001234567892":{"p_demo_001234567893":{raw:"帮助同学+2",score:2,revision:1}}},groupScores:{"g_demo_001234567890":{"p_demo_001234567893":{raw:"合作完成任务+3",score:3,revision:1}},"g_demo_001234567891":{"p_demo_001234567890":{raw:"朗读表现+2",score:2,revision:1}}}}; }
+    function active(items){return (items||[]).filter(item=>item.active).sort((a,b)=>(a.order||0)-(b.order||0));}
+    function currentGroup(id){return state.classData?.groups.find(group=>group.id===id&&group.active)||null;}
+    function groupName(id){return currentGroup(id)?.name||"未分组";}
+    function draftKey(scope,subjectId,projectId){return `${scope}:${subjectId}:${projectId}`;}
+    function serverCell(scope,subjectId,projectId){const container=scope==="student"?state.classData?.personalScores:state.classData?.groupScores; return container?.[subjectId]?.[projectId]||{raw:"",score:0,revision:0,parserVersion:1};}
+    function displayCell(scope,subjectId,projectId){const draft=state.drafts.get(draftKey(scope,subjectId,projectId)); if(!draft)return serverCell(scope,subjectId,projectId); const parsed=parseScore(draft.text); return {...serverCell(scope,subjectId,projectId),raw:draft.text,score:parsed.score,hasUnsignedNumber:parsed.warning};}
+    function totalFor(scope,subjectId){return active(state.classData?.projects).reduce((sum,project)=>sum+Number(displayCell(scope,subjectId,project.id).score||0),0);}
+    function persistDrafts(){if(!state.session||!state.classData)return; const key=`cloud-score:draft:${state.session.username}:${state.classData.classId}`; if(state.drafts.size){sessionStorage.setItem(key,JSON.stringify({revision:state.classData.revision,structureRevision:state.draftStructureRevision??state.classData.structureRevision,items:[...state.drafts]}));}else{state.draftStructureRevision=null;sessionStorage.removeItem(key);}}
+    function restoreDrafts(){state.drafts.clear();state.draftStructureRevision=null;if(!state.session||!state.classData)return; const key=`cloud-score:draft:${state.session.username}:${state.classData.classId}`; try{const saved=JSON.parse(sessionStorage.getItem(key)||"null"); if(Array.isArray(saved?.items)&&saved.items.length){state.drafts=new Map(saved.items);state.draftStructureRevision=Number.isInteger(saved.structureRevision)?saved.structureRevision:state.classData.structureRevision;toast(`已恢复 ${state.drafts.size} 项未保存草稿`);if(state.draftStructureRevision!==state.classData.structureRevision){els.notice.textContent="草稿创建后班级结构曾发生变化。草稿已保留，请核对后保存；系统会先要求确认最新结构。";els.notice.classList.remove("hidden");}}}catch{sessionStorage.removeItem(key);}}
+    function updateDirtyStatus(){els.dirtyCount.textContent=String(state.drafts.size); els.saveButton.disabled=state.saving||state.drafts.size===0||!navigator.onLine; if(state.saving)setStatus("dirty","正在批量保存…"); else if(!navigator.onLine)setStatus("error",state.drafts.size?`当前离线 · ${state.drafts.size} 个单元格尚未保存`:"当前离线"); else if(state.drafts.size)setStatus("dirty",`${state.drafts.size} 个单元格尚未保存`); else setStatus("saved","所有修改均已保存");}
+    function showEmpty(title,description){els.emptyState.classList.remove("hidden");els.tableCard.classList.add("hidden");const heading=els.emptyState.querySelector("h2");const paragraph=els.emptyState.querySelector("p");heading.textContent=title;paragraph.textContent=description;}
+    function getSortedSubjects(rawSubjects,projects){
+      const items=[...rawSubjects];
+      if(!state.sort.column||!state.sort.direction)return items;
+      const dir=state.sort.direction==="asc"?1:-1;
+      if(state.sort.column==="name"){
+        return items.sort((a,b)=>{
+          const cmp=pinyinCollator.compare(a.name||"",b.name||"");
+          return cmp!==0?cmp*dir:((a.order||0)-(b.order||0));
+        });
+      }
+      if(state.sort.column==="total"){
+        return items.sort((a,b)=>{
+          const scoreA=totalFor(state.scope,a.id);
+          const scoreB=totalFor(state.scope,b.id);
+          if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      if(state.sort.column==="groupTotal"&&state.scope==="student"){
+        return items.sort((a,b)=>{
+          const grpA=currentGroup(a.groupId);
+          const grpB=currentGroup(b.groupId);
+          const scoreA=grpA?totalFor("group",grpA.id):0;
+          const scoreB=grpB?totalFor("group",grpB.id):0;
+          if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      const projectId=state.sort.column;
+      return items.sort((a,b)=>{
+        const scoreA=Number(displayCell(state.scope,a.id,projectId).score||0);
+        const scoreB=Number(displayCell(state.scope,b.id,projectId).score||0);
+        if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+        return ((a.order||0)-(b.order||0));
+      });
+    }
+    function toggleSort(columnId,isName=false){
+      if(state.sort.column!==columnId){
+        state.sort.column=columnId;
+        state.sort.direction=isName?"asc":"desc";
+      }else{
+        if(isName){
+          if(state.sort.direction==="asc")state.sort.direction="desc";
+          else if(state.sort.direction==="desc"){state.sort.column=null;state.sort.direction=null;}
+          else state.sort.direction="asc";
+        }else{
+          if(state.sort.direction==="desc")state.sort.direction="asc";
+          else if(state.sort.direction==="asc"){state.sort.column=null;state.sort.direction=null;}
+          else state.sort.direction="desc";
+        }
+      }
+      renderTable();
+    }
+    function sortSummaryText(){
+      if(!state.sort.column||!state.sort.direction)return "";
+      if(state.sort.column==="name")return ` · 按${state.scope==="student"?"姓名":"小组"}拼音 ${state.sort.direction==="asc"?"A-Z":"Z-A"}`;
+      if(state.sort.column==="total")return ` · 按${state.scope==="student"?"个人总分":"小组总分"} ${state.sort.direction==="asc"?"升序":"降序"}`;
+      if(state.sort.column==="groupTotal")return ` · 按小组总分 ${state.sort.direction==="asc"?"升序":"降序"}`;
+      const project=state.classData?.projects.find(p=>p.id===state.sort.column);
+      return ` · 按${project?.name||"项目"} ${state.sort.direction==="asc"?"升序":"降序"}`;
+    }
+    function createHeaderCell(columnId,labelText,className,isName=false){
+      const th=node("th",className);
+      th.scope="col";
+      const isCurrent=state.sort.column===columnId;
+      const dir=isCurrent?state.sort.direction:null;
+      th.setAttribute("aria-sort",dir==="asc"?"ascending":dir==="desc"?"descending":"none");
+      const btn=node("button",`th-sort-btn${isCurrent?" is-sorted":""}`);
+      btn.type="button";
+      const hint=isName
+        ?(dir==="asc"?"当前按拼音 A-Z 升序，点击切换为 Z-A 降序":dir==="desc"?"当前按拼音 Z-A 降序，点击恢复默认顺序":"点击按汉字拼音 A-Z 排序")
+        :(dir==="desc"?"当前按分数从高到低排序，点击切换为升序":dir==="asc"?"当前按分数从低到高排序，点击恢复默认顺序":"点击按分数从高到低排序");
+      btn.title=`${labelText}（${hint}）`;
+      btn.setAttribute("aria-label",`${labelText}，${hint}`);
+      const titleSpan=node("span","th-label",labelText);
+      let iconText="⇅";
+      if(isCurrent){
+        if(isName)iconText=dir==="asc"?"A-Z":"Z-A";
+        else iconText=dir==="asc"?"↑":"↓";
+      }
+      const iconSpan=node("span","th-sort-icon",iconText);
+      btn.append(titleSpan,iconSpan);
+      btn.addEventListener("click",()=>toggleSort(columnId,isName));
+      th.append(btn);
+      return th;
+    }
+    function createScoreButton(subject,project,rowIndex,colIndex){const cell=displayCell(state.scope,subject.id,project.id);const key=draftKey(state.scope,subject.id,project.id);const button=node("button","score-button");button.type="button";button.dataset.key=key;button.dataset.row=String(rowIndex);button.dataset.col=String(colIndex);button.tabIndex=state.positions.length===state.activeIndex?0:-1;button.setAttribute("aria-label",`${subject.name}，${project.name}，${cell.raw||"无记录"}，小计 ${formatScore(cell.score)}`);if(state.drafts.has(key))button.classList.add("draft-cell");const text=node("span",`cell-text${cell.raw?"":" placeholder"}`,cell.raw||"点击记分");const score=node("span",`cell-score${Number(cell.score)<0?" negative":""}`,`小计 ${Number(cell.score)>0?"+":""}${formatScore(cell.score)}`);button.append(text,score);if(cell.hasUnsignedNumber)button.append(node("span","cell-warning","含无符号数字，未计入"));const position={key,scope:state.scope,subjectId:subject.id,projectId:project.id,row:rowIndex,col:colIndex,button};state.positions.push(position);button.addEventListener("click",()=>{state.activeIndex=state.positions.indexOf(position);openEditor(position);});button.addEventListener("keydown",event=>handleCellKey(event,position));return button;}
+    function renderTable(){if(!state.classData){showEmpty("尚未选择班级","请选择一个已绑定的班级。");return;}const projects=active(state.classData.projects);const rawSubjects=state.scope==="student"?active(state.classData.students):active(state.classData.groups);const subjects=getSortedSubjects(rawSubjects,projects);els.pageTitle.textContent=state.classData.name;els.revisionValue.textContent=`v${state.classData.revision}`;els.updatedValue.textContent=state.classData.updatedAt?new Date(state.classData.updatedAt).toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}):"—";if(!subjects.length){showEmpty(state.scope==="student"?"还没有学生":"还没有小组",state.scope==="student"?"请点击上方“班级设置”添加学生。":"请点击上方“班级设置”添加小组。");updateDirtyStatus();return;}els.emptyState.classList.add("hidden");els.tableCard.classList.remove("hidden");els.scoreTable.replaceChildren();state.positions=[];const thead=node("thead");const headerRow=node("tr");headerRow.append(createHeaderCell("name",state.scope==="student"?"学生姓名":"小组名称","name-head",true));for(const project of projects){headerRow.append(createHeaderCell(project.id,project.name,"project-head",false));}if(state.scope==="student"&&els.groupTotalToggle.checked){headerRow.append(createHeaderCell("groupTotal","小组总分","group-total-head",false));}headerRow.append(createHeaderCell("total",state.scope==="student"?"个人总分":"小组总分","total-head",false));thead.append(headerRow);const tbody=node("tbody");subjects.forEach((subject,rowIndex)=>{const row=node("tr");const nameCell=node("td","name-cell");nameCell.append(node("div","name-main",subject.name));const studentGroup=state.scope==="student"?currentGroup(subject.groupId):null;if(state.scope==="student"){const chip=node("span",`group-chip${studentGroup?"":" none"}`,groupName(subject.groupId));nameCell.append(chip);}row.append(nameCell);projects.forEach((project,colIndex)=>{const td=node("td");td.append(createScoreButton(subject,project,rowIndex,colIndex));row.append(td);});if(state.scope==="student"&&els.groupTotalToggle.checked){const groupTotal=studentGroup?totalFor("group",studentGroup.id):0;row.append(node("td","group-total-cell",formatScore(groupTotal)));}row.append(node("td","total-cell",formatScore(totalFor(state.scope,subject.id))));tbody.append(row);});els.scoreTable.append(thead,tbody);els.tableSummary.textContent=`${subjects.length} ${state.scope==="student"?"名学生":"个小组"} · ${projects.length} 个项目 · 第 ${state.classData.revision} 版${sortSummaryText()}`;if(state.activeIndex>=state.positions.length)state.activeIndex=Math.max(0,state.positions.length-1);state.positions.forEach((position,index)=>{position.button.tabIndex=index===state.activeIndex?0:-1;position.button.classList.toggle("active-cell",index===state.activeIndex);});updateDirtyStatus();}
+    function handleCellKey(event,position){const index=state.positions.indexOf(position);let target=-1;if(event.key==="Enter"||event.key===" "){event.preventDefault();openEditor(position);return;}if(event.key==="ArrowLeft")target=index-1;else if(event.key==="ArrowRight")target=index+1;else if(event.key==="ArrowUp")target=state.positions.findIndex(item=>item.row===position.row-1&&item.col===position.col);else if(event.key==="ArrowDown")target=state.positions.findIndex(item=>item.row===position.row+1&&item.col===position.col);else if(event.key==="Tab")target=index+(event.shiftKey?-1:1);else if(event.key==="Home")target=state.positions.findIndex(item=>item.row===position.row);else if(event.key==="End"){const rowItems=state.positions.filter(item=>item.row===position.row);target=state.positions.indexOf(rowItems[rowItems.length-1]);}else return;if(target<0||target>=state.positions.length)return;event.preventDefault();state.activeIndex=target;renderTable();state.positions[target]?.button.focus({preventScroll:false});}
+    function openEditor(position){state.editor=position;const subject=(position.scope==="student"?state.classData.students:state.classData.groups).find(item=>item.id===position.subjectId);const project=state.classData.projects.find(item=>item.id===position.projectId);els.editorHeading.textContent=`编辑${position.scope==="student"?"个人":"小组"}积分`;els.editorContext.textContent=`${subject?.name||"—"} · ${project?.name||"—"}`;els.scoreInput.value=displayCell(position.scope,position.subjectId,position.projectId).raw||"";updatePreview();els.cellEditor.classList.add("open");els.cellEditor.setAttribute("aria-hidden","false");setTimeout(()=>els.scoreInput.focus(),40);}
+    function closeEditor(focus=true){els.cellEditor.classList.remove("open");els.cellEditor.setAttribute("aria-hidden","true");if(focus)state.positions[state.activeIndex]?.button.focus();state.editor=null;}
+    function updatePreview(){const parsed=parseScore(els.scoreInput.value);els.scorePreview.textContent=`${parsed.score>0?"+":""}${formatScore(parsed.score)}`;els.parserHint.textContent=parsed.error|| (parsed.warning?"发现无符号数字，已忽略":"只统计带有 + 或 - 的数字");els.parserHint.style.color=parsed.error?"#b3473d":parsed.warning?"#a36213":"";$("editorApply").disabled=Boolean(parsed.error);}
+    function applyEditor(){if(!state.editor)return;const parsed=parseScore(els.scoreInput.value);if(parsed.error){toast(parsed.error);return;}const {scope,subjectId,projectId}=state.editor;const key=draftKey(scope,subjectId,projectId);const original=serverCell(scope,subjectId,projectId);const text=els.scoreInput.value;if(text===original.raw)state.drafts.delete(key);else{if(!state.drafts.size)state.draftStructureRevision=state.classData.structureRevision;state.drafts.set(key,{text,baseCellRevision:Number(original.revision||0)});}persistDrafts();closeEditor(false);renderTable();state.positions[state.activeIndex]?.button.focus();}
+    function moveEditor(delta){if(!state.editor)return;applyEditor();const next=Math.min(state.positions.length-1,Math.max(0,state.activeIndex+delta));state.activeIndex=next;renderTable();if(state.positions[next])openEditor(state.positions[next]);}
+    async function loadClass(classId,{discard=false}={}){if(state.drafts.size&&!discard&&!confirm("当前有未保存修改。刷新或切换班级会先保留草稿，但可能产生冲突，是否继续？"))return false;setStatus("","正在读取班级数据…");try{if(isLocalDemo){state.classData=demoClass();state.etag='"demo-etag"';}else{const result=await api(`/api/classes/${encodeURIComponent(classId)}`);state.classData=result.body.data.class;state.etag=result.etag||result.body.etag;}localStorage.setItem("cloud-score:last-class",classId);restoreDrafts();renderTable();return true;}catch(error){showEmpty("无法加载班级",error.message);setStatus("error",error.message);return false;}}
+    function mutationId(){const uuid=crypto.randomUUID?crypto.randomUUID().replace(/-/g,""):Array.from(crypto.getRandomValues(new Uint8Array(16)),value=>value.toString(16).padStart(2,"0")).join("");return `m_${Date.now()}_${uuid}`;}
+    async function saveScores(){
+      if(!state.classData||!state.drafts.size||state.saving)return;
+      state.saving=true;
+      updateDirtyStatus();
+      const pending=[...state.drafts];
+      let savedCount=0;
+      let finalStatus=null;
+      try{
+        for(let offset=0;offset<pending.length;offset+=500){
+          const elapsed=Date.now()-state.lastSaveAttempt;
+          if(elapsed<1200)await new Promise(resolve=>setTimeout(resolve,1200-elapsed));
+          state.lastSaveAttempt=Date.now();
+          const batch=pending.slice(offset,offset+500);
+          const changes=batch.map(([key,draft])=>{const [scope,subjectId,projectId]=key.split(":");return {scope,subjectId,projectId,baseCellRevision:draft.baseCellRevision,text:draft.text};});
+          if(isLocalDemo){
+            await new Promise(resolve=>setTimeout(resolve,350));
+            changes.forEach(change=>{const container=change.scope==="student"?state.classData.personalScores:state.classData.groupScores;if(!container[change.subjectId])container[change.subjectId]={};const parsed=parseScore(change.text);container[change.subjectId][change.projectId]={raw:change.text,score:parsed.score,hasUnsignedNumber:parsed.warning,revision:change.baseCellRevision+1,updatedAt:new Date().toISOString(),updatedBy:"demo-teacher"};});
+            state.classData.revision+=1;
+            state.classData.updatedAt=new Date().toISOString();
+          }else{
+            const result=await api(`/api/classes/${encodeURIComponent(state.classData.classId)}/scores`,{method:"PATCH",headers:{"If-Match":state.etag,"X-CSRF-Token":state.session.csrf},body:{mutationId:mutationId(),baseRevision:state.classData.revision,baseStructureRevision:state.draftStructureRevision??state.classData.structureRevision,changes}});
+            state.classData=result.body.data.class;
+            state.etag=result.etag||result.body.etag;
+            if(result.body.data.merged)toast("已自动合并其他教师在不同单元格的修改");
+          }
+          batch.forEach(([key,submitted])=>{const current=state.drafts.get(key);if(current&&current.text===submitted.text&&current.baseCellRevision===submitted.baseCellRevision)state.drafts.delete(key);else if(current){const [scope,subjectId,projectId]=key.split(":");current.baseCellRevision=Number(serverCell(scope,subjectId,projectId).revision||0);}});
+          savedCount+=batch.length;
+          persistDrafts();
+          renderTable();
+        }
+        els.notice.classList.add("hidden");
+        toast(`${savedCount} 项积分已安全保存`);
+      }catch(error){
+        if(error.status===409&&error.details?.conflicts){
+          if(error.details.class){state.classData=error.details.class;state.etag=error.details.etag||state.etag;renderTable();}
+          showConflicts(error.details.conflicts,"cell");
+          finalStatus={kind:"error",text:"发现同一单元格冲突"};
+        }
+        else if(error.code==="STRUCTURE_CONFLICT"&&error.details?.class){
+          state.classData=error.details.class;
+          state.etag=error.details.etag||state.etag;
+          state.draftStructureRevision=state.classData.structureRevision;
+          persistDrafts();
+          const invalidDrafts=findStructureInvalidDrafts();
+          renderTable();
+          finalStatus={kind:"error",text:invalidDrafts.length?"部分草稿对应的对象已归档":"班级结构已变化，本地草稿仍保留"};
+          els.notice.textContent=invalidDrafts.length
+            ? `班级结构曾被修改，其中 ${invalidDrafts.length} 项草稿对应的学生、项目或小组已归档。请在弹窗中丢弃这些草稿，或恢复对应对象。`
+            : "班级学生、项目或小组刚刚发生更新。已显示最新结构；请核对高亮的本地草稿后再次保存。";
+          els.notice.classList.remove("hidden");
+          if(invalidDrafts.length)showConflicts(invalidDrafts,"structure");
+        }
+        else if(error.code==="ENTITY_ARCHIVED"){
+          const invalidDrafts=findStructureInvalidDrafts();
+          finalStatus={kind:"error",text:"部分草稿对应的对象已归档"};
+          els.notice.textContent=error.message;
+          els.notice.classList.remove("hidden");
+          if(invalidDrafts.length)showConflicts(invalidDrafts,"structure");
+        }
+        else{finalStatus={kind:"error",text:error.message};els.notice.textContent=error.message;els.notice.classList.remove("hidden");}
+      }finally{state.saving=false;updateDirtyStatus();if(finalStatus)setStatus(finalStatus.kind,finalStatus.text);}
+    }
+    function findStructureInvalidDrafts(){const projects=new Map((state.classData?.projects||[]).map(item=>[item.id,item]));const students=new Map((state.classData?.students||[]).map(item=>[item.id,item]));const groups=new Map((state.classData?.groups||[]).map(item=>[item.id,item]));const conflicts=[];for(const [key,draft] of state.drafts){const [scope,subjectId,projectId]=key.split(":");const subject=(scope==="student"?students:groups).get(subjectId);const project=projects.get(projectId);let structureReason="";if(!subject?.active)structureReason=`${scope==="student"?"学生":"小组"}已归档`;else if(!project?.active)structureReason="评分项目已归档";if(structureReason)conflicts.push({scope,subjectId,projectId,localText:draft.text,current:serverCell(scope,subjectId,projectId),structureInvalid:true,structureReason});}return conflicts;}
+    function setServerCellFromConflict(conflict){const container=conflict.scope==="student"?state.classData.personalScores:state.classData.groupScores;if(!container[conflict.subjectId])container[conflict.subjectId]={};container[conflict.subjectId][conflict.projectId]=conflict.current;}
+    function resolveConflict(conflict,keepLocal){if(conflict.structureInvalid&&keepLocal)return;const key=draftKey(conflict.scope,conflict.subjectId,conflict.projectId);if(!conflict.structureInvalid)setServerCellFromConflict(conflict);if(keepLocal){const draft=state.drafts.get(key);if(draft)draft.baseCellRevision=Number(conflict.current.revision||0);}else state.drafts.delete(key);conflict.resolved=true;persistDrafts();}
+    function conflictLabel(conflict){const subject=(conflict.scope==="student"?state.classData.students:state.classData.groups).find(item=>item.id===conflict.subjectId);const project=state.classData.projects.find(item=>item.id===conflict.projectId);return `${subject?.name||"未知"} · ${project?.name||"未知"}`;}
+    function renderConflicts(){els.conflictList.replaceChildren();state.conflicts.forEach(conflict=>{const item=node("section","conflict-item");const suffix=conflict.resolved?" · 已处理":conflict.structureReason?` · ${conflict.structureReason}`:"";item.append(node("div","conflict-context",`${conflictLabel(conflict)}${suffix}`));const values=node("div","conflict-values");const local=node("div","conflict-value");local.append(node("small","","本地草稿"),node("div","",conflict.localText||"（空）"));const server=node("div","conflict-value");server.append(node("small","",conflict.structureInvalid?"服务器历史记录":"服务器版本"),node("div","",conflict.current?.raw||"（空）"));values.append(local,server);const actions=node("div","conflict-actions");const useServer=node("button","btn",conflict.structureInvalid?"丢弃本地草稿":"采用服务器");useServer.type="button";const keepLocal=node("button","btn primary",conflict.structureInvalid?"需先恢复对象":"保留本地");keepLocal.type="button";useServer.disabled=Boolean(conflict.resolved);keepLocal.disabled=Boolean(conflict.resolved||conflict.structureInvalid);useServer.addEventListener("click",()=>{resolveConflict(conflict,false);renderConflicts();});keepLocal.addEventListener("click",()=>{resolveConflict(conflict,true);renderConflicts();});actions.append(useServer,keepLocal);item.append(values,actions);els.conflictList.append(item);});$("keepLocalAll").disabled=state.conflicts.some(conflict=>!conflict.resolved&&conflict.structureInvalid);}
+    function showConflicts(conflicts,mode="cell"){state.conflicts=conflicts.map(item=>({...item,resolved:false}));els.conflictTitle.textContent=mode==="structure"?"部分草稿无法应用":"发现多人编辑冲突";els.conflictDescription.textContent=mode==="structure"?"这些草稿对应的学生、项目或小组已归档。可丢弃草稿；若必须保留，请先在班级设置中恢复对应对象。":"服务器中的同一单元格已经改变。请逐项选择要保留的版本，然后再次保存。";$("useServerAll").textContent=mode==="structure"?"全部丢弃草稿":"全部采用服务器";$("keepLocalAll").textContent=mode==="structure"?"需先恢复对象":"全部保留本地";renderConflicts();els.conflictDialog.showModal();}
+    async function refreshClass(){if(!state.classData)return;await loadClass(state.classData.classId);}
+    async function logout(){if(state.drafts.size&&!confirm("仍有未保存积分，确定退出吗？"))return;try{if(!isLocalDemo)await api("/api/auth/logout",{method:"POST",headers:{"X-CSRF-Token":state.session.csrf},body:{}});}finally{location.replace("/login.html");}}
+    function populateClassSelect(classes){els.classSelect.replaceChildren();if(!classes.length){const option=node("option","","未绑定班级");option.value="";els.classSelect.append(option);els.classSelect.disabled=true;return;}for(const item of classes){const option=node("option","",item.name);option.value=item.id;els.classSelect.append(option);}els.classSelect.disabled=false;const preferred=localStorage.getItem("cloud-score:last-class");if(classes.some(item=>item.id===preferred))els.classSelect.value=preferred;}
+
+    function activeEntities(kind) {
+      const source = kind === "student" ? state.classData?.students : kind === "project" ? state.classData?.projects : state.classData?.groups;
+      return [...(source || [])].filter((item) => item.active).sort((a, b) => (a.order || 0) - (b.order || 0) || a.id.localeCompare(b.id));
+    }
+    function kindLabels(kind) {
+      return kind === "student" ? ["学生", "学生姓名"] : kind === "project" ? ["评分项目", "项目名称"] : ["小组", "小组名称"];
+    }
+
+    async function patchStructure(operation, successMessage) {
+      if (!state.classData) return;
+      try {
+        if (isLocalDemo) {
+          toast(successMessage);
+          return;
+        }
+        const result = await api(`/api/classes/${encodeURIComponent(state.classData.classId)}/structure`, {
+          method: "PATCH",
+          headers: { "If-Match": state.etag, "X-CSRF-Token": state.session.csrf },
+          body: { mutationId: mutationId(), baseRevision: state.classData.revision, operations: [operation] },
+        });
+        state.classData = result.body.data.class;
+        state.etag = result.etag || result.body.etag;
+        toast(successMessage);
+        renderTable();
+        renderStructureDialog();
+      } catch (error) {
+        toast(error.message);
+        throw error;
+      }
+    }
+
+    function renderStructureDialog() {
+      const kind = state.structureTab;
+      els.tabStudent.classList.toggle("active", kind === "student");
+      els.tabProject.classList.toggle("active", kind === "project");
+      els.tabGroup.classList.toggle("active", kind === "group");
+      const [singular] = kindLabels(kind);
+      els.addEntityBtn.textContent = `新增${singular}`;
+      const activeList = activeEntities(kind);
+      const all = kind === "student" ? (state.classData?.students || []) : kind === "project" ? (state.classData?.projects || []) : (state.classData?.groups || []);
+      const archived = all.filter((item) => !item.active);
+      els.structureCountInfo.textContent = `${singular} · 使用中 ${activeList.length} / 已归档 ${archived.length}`;
+      els.structureList.replaceChildren();
+
+      if (!activeList.length && !archived.length) {
+        els.structureList.append(node("div", "empty", `暂无${singular}，点击上方按钮新增。`));
+        return;
+      }
+
+      if (activeList.length) {
+        els.structureList.append(node("div", "list-caption", `使用中 · ${activeList.length}`));
+        activeList.forEach((item, index) => {
+          const row = node("div", "entity-row");
+          const orderBox = node("div", "order-buttons");
+          const upBtn = btn("↑", "btn icon-btn", () => reorderEntity(kind, index, -1), "上移");
+          const downBtn = btn("↓", "btn icon-btn", () => reorderEntity(kind, index, 1), "下移");
+          upBtn.disabled = index === 0;
+          downBtn.disabled = index === activeList.length - 1;
+          orderBox.append(upBtn, downBtn);
+
+          const ident = node("div");
+          ident.append(node("div", "entity-name", item.name));
+          if (kind === "student") {
+            const group = state.classData.groups.find((entry) => entry.id === item.groupId);
+            ident.append(node("div", "entity-meta", group ? `小组：${group.name}` : "未分组"));
+          } else {
+            ident.append(node("div", "entity-meta", `顺序 ${index + 1}`));
+          }
+
+          const meta = node("div", "entity-meta", `v${item.version}`);
+          const actions = node("div", "row-actions");
+          actions.append(
+            btn("编辑", "btn small", () => openEntityForm(kind, item)),
+            btn("归档", "btn small danger", () => archiveEntity(kind, item))
+          );
+          row.append(orderBox, ident, meta, actions);
+          els.structureList.append(row);
+        });
+      }
+
+      if (archived.length) {
+        els.structureList.append(node("div", "list-caption", `已归档 · ${archived.length}`));
+        archived.forEach((item) => {
+          const row = node("div", "entity-row archived");
+          row.append(node("div", "", ""));
+          const ident = node("div");
+          ident.append(node("div", "entity-name", item.name), node("div", "entity-meta", "历史数据已保留"));
+          const meta = node("div", "entity-meta", `v${item.version}`);
+          const actions = node("div", "row-actions");
+          actions.append(btn("恢复", "btn small", () => patchStructure({ type: `${kind}.restore`, id: item.id, expectedVersion: item.version }, `${kindLabels(kind)[0]}已恢复`)));
+          row.append(ident, meta, actions);
+          els.structureList.append(row);
+        });
+      }
+    }
+
+    async function reorderEntity(kind, index, direction) {
+      const items = activeEntities(kind);
+      const target = index + direction;
+      if (target < 0 || target >= items.length) return;
+      [items[index], items[target]] = [items[target], items[index]];
+      await patchStructure({ type: `${kind}.reorder`, orderedIds: items.map((item) => item.id) }, "显示顺序已更新");
+    }
+
+    async function archiveEntity(kind, item) {
+      const [singular] = kindLabels(kind);
+      if (!confirm(`确定归档${singular}“${item.name}”？历史积分数据将完整保留并可随时恢复。`)) return;
+      await patchStructure({ type: `${kind}.archive`, id: item.id, expectedVersion: item.version }, `${singular}已归档`);
+    }
+
+    function openEntityForm(kind, item = null) {
+      const [singular, fieldLabel] = kindLabels(kind);
+      els.entityFormTitle.textContent = `${item ? "编辑" : "新增"}${singular}`;
+      els.entityFormDesc.textContent = item ? "修改名称或属性，历史积分始终绑定原有稳定 ID。" : "创建后将自动添加到班级有效列表中。";
+      els.entityFormFields.replaceChildren();
+      els.entityFormError.classList.add("hidden");
+
+      const nameWrap = node("div", "modal-field");
+      nameWrap.append(node("label", "", fieldLabel));
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.name = "name";
+      nameInput.value = item?.name || "";
+      nameInput.maxLength = kind === "student" ? 50 : 40;
+      nameInput.required = true;
+      nameWrap.append(nameInput);
+      els.entityFormFields.append(nameWrap);
+
+      if (kind === "student") {
+        const groupWrap = node("div", "modal-field");
+        groupWrap.append(node("label", "", "所属小组"));
+        const select = document.createElement("select");
+        select.name = "groupId";
+        const noneOption = document.createElement("option");
+        noneOption.value = "";
+        noneOption.textContent = "不分组";
+        select.append(noneOption);
+        activeEntities("group").forEach((grp) => {
+          const opt = document.createElement("option");
+          opt.value = grp.id;
+          opt.textContent = grp.name;
+          if (item?.groupId === grp.id) opt.selected = true;
+          select.append(opt);
+        });
+        groupWrap.append(select);
+        els.entityFormFields.append(groupWrap);
+      }
+
+      entitySubmitCallback = async (formData) => {
+        const name = String(formData.get("name") || "").trim();
+        if (!name) throw new Error(`请输入${fieldLabel}。`);
+        const operation = item ? { type: `${kind}.update`, id: item.id, expectedVersion: item.version, name } : { type: `${kind}.create`, name };
+        if (kind === "student") {
+          operation.groupId = String(formData.get("groupId") || "") || null;
+        }
+        await patchStructure(operation, `${singular}${item ? "已更新" : "已新增"}`);
+      };
+
+      els.entityDialog.showModal();
+      nameInput.focus();
+    }
+
+    function openPasswordModal() {
+      els.passwordForm.reset();
+      els.passwordError.textContent = "";
+      els.passwordError.classList.add("hidden");
+      els.passwordDialog.showModal();
+      $("currentPasswordInput").focus();
+    }
+
+    async function initialize(){try{if(isLocalDemo){state.session={role:"teacher",username:"demo-teacher",csrf:"demo",classes:[{id:"class-a",name:"示范班"}]};}else{const result=await api("/api/auth/session");state.session=result.body.data;if(state.session.role!=="teacher"){location.replace("/admin.html");return;}}els.userPill.textContent=state.session.username;populateClassSelect(state.session.classes||[]);if(!state.session.classes?.length){showEmpty("尚未绑定班级","请联系管理员为此教师账号绑定至少一个班级。");setStatus("","等待管理员分配班级");return;}await loadClass(els.classSelect.value,{discard:true});}catch(error){showEmpty("登录状态无效",error.message);setStatus("error",error.message);}}
+
+    els.scoreInput.addEventListener("input",updatePreview);
+    $("editorClose").addEventListener("click",()=>closeEditor());
+    $("editorCancel").addEventListener("click",()=>closeEditor());
+    $("editorBackdrop").addEventListener("click",()=>closeEditor());
+    $("editorApply").addEventListener("click",applyEditor);
+    $("previousCell").addEventListener("click",()=>moveEditor(-1));
+    $("nextCell").addEventListener("click",()=>moveEditor(1));
+    els.saveButton.addEventListener("click",saveScores);
+    els.refreshButton.addEventListener("click",refreshClass);
+    $("logoutButton").addEventListener("click",logout);
+    $("passwordBtn").addEventListener("click",openPasswordModal);
+    $("passwordCancel").addEventListener("click",()=>els.passwordDialog.close());
+
+    els.passwordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      els.passwordError.classList.add("hidden");
+      const currentPassword = $("currentPasswordInput").value;
+      const newPassword = $("newPasswordInput").value;
+      const confirmPassword = $("confirmPasswordInput").value;
+      if (newPassword !== confirmPassword) {
+        els.passwordError.textContent = "两次输入的新密码不一致。";
+        els.passwordError.classList.remove("hidden");
+        return;
+      }
+      if (newPassword.length < 6 || newPassword.length > 128) {
+        els.passwordError.textContent = "新密码长度须为 6–128 个字符。";
+        els.passwordError.classList.remove("hidden");
+        return;
+      }
+      $("passwordSubmit").disabled = true;
+      try {
+        if (isLocalDemo) {
+          toast("示范模式：密码已模拟更新");
+          els.passwordDialog.close();
+          return;
+        }
+        await api("/api/auth/password", {
+          method: "POST",
+          headers: { "X-CSRF-Token": state.session.csrf },
+          body: { currentPassword, newPassword },
+        });
+        toast("密码修改成功！");
+        els.passwordDialog.close();
+      } catch (err) {
+        els.passwordError.textContent = err.message;
+        els.passwordError.classList.remove("hidden");
+      } finally {
+        $("passwordSubmit").disabled = false;
+      }
+    });
+
+    $("structureBtn").addEventListener("click", () => {
+      if (!state.classData) {
+        toast("请先选择一个有效班级");
+        return;
+      }
+      renderStructureDialog();
+      els.structureDialog.showModal();
+    });
+    $("structureClose").addEventListener("click", () => els.structureDialog.close());
+    els.tabStudent.addEventListener("click", () => { state.structureTab = "student"; renderStructureDialog(); });
+    els.tabProject.addEventListener("click", () => { state.structureTab = "project"; renderStructureDialog(); });
+    els.tabGroup.addEventListener("click", () => { state.structureTab = "group"; renderStructureDialog(); });
+    els.addEntityBtn.addEventListener("click", () => openEntityForm(state.structureTab));
+    $("entityCancel").addEventListener("click", () => els.entityDialog.close());
+
+    els.entityForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!entitySubmitCallback) return;
+      $("entitySubmit").disabled = true;
+      els.entityFormError.classList.add("hidden");
+      try {
+        const formData = new FormData(els.entityForm);
+        await entitySubmitCallback(formData);
+        els.entityDialog.close();
+      } catch (err) {
+        els.entityFormError.textContent = err.message;
+        els.entityFormError.classList.remove("hidden");
+      } finally {
+        $("entitySubmit").disabled = false;
+      }
+    });
+
+    els.classSelect.addEventListener("change",async event=>{const previous=state.classData?.classId;if(!(await loadClass(event.target.value)))event.target.value=previous||"";});
+    els.studentTab.addEventListener("click",()=>{state.scope="student";els.studentTab.classList.add("active");els.groupTab.classList.remove("active");els.studentTab.setAttribute("aria-pressed","true");els.groupTab.setAttribute("aria-pressed","false");if(state.sort.column==="groupTotal")state.sort={column:null,direction:null};state.activeIndex=0;renderTable();});
+    els.groupTab.addEventListener("click",()=>{state.scope="group";els.groupTab.classList.add("active");els.studentTab.classList.remove("active");els.groupTab.setAttribute("aria-pressed","true");els.studentTab.setAttribute("aria-pressed","false");if(state.sort.column==="groupTotal")state.sort={column:null,direction:null};state.activeIndex=0;renderTable();});
+    els.groupTotalToggle.checked=localStorage.getItem("cloud-score:show-group-total")!=="false";
+    els.groupTotalToggle.addEventListener("change",()=>{localStorage.setItem("cloud-score:show-group-total",String(els.groupTotalToggle.checked));if(!els.groupTotalToggle.checked&&state.sort.column==="groupTotal")state.sort={column:null,direction:null};renderTable();});
+    $("useServerAll").addEventListener("click",()=>{state.conflicts.forEach(conflict=>{if(!conflict.resolved)resolveConflict(conflict,false);});renderConflicts();});
+    $("keepLocalAll").addEventListener("click",()=>{state.conflicts.forEach(conflict=>{if(!conflict.resolved)resolveConflict(conflict,true);});renderConflicts();});
+    $("conflictDone").addEventListener("click",()=>{if(state.conflicts.some(item=>!item.resolved)){toast("请先处理所有冲突");return;}els.conflictDialog.close();renderTable();});
+    els.conflictDialog.addEventListener("cancel",event=>{if(state.conflicts.some(item=>!item.resolved)){event.preventDefault();toast("请先处理所有冲突");}});
+    window.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="s"){event.preventDefault();saveScores();}if(event.key==="Escape"&&els.cellEditor.classList.contains("open"))closeEditor();});
+    window.addEventListener("beforeunload",event=>{if(state.drafts.size){event.preventDefault();event.returnValue="";}});
+    function getSystemTheme() { return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+    function getStoredTheme() { return localStorage.getItem("cloud-score:theme") || "auto"; }
+    function applyTheme(theme) {
+      if (theme === "dark" || theme === "light") document.documentElement.setAttribute("data-theme", theme);
+      else document.documentElement.removeAttribute("data-theme");
+      if (els.themeIcon) {
+        els.themeIcon.textContent = theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌓";
+        const desc = theme === "auto" ? `跟随系统（${getSystemTheme() === "dark" ? "深色" : "浅色"}）` : (theme === "dark" ? "深色模式" : "浅色模式");
+        els.themeBtn.title = `当前主题：${desc}（点击切换）`;
+      }
+    }
+    function cycleTheme() {
+      const current = getStoredTheme();
+      const next = current === "auto" ? "dark" : current === "dark" ? "light" : "auto";
+      if (next === "auto") localStorage.removeItem("cloud-score:theme");
+      else localStorage.setItem("cloud-score:theme", next);
+      applyTheme(next);
+    }
+    if (els.themeBtn) els.themeBtn.addEventListener("click", cycleTheme);
+    applyTheme(getStoredTheme());
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+      if (getStoredTheme() === "auto") applyTheme("auto");
+    });
+
+    window.addEventListener("online",()=>updateDirtyStatus());
+    window.addEventListener("offline",()=>updateDirtyStatus());
+    initialize();
+  })();
+  </script>
+</body>
+</html>

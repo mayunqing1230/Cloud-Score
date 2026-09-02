@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-QCrNMh3UwA9ub0llwXi4dJt07NJ9zSoZiQQwdFjtK20='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <title>登录 · Cloud Score</title>
+  <style>
+    :root{color-scheme:light;--ink:#173934;--muted:#667b77;--paper:#f3f4ec;--card:#fffef9;--line:#dce5e0;--brand:#176b61;--brand-dark:#104d46;--brand-soft:#dceee9;--amber:#bc7a25;--danger:#b3473d;--danger-soft:#fbe9e5;--shadow:0 28px 80px rgba(24,54,49,.15);--control-bg:#fff;--captcha-bg:#eef5f3;--glow-1:#cce9e1;--glow-2:#f1dcb8}
+    :root[data-theme="dark"]{color-scheme:dark;--ink:#e3edea;--muted:#8ea5a0;--paper:#121b19;--card:#182523;--line:#273e3a;--brand:#29a091;--brand-dark:#3ec4b3;--brand-soft:#1c3d37;--amber:#e59d38;--danger:#e06053;--danger-soft:#381a17;--shadow:0 28px 80px rgba(0,0,0,.5);--control-bg:#14201e;--captcha-bg:#1a2b28;--glow-1:rgba(41,160,145,.18);--glow-2:rgba(229,157,56,.12)}
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--ink:#e3edea;--muted:#8ea5a0;--paper:#121b19;--card:#182523;--line:#273e3a;--brand:#29a091;--brand-dark:#3ec4b3;--brand-soft:#1c3d37;--amber:#e59d38;--danger:#e06053;--danger-soft:#381a17;--shadow:0 28px 80px rgba(0,0,0,.5);--control-bg:#14201e;--captcha-bg:#1a2b28;--glow-1:rgba(41,160,145,.18);--glow-2:rgba(229,157,56,.12)}}
+    *{box-sizing:border-box}html,body{min-height:100%;margin:0}body{font-family:Inter,"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;background:var(--paper);color:var(--ink);transition:background .2s,color .2s}button,input{font:inherit}.hidden,[hidden]{display:none!important}
+    body:before,body:after{content:"";position:fixed;border-radius:999px;filter:blur(1px);pointer-events:none}body:before{width:52vw;height:52vw;max-width:720px;max-height:720px;left:-18vw;top:-28vw;background:radial-gradient(circle,var(--glow-1) 0,transparent 70%)}body:after{width:460px;height:460px;right:-180px;bottom:-240px;background:radial-gradient(circle,var(--glow-2) 0,transparent 70%)}
+    .shell{position:relative;z-index:1;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(320px,1fr) minmax(420px,620px);align-items:stretch}.story{padding:clamp(28px,5vw,72px);display:flex;flex-direction:column;justify-content:space-between;min-height:100vh}.story-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.035em}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--brand);color:#fff;box-shadow:0 11px 28px rgba(23,107,97,.27)}.brand small{display:block;margin-top:2px;color:var(--muted);font-size:10px;letter-spacing:.15em;text-transform:uppercase}.statement{max-width:660px;margin:40px 0}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--brand-dark);font-size:12px;font-weight:850;background:var(--card)}.eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand)}h1{font-size:clamp(36px,5.8vw,76px);line-height:1.02;letter-spacing:-.06em;margin:20px 0 16px;max-width:760px}.statement p{max-width:590px;margin:0;color:var(--muted);font-size:clamp(15px,1.5vw,19px);line-height:1.7}.principles{display:flex;gap:20px;color:var(--muted);font-size:12px}.principles span{display:flex;align-items:center;gap:7px}.principles span:before{content:"✓";color:var(--brand);font-weight:900}
+    .top-toolbar{position:absolute;top:18px;right:22px;z-index:20;display:flex;align-items:center;gap:8px}.theme-btn{width:36px;height:36px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;display:grid;place-items:center;font-size:16px;cursor:pointer;transition:.15s;box-shadow:0 4px 12px rgba(0,0,0,.04)}.theme-btn:hover{border-color:var(--brand);transform:translateY(-1px)}
+    .statement-opensource{margin-top:14px}.statement-opensource a{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;color:var(--brand);text-decoration:none;font-size:13px;font-weight:750;line-height:1.45;word-break:break-all;transition:.15s}.statement-opensource a:hover{color:var(--brand-dark);text-decoration:underline}.statement-opensource svg{width:15px;height:15px;fill:currentColor;flex:0 0 auto}.license-tag{display:inline-block;padding:1px 5px;background:var(--brand-soft);color:var(--brand-dark);border-radius:4px;font-size:10px;font-weight:800}
+    .entry{padding:clamp(18px,3.5vw,48px);display:flex;align-items:center;justify-content:center;position:relative}.card{width:min(100%,480px);background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:clamp(24px,3.6vw,38px);backdrop-filter:blur(16px)}.card-head{margin-bottom:22px}.card-head h2{font-size:27px;letter-spacing:-.04em;margin:0 0 6px}.card-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.field{margin-bottom:15px}.field label{display:flex;justify-content:space-between;margin:0 0 6px;font-size:13px;font-weight:850}.field label span{font-weight:600;color:var(--muted);font-size:11px}.control{width:100%;height:48px;border:1px solid var(--line);background:var(--control-bg);border-radius:12px;padding:0 14px;color:var(--ink);transition:.15s}.control::placeholder{color:var(--muted);opacity:.7}.control:focus{outline:3px solid rgba(23,107,97,.18);border-color:var(--brand)}.captcha-row{display:grid;grid-template-columns:1fr 144px;gap:9px}.captcha-box{height:48px;border:1px solid var(--line);border-radius:12px;background:var(--captcha-bg);color:var(--ink);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;cursor:pointer}.captcha-box strong{font-size:16px;letter-spacing:.02em}.captcha-box span{margin-top:3px;color:var(--muted);font-size:9px;font-weight:700}.captcha-box:hover{border-color:var(--brand);background:var(--brand-soft)}.captcha-box:focus-visible{outline:3px solid rgba(23,107,97,.18);border-color:var(--brand)}.captcha-box.loading:after{content:"正在出题…";position:absolute;inset:0;display:grid;place-items:center;border-radius:11px;background:var(--captcha-bg);color:var(--muted);font-size:12px;font-weight:750}.captcha-note{margin:6px 0 0;color:var(--muted);font-size:11px}.error{display:flex;align-items:flex-start;gap:9px;background:var(--danger-soft);color:var(--danger);border-radius:11px;padding:9px 12px;margin:2px 0 12px;font-size:12px;line-height:1.5}.error:before{content:"!";width:18px;height:18px;flex:0 0 auto;display:grid;place-items:center;background:var(--danger);color:#fff;border-radius:50%;font-size:11px;font-weight:900}.submit{width:100%;height:50px;border:0;border-radius:12px;background:var(--brand);color:#fff;font-weight:900;letter-spacing:.02em;box-shadow:0 10px 24px rgba(23,107,97,.22);transition:.16s;cursor:pointer}.submit:hover{background:var(--brand-dark);transform:translateY(-1px)}.submit:disabled{cursor:wait;opacity:.68;transform:none}.submit .busy-label{display:none}.submit.busy .default-label{display:none}.submit.busy .busy-label{display:inline}.security-note{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px 0 0;color:var(--muted);font-size:11px}.security-note svg{width:14px;height:14px;fill:var(--brand)}
+    .noscript{max-width:480px;margin:auto;padding:16px;background:var(--danger-soft);border-radius:12px;color:var(--danger)}
+    @media(max-width:920px){.shell{display:block}.story{min-height:auto;padding:20px 18px 8px}.statement{margin:36px 0 12px}.statement h1{font-size:32px}.statement p{font-size:14px}.principles{display:none}.entry{padding:14px 16px 36px}.top-toolbar{top:14px;right:16px}}
+    @media(max-width:520px){.story{padding-bottom:0}.statement{margin:20px 0 8px}.statement h1{font-size:26px;margin:10px 0 4px}.statement p{display:none}.statement-opensource{margin-top:6px;margin-bottom:8px}.statement-opensource a{font-size:11px;gap:4px;line-height:1.4}.card{border-radius:18px;padding:20px 16px}.captcha-row{grid-template-columns:1fr 124px}.top-toolbar{top:12px;right:14px}.theme-btn{width:34px;height:34px;font-size:15px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="top-toolbar">
+    <button class="theme-btn" id="themeToggle" type="button" title="切换浅色/深色主题" aria-label="切换浅色/深色主题"><span id="themeIcon">🌓</span></button>
+  </div>
+  <main class="shell">
+    <section class="story" aria-label="系统介绍">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">分</span><span>Cloud Score<small>Classroom points</small></span></div>
+      <div class="statement">
+        <span class="eyebrow">班级积分工作台</span>
+        <h1>把每一次进步，记得清清楚楚。</h1>
+        <p>面向教师的轻量积分表。快速记录、清晰统计，在电脑和手机上都能顺手完成课堂工作。</p>
+        <div class="statement-opensource">
+          <a href="https://github.com/mayunqing1230/Cloud-Score" target="_blank" rel="noopener noreferrer" title="访问 GitHub 开源仓库">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+            <span>开源自由 · <span class="license-tag">MIT 协议</span>：github.com/mayunqing1230/Cloud-Score</span>
+          </a>
+        </div>
+      </div>
+      <div class="principles" aria-label="系统特点"><span>私有数据存储</span><span>冲突安全保存</span><span>无自动轮询</span></div>
+    </section>
+    <section class="entry" aria-label="登录区域">
+      <div class="card">
+        <div class="card-head"><h2>欢迎回来</h2><p>管理员与教师使用同一入口；账号不区分大小写，密码区分大小写。</p></div>
+        <noscript><div class="noscript">此系统需要启用 JavaScript 才能登录。</div></noscript>
+        <form id="loginForm" autocomplete="on" novalidate>
+          <div class="field"><label for="username">账号 <span>管理员固定为 admin</span></label><input class="control" id="username" name="username" autocomplete="username" maxlength="32" pattern="[A-Za-z0-9_-]+" placeholder="例如 teacher01" required autofocus></div>
+          <div class="field"><label for="password">密码 <span>区分大小写</span></label><input class="control" id="password" name="password" type="password" autocomplete="current-password" maxlength="128" placeholder="输入密码" required></div>
+          <div class="field"><label for="captchaCode">安全计算题 <span>2 分钟内有效</span></label><div class="captcha-row"><input class="control" id="captchaCode" name="captchaCode" inputmode="numeric" autocomplete="off" maxlength="3" pattern="[0-9]{1,3}" placeholder="填写答案" required><button class="captcha-box loading" type="button" id="refreshCaptcha" aria-label="换一道安全计算题"><strong id="captchaQuestion" aria-live="polite">—</strong><span>点击换一题</span></button></div><p class="captcha-note">请填写右侧算式的答案；每道题只能使用一次。</p></div>
+          <div class="error hidden" id="errorBox" role="alert"></div>
+          <button class="submit" id="submitButton" type="submit"><span class="default-label">安全登录</span><span class="busy-label">正在验证…</span></button>
+        </form>
+        <p class="security-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4.5 5v5.7c0 5 3.2 9.6 7.5 11.3 4.3-1.7 7.5-6.3 7.5-11.3V5L12 2Zm0 3.1 4.5 1.8v3.8c0 3.5-1.9 6.8-4.5 8.2-2.6-1.4-4.5-4.7-4.5-8.2V6.9L12 5.1Z"/></svg>登录请求受验证码、随机延迟与临时封禁保护</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    "use strict";
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+
+    function getSystemTheme() { return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+    function getStoredTheme() { return localStorage.getItem("cloud-score:theme") || "auto"; }
+    function applyTheme(theme) {
+      if (theme === "dark" || theme === "light") document.documentElement.setAttribute("data-theme", theme);
+      else document.documentElement.removeAttribute("data-theme");
+      if (themeIcon) {
+        themeIcon.textContent = theme === "dark" ? "🌙" : theme === "light" ? "☀️" : "🌓";
+        const desc = theme === "auto" ? `跟随系统（${getSystemTheme() === "dark" ? "深色" : "浅色"}）` : (theme === "dark" ? "深色模式" : "浅色模式");
+        themeToggle.title = `当前主题：${desc}（点击切换）`;
+      }
+    }
+    function cycleTheme() {
+      const current = getStoredTheme();
+      const next = current === "auto" ? "dark" : current === "dark" ? "light" : "auto";
+      if (next === "auto") localStorage.removeItem("cloud-score:theme");
+      else localStorage.setItem("cloud-score:theme", next);
+      applyTheme(next);
+    }
+    if (themeToggle) themeToggle.addEventListener("click", cycleTheme);
+    applyTheme(getStoredTheme());
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+      if (getStoredTheme() === "auto") applyTheme("auto");
+    });
+
+    const form = document.getElementById("loginForm");
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+    const captchaCode = document.getElementById("captchaCode");
+    const refreshCaptcha = document.getElementById("refreshCaptcha");
+    const captchaQuestion = document.getElementById("captchaQuestion");
+    const errorBox = document.getElementById("errorBox");
+    const submitButton = document.getElementById("submitButton");
+    let captchaId = "";
+    let blockedUntil = 0;
+    let countdownTimer = 0;
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function clearError() {
+      errorBox.textContent = "";
+      errorBox.classList.add("hidden");
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, { credentials: "same-origin", cache: "no-store", ...options });
+      let payload = null;
+      try { payload = await response.json(); } catch { payload = null; }
+      if (!response.ok || !payload?.ok) {
+        const failure = new Error(payload?.error?.message || `请求失败（${response.status}）`);
+        failure.status = response.status;
+        failure.code = payload?.error?.code || "NETWORK_RESPONSE_ERROR";
+        failure.details = payload?.error?.details || {};
+        failure.retryAfter = Number(response.headers.get("Retry-After") || failure.details.retryAfter || 0);
+        throw failure;
+      }
+      return payload;
+    }
+
+    function updateBlockedState() {
+      window.clearTimeout(countdownTimer);
+      const seconds = Math.max(0, Math.ceil((blockedUntil - Date.now()) / 1000));
+      if (!seconds) {
+        submitButton.disabled = false;
+        if (blockedUntil) clearError();
+        blockedUntil = 0;
+        return;
+      }
+      submitButton.disabled = true;
+      showError(`登录暂时受限，请在 ${seconds} 秒后重试。`);
+      countdownTimer = window.setTimeout(updateBlockedState, 1000);
+    }
+
+    async function loadCaptcha(focus = false) {
+      refreshCaptcha.classList.add("loading");
+      refreshCaptcha.disabled = true;
+      captchaId = "";
+      captchaCode.value = "";
+      captchaQuestion.textContent = "—";
+      try {
+        const result = await requestJson("/api/auth/captcha");
+        if (!result.data?.captchaId || !result.data?.question) throw new Error("计算题响应不完整");
+        captchaId = result.data.captchaId;
+        captchaQuestion.textContent = result.data.question;
+        if (focus) captchaCode.focus();
+      } catch (error) {
+        showError(error.code === "CUSTOM_DOMAIN_REQUIRED" ? "请通过已绑定的自定义域名访问系统。" : `验证码加载失败：${error.message}`);
+      } finally {
+        refreshCaptcha.classList.remove("loading");
+        refreshCaptcha.disabled = false;
+      }
+    }
+
+    async function checkExistingSession() {
+      try {
+        const result = await requestJson("/api/auth/session");
+        const target = result.data.role === "admin" ? "/admin.html" : "/teacher.html";
+        location.replace(target);
+      } catch { await loadCaptcha(); }
+    }
+
+    refreshCaptcha.addEventListener("click", () => loadCaptcha(true));
+    username.addEventListener("input", () => { username.value = username.value.normalize("NFKC").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 32); });
+    captchaCode.addEventListener("input", () => { captchaCode.value = captchaCode.value.normalize("NFKC").replace(/\D/g, "").slice(0, 3); });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearError();
+      if (Date.now() < blockedUntil) return updateBlockedState();
+      const account = username.value.normalize("NFKC").trim().toLowerCase();
+      if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(account)) return showError("账号格式不正确，只能使用字母、数字、短横线或下划线。");
+      if (!password.value || password.value.length > 128) return showError("请输入有效密码。");
+      if (!captchaId || !/^\d{1,3}$/.test(captchaCode.value)) return showError("请输入当前计算题的数字答案。");
+      submitButton.disabled = true;
+      submitButton.classList.add("busy");
+      try {
+        const result = await requestJson("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: account, password: password.value, captchaId, captchaCode: captchaCode.value }),
+        });
+        password.value = "";
+        location.replace(result.data.role === "admin" ? "/admin.html" : "/teacher.html");
+      } catch (error) {
+        const until = Number(error.details?.blockedUntil || 0);
+        if (error.status === 429 || until > Date.now()) {
+          blockedUntil = until > Date.now() ? until : Date.now() + Math.max(1, error.retryAfter) * 1000;
+          updateBlockedState();
+        } else {
+          showError(error.message);
+          submitButton.disabled = false;
+        }
+        await loadCaptcha(error.code === "INVALID_CAPTCHA");
+      } finally {
+        submitButton.classList.remove("busy");
+        if (Date.now() >= blockedUntil) submitButton.disabled = false;
+      }
+    });
+
+    checkExistingSession();
+  </script>
+</body>
+</html>
