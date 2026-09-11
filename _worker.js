@@ -1,5 +1,11 @@
 const APP_SCHEMA_VERSION = 1;
 const CATALOG_KEY = "system/catalog.json";
+const ANNOUNCEMENT_KEY = "system/announcement.json";
+const MAX_ANNOUNCEMENT_NOTICE_LENGTH = 2000;
+const MAX_CHANGELOG_ENTRIES = 50;
+const MAX_CHANGELOG_VERSION_LENGTH = 50;
+const MAX_CHANGELOG_DATE_LENGTH = 30;
+const MAX_CHANGELOG_CONTENT_LENGTH = 2000;
 const COOKIE_PROD = "__Host-cs_session";
 const COOKIE_LOCAL = "cs_session";
 const SESSION_ADMIN_SECONDS = 2 * 60 * 60;
@@ -169,6 +175,28 @@ function validatePassword(password) {
   return value;
 }
 
+function validatePasswordWithPolicy(password, policy) {
+  const value = validatePassword(password);
+  if (!policy || !policy.enabled) return value;
+  const minLength = Number.isInteger(policy.minLength) && policy.minLength >= 6 && policy.minLength <= 32 ? policy.minLength : 8;
+  if (value.length < minLength) {
+    throw new ApiError(400, "PASSWORD_POLICY_VIOLATION", `新密码长度不能少于 ${minLength} 个字符。`);
+  }
+  if (policy.requireUppercase && !/[A-Z]/.test(value)) {
+    throw new ApiError(400, "PASSWORD_POLICY_VIOLATION", "新密码必须包含至少一个大写英文字母。");
+  }
+  if (policy.requireLowercase && !/[a-z]/.test(value)) {
+    throw new ApiError(400, "PASSWORD_POLICY_VIOLATION", "新密码必须包含至少一个小写英文字母。");
+  }
+  if (policy.requireNumber && !/[0-9]/.test(value)) {
+    throw new ApiError(400, "PASSWORD_POLICY_VIOLATION", "新密码必须包含至少一个数字。");
+  }
+  if (policy.requireSpecial && !/[^A-Za-z0-9]/.test(value)) {
+    throw new ApiError(400, "PASSWORD_POLICY_VIOLATION", "新密码必须包含至少一个特殊符号。");
+  }
+  return value;
+}
+
 function assertMutationId(value) {
   if (!MUTATION_PATTERN.test(String(value ?? ""))) {
     throw new ApiError(400, "INVALID_MUTATION_ID", "mutationId 格式无效。" );
@@ -280,10 +308,36 @@ async function verifyPasswordRecord(password, record) {
   return constantTimeDigestEqual(actual, expected);
 }
 
+function defaultPasswordPolicy() {
+  return {
+    enabled: false,
+    minLength: 8,
+    requireUppercase: false,
+    requireLowercase: false,
+    requireNumber: false,
+    requireSpecial: false,
+    promptMode: "reminder",
+  };
+}
+
+function migratePasswordPolicy(policy) {
+  if (!policy || typeof policy !== "object") return defaultPasswordPolicy();
+  return {
+    enabled: Boolean(policy.enabled),
+    minLength: Number.isInteger(policy.minLength) && policy.minLength >= 6 && policy.minLength <= 32 ? policy.minLength : 8,
+    requireUppercase: Boolean(policy.requireUppercase),
+    requireLowercase: Boolean(policy.requireLowercase),
+    requireNumber: Boolean(policy.requireNumber),
+    requireSpecial: Boolean(policy.requireSpecial),
+    promptMode: policy.promptMode === "mandatory" ? "mandatory" : "reminder",
+  };
+}
+
 function defaultCatalog() {
   return {
     schemaVersion: APP_SCHEMA_VERSION,
     revision: 0,
+    passwordPolicy: defaultPasswordPolicy(),
     teachers: {},
     classes: {},
     recentMutations: [],
@@ -317,11 +371,24 @@ function migrateCatalog(value) {
   if ((value.schemaVersion || 1) > APP_SCHEMA_VERSION) {
     throw new ApiError(503, "SCHEMA_TOO_NEW", "数据版本高于当前程序支持版本。" );
   }
+  const teachers = {};
+  if (value.teachers && typeof value.teachers === "object") {
+    for (const [key, teacher] of Object.entries(value.teachers)) {
+      if (teacher && typeof teacher === "object") {
+        teachers[key] = {
+          ...teacher,
+          initialPasswordChanged: Boolean(teacher.initialPasswordChanged ?? true),
+          passwordUpdatedAt: teacher.passwordUpdatedAt || null,
+        };
+      }
+    }
+  }
   return {
     ...defaultCatalog(),
     ...value,
     schemaVersion: APP_SCHEMA_VERSION,
-    teachers: value.teachers && typeof value.teachers === "object" ? value.teachers : {},
+    passwordPolicy: migratePasswordPolicy(value.passwordPolicy),
+    teachers,
     classes: value.classes && typeof value.classes === "object" ? value.classes : {},
     recentMutations: Array.isArray(value.recentMutations) ? value.recentMutations.slice(-50) : [],
     receipts: value.receipts && typeof value.receipts === "object" ? value.receipts : {},
@@ -643,6 +710,8 @@ function sanitizeCatalog(catalog) {
     classIds: Array.isArray(teacher.classIds) ? teacher.classIds : [],
     authVersion: Number(teacher.authVersion || 0),
     version: Number(teacher.version || 0),
+    initialPasswordChanged: Boolean(teacher.initialPasswordChanged ?? true),
+    passwordUpdatedAt: teacher.passwordUpdatedAt || null,
     createdAt: teacher.createdAt,
     updatedAt: teacher.updatedAt,
   }));
@@ -656,7 +725,14 @@ function sanitizeCatalog(catalog) {
   }));
   teachers.sort((a, b) => a.username.localeCompare(b.username));
   classes.sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
-  return { schemaVersion: catalog.schemaVersion, revision: catalog.revision, teachers, classes, updatedAt: catalog.updatedAt };
+  return {
+    schemaVersion: catalog.schemaVersion,
+    revision: catalog.revision,
+    passwordPolicy: migratePasswordPolicy(catalog.passwordPolicy),
+    teachers,
+    classes,
+    updatedAt: catalog.updatedAt,
+  };
 }
 
 function classSummaryForSession(catalog, session) {
@@ -757,6 +833,25 @@ async function applyCatalogOperations(env, source, operations) {
   const catalog = structuredClone(source);
   for (const operation of operations) {
     const type = String(operation?.type || "");
+    if (type === "catalog.setPasswordPolicy") {
+      catalog.passwordPolicy = migratePasswordPolicy(operation.policy);
+      catalog.updatedAt = nowIso();
+      continue;
+    }
+    if (type === "catalog.requireAllPasswordReset") {
+      const timestamp = nowIso();
+      for (const teacher of Object.values(catalog.teachers || {})) {
+        if (teacher && typeof teacher === "object" && teacher.active) {
+          teacher.initialPasswordChanged = false;
+          teacher.passwordUpdatedAt = timestamp;
+          teacher.version = Number(teacher.version || 0) + 1;
+          teacher.authVersion = Number(teacher.authVersion || 0) + 1;
+          teacher.updatedAt = timestamp;
+        }
+      }
+      catalog.updatedAt = timestamp;
+      continue;
+    }
     if (type === "teacher.create") {
       const username = normalizeIdentifier(operation.username, "教师账号");
       if (username === "admin") throw new ApiError(409, "RESERVED_USERNAME", "admin 是保留账号。" );
@@ -773,6 +868,8 @@ async function applyCatalogOperations(env, source, operations) {
         classIds,
         authVersion: 1,
         version: 1,
+        initialPasswordChanged: false,
+        passwordUpdatedAt: timestamp,
         createdAt: timestamp,
         updatedAt: timestamp,
       };
@@ -784,7 +881,11 @@ async function applyCatalogOperations(env, source, operations) {
       if (!teacher) throw new ApiError(404, "TEACHER_NOT_FOUND", "教师账号不存在。" );
       expectedVersion(teacher, operation.expectedVersion, "教师账号");
       if (type === "teacher.setClasses") teacher.classIds = normalizeClassIds(operation.classIds || [], catalog);
-      else if (type === "teacher.resetPassword") teacher.password = await createPasswordRecord(operation.password);
+      else if (type === "teacher.resetPassword") {
+        teacher.password = await createPasswordRecord(operation.password);
+        teacher.initialPasswordChanged = false;
+        teacher.passwordUpdatedAt = nowIso();
+      }
       else if (type === "teacher.archive") teacher.active = false;
       else if (type === "teacher.restore") {
         if (!teacher.active && Object.values(catalog.teachers).filter((entry) => entry.active).length >= MAX_TEACHERS) {
@@ -1098,12 +1199,21 @@ async function handleSession(context) {
   const auth = await authenticate(context.env, context.request);
   const catalogRecord = auth.catalogRecord || (auth.session.role === "teacher" ? await loadCatalog(context.env.R2, false) : null);
   const classes = catalogRecord ? classSummaryForSession(catalogRecord.data, auth.session) : [];
+  let initialPasswordChanged = true;
+  let passwordPolicy = defaultPasswordPolicy();
+  if (auth.session.role === "teacher" && catalogRecord) {
+    const teacher = catalogRecord.data.teachers[auth.session.username];
+    initialPasswordChanged = Boolean(teacher?.initialPasswordChanged ?? true);
+    passwordPolicy = migratePasswordPolicy(catalogRecord.data.passwordPolicy);
+  }
   return okResponse({
     role: auth.session.role,
     username: auth.session.username,
     csrf: auth.session.csrf,
     expiresAt: auth.session.expiresAt,
     classes,
+    initialPasswordChanged,
+    passwordPolicy,
   });
 }
 
@@ -1159,6 +1269,93 @@ async function handleAdminCatalogPatch(context) {
   }
   if (!written) throw new ApiError(409, "CATALOG_CONFLICT", "管理数据已被其他操作更新，请刷新后重试。" );
   return okResponse({ catalog: sanitizeCatalog(next), replayed: false }, { revision: next.revision, etag: written.httpEtag }, 200, { ETag: written.httpEtag || `"${written.etag}"` });
+}
+
+function defaultAnnouncement() {
+  return {
+    enabled: false,
+    notice: "",
+    changelog: [],
+    version: 0,
+    updatedAt: 0,
+  };
+}
+
+function sanitizeAnnouncement(data) {
+  if (!data || typeof data !== "object") return defaultAnnouncement();
+  const enabled = Boolean(data.enabled);
+  const notice = typeof data.notice === "string" ? data.notice.slice(0, MAX_ANNOUNCEMENT_NOTICE_LENGTH) : "";
+  const rawChangelog = Array.isArray(data.changelog) ? data.changelog : [];
+  const changelog = [];
+  for (const item of rawChangelog) {
+    if (!item || typeof item !== "object") continue;
+    changelog.push({
+      id: typeof item.id === "string" && item.id ? item.id.slice(0, 64) : `cl_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      version: typeof item.version === "string" ? item.version.slice(0, MAX_CHANGELOG_VERSION_LENGTH) : "",
+      date: typeof item.date === "string" ? item.date.slice(0, MAX_CHANGELOG_DATE_LENGTH) : "",
+      content: typeof item.content === "string" ? item.content.slice(0, MAX_CHANGELOG_CONTENT_LENGTH) : "",
+    });
+    if (changelog.length >= MAX_CHANGELOG_ENTRIES) break;
+  }
+  const version = Number.isFinite(Number(data.version)) ? Number(data.version) : 0;
+  const updatedAt = Number.isFinite(Number(data.updatedAt)) ? Number(data.updatedAt) : 0;
+  return { enabled, notice, changelog, version, updatedAt };
+}
+
+async function loadAnnouncement(bucket) {
+  const record = await readJsonObject(bucket, ANNOUNCEMENT_KEY);
+  if (!record) return { data: defaultAnnouncement(), etag: null, httpEtag: null };
+  return { ...record, data: sanitizeAnnouncement(record.data) };
+}
+
+async function handleAnnouncementGet(context) {
+  const record = await loadAnnouncement(context.env.R2);
+  return okResponse({ announcement: record.data }, { etag: record.httpEtag }, 200, { ETag: record.httpEtag || '""' });
+}
+
+async function handleAdminAnnouncementPut(context) {
+  const auth = await authenticate(context.env, context.request, "admin");
+  assertCsrf(context.request, auth.session);
+  const body = await readRequestJson(context.request);
+  if (!body || typeof body !== "object") {
+    throw new ApiError(400, "INVALID_ANNOUNCEMENT", "公告数据无效。");
+  }
+
+  const enabled = Boolean(body.enabled);
+  const notice = typeof body.notice === "string" ? body.notice.trim().slice(0, MAX_ANNOUNCEMENT_NOTICE_LENGTH) : "";
+  const rawChangelog = Array.isArray(body.changelog) ? body.changelog : [];
+  if (rawChangelog.length > MAX_CHANGELOG_ENTRIES) {
+    throw new ApiError(400, "TOO_MANY_ENTRIES", `更新记录最多 ${MAX_CHANGELOG_ENTRIES} 条。`);
+  }
+  const changelog = [];
+  for (const entry of rawChangelog) {
+    if (!entry || typeof entry !== "object") continue;
+    const v = typeof entry.version === "string" ? entry.version.trim().slice(0, MAX_CHANGELOG_VERSION_LENGTH) : "";
+    const d = typeof entry.date === "string" ? entry.date.trim().slice(0, MAX_CHANGELOG_DATE_LENGTH) : "";
+    const c = typeof entry.content === "string" ? entry.content.trim().slice(0, MAX_CHANGELOG_CONTENT_LENGTH) : "";
+    const id = typeof entry.id === "string" && entry.id.trim() ? entry.id.trim().slice(0, 64) : `cl_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    changelog.push({ id, version: v, date: d, content: c });
+  }
+
+  const current = await loadAnnouncement(context.env.R2);
+  const publishAsNew = body.publishAsNew !== false;
+  const now = Date.now();
+  const nextVersion = publishAsNew ? now : (current.data.version || now);
+
+  const next = {
+    enabled,
+    notice,
+    changelog,
+    version: nextVersion,
+    updatedAt: now,
+  };
+
+  const written = await putJsonObject(context.env.R2, ANNOUNCEMENT_KEY, next);
+  if (!written) {
+    throw new ApiError(503, "R2_WRITE_FAILED", "保存公告失败，请稍后重试。");
+  }
+
+  return okResponse({ announcement: next }, { etag: written.httpEtag }, 200, { ETag: written.httpEtag || `"${written.etag}"` });
 }
 
 async function handleClassGet(context, classId) {
@@ -1222,7 +1419,6 @@ async function handlePasswordChange(context) {
   assertCsrf(context.request, auth.session);
   const body = await readRequestJson(context.request);
   const currentPassword = String(body.currentPassword ?? "").slice(0, 128);
-  const newPassword = validatePassword(body.newPassword);
   if (!currentPassword) {
     throw new ApiError(400, "INVALID_CURRENT_PASSWORD", "请输入当前密码。");
   }
@@ -1231,6 +1427,7 @@ async function handlePasswordChange(context) {
   if (!teacher || !teacher.active) {
     throw new ApiError(401, "SESSION_REVOKED", "账号已停用，请联系管理员。");
   }
+  const newPassword = validatePasswordWithPolicy(body.newPassword, catalogRecord.data.passwordPolicy);
   const valid = await verifyPasswordRecord(currentPassword, teacher.password);
   if (!valid) {
     throw new ApiError(400, "INVALID_CREDENTIALS", "当前密码不正确。");
@@ -1247,6 +1444,8 @@ async function handlePasswordChange(context) {
         password: newPasswordRecord,
         authVersion: nextAuthVersion,
         version: nextTeacherVersion,
+        initialPasswordChanged: true,
+        passwordUpdatedAt: nowIso(),
         updatedAt: nowIso(),
       },
     },
@@ -1274,7 +1473,7 @@ async function handlePasswordChange(context) {
   } catch {
     // Non-critical cleanup
   }
-  return okResponse({ message: "密码已成功修改。" }, {}, 200, { "Set-Cookie": newSession.cookie });
+  return okResponse({ message: "密码已成功修改。", initialPasswordChanged: true }, {}, 200, { "Set-Cookie": newSession.cookie });
 }
 
 async function verifyFreshTeacherAccess(env, session, classId) {
@@ -1377,6 +1576,15 @@ export async function onRequest(context) {
       if (method === "PATCH") return await handleAdminCatalogPatch(context);
       return methodNotAllowed(["GET", "PATCH"]);
     }
+    if (path === "/api/announcement") {
+      if (method === "GET") return await handleAnnouncementGet(context);
+      return methodNotAllowed(["GET"]);
+    }
+    if (path === "/api/admin/announcement") {
+      if (method === "GET") return await handleAnnouncementGet(context);
+      if (method === "PUT") return await handleAdminAnnouncementPut(context);
+      return methodNotAllowed(["GET", "PUT"]);
+    }
     const classRoute = /^\/api\/classes\/([a-zA-Z0-9_-]+)(?:\/(structure|scores))?$/.exec(path);
     if (classRoute) {
       const classId = normalizeIdentifier(classRoute[1], "班级号");
@@ -1400,6 +1608,13 @@ export const __test = Object.freeze({
   createMathChallenge,
   defaultCatalog,
   defaultClass,
+  defaultAnnouncement,
+  sanitizeAnnouncement,
+  loadAnnouncement,
+  validatePasswordWithPolicy,
+  defaultPasswordPolicy,
+  migratePasswordPolicy,
+  applyCatalogOperations,
 });
 
 // Flat Cloudflare Pages Advanced Mode adapter. Generated by scripts/build-release.mjs.
