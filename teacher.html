@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-LM4BwxSsPk4j15snFvP+S2/3nfpoSMkET7kOiHcI0cY='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-tOSg3aIRmV0FYS/tGK2yneGVOYatPOw7iMR+KLBt6QU='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
   <title>教师积分台 · Cloud Score</title>
   <style>
     :root{color-scheme:light;--ink:#18332f;--muted:#647773;--paper:#f5f5ee;--surface:#fffef9;--line:#dce4df;--brand:#176b61;--brand-dark:#104b45;--brand-soft:#dceeea;--amber:#c98424;--amber-soft:#fff0d4;--danger:#b3473d;--danger-soft:#fae7e3;--shadow:0 18px 50px rgba(24,51,47,.12);--radius:14px;--name-width:140px;--total-width:80px;--project-width:120px;--control-bg:#fff;--table-bg:#fff;--table-head-bg:#f1f5f2;--table-head-color:#49615c;--name-cell-bg:#fbfcf8;--total-cell-bg:#e8f2ef;--group-total-bg:#fff8e9;--group-total-color:#8c5c15;--hover-bg:#f6faf8;--preview-card-bg:#edf5f2;--modal-bg:#fff;--empty-bg:rgba(255,255,255,.55);--dialog-backdrop:rgba(15,33,30,.46)}
@@ -14,7 +14,7 @@
     *{box-sizing:border-box}html,body{min-height:100%;margin:0}body{font-family:Inter,"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;background:radial-gradient(circle at 8% 0,var(--brand-soft) 0,transparent 28rem),var(--paper);color:var(--ink);transition:background .2s,color .2s}button,input,select,textarea{font:inherit}button,select{min-height:38px}button{cursor:pointer}.hidden,[hidden]{display:none!important}
     .topbar{height:58px;padding:0 clamp(12px,2.5vw,28px);display:flex;align-items:center;justify-content:space-between;background:var(--surface);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}.topbar-left{display:flex;align-items:center;gap:16px;min-width:0}.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.03em;text-decoration:none;color:inherit;transition:opacity .15s}.brand:hover{text-decoration:none;opacity:.9}.brand:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:8px}.brand-mark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(23,107,97,.2)}.brand small{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);font-weight:700;text-transform:uppercase}.topbar-opensource{display:flex;align-items:center}.topbar-opensource a{display:inline-flex;align-items:center;gap:6px;color:var(--brand);text-decoration:none;font-size:12px;font-weight:750;line-height:1.4;white-space:nowrap;transition:.15s}.topbar-opensource a:hover{color:var(--brand-dark);text-decoration:underline}.topbar-opensource svg{width:15px;height:15px;fill:currentColor;flex:0 0 auto}.license-tag{display:inline-block;padding:1px 5px;background:var(--brand-soft);color:var(--brand-dark);border-radius:4px;font-size:10px;font-weight:800}.mobile-opensource{display:none}.user-cluster{display:flex;align-items:center;gap:8px}.user-pill{padding:5px 9px;border-radius:999px;background:var(--brand-soft);font-size:12px;font-weight:700;color:var(--brand-dark)}
     main{padding:14px clamp(8px,2vw,24px) 30px;max-width:1800px;margin:auto}.workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}.workspace-head h1{font-size:clamp(20px,2.5vw,28px);margin:0 0 4px;letter-spacing:-.03em}.workspace-head p{margin:0;color:var(--muted);font-size:13px}.revision-card{display:flex;gap:12px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:11px;color:var(--muted)}.revision-card strong{display:block;color:var(--ink);font-size:13px;margin-top:1px}
-    .toolbar{position:sticky;top:66px;z-index:30;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--surface);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);margin-bottom:10px}.toolbar-main,.toolbar-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.field-inline{display:flex;align-items:center;gap:6px}.field-inline label{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}.select{border:1px solid var(--line);background:var(--control-bg);border-radius:9px;padding:0 24px 0 9px;color:var(--ink);font-weight:700;height:36px;min-height:36px}.segmented{display:flex;background:var(--paper);padding:3px;border-radius:10px;gap:2px}.segmented button{border:0;background:transparent;color:var(--muted);border-radius:7px;padding:0 11px;font-weight:800;height:30px;min-height:30px;font-size:12px}.segmented button.active{background:var(--surface);color:var(--brand-dark);box-shadow:0 2px 8px rgba(0,0,0,.1)}.toolbar-status{min-width:0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.status-dot{width:8px;height:8px;border-radius:50%;background:#8b9a97;flex:0 0 auto}.status-dot.dirty{background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}.status-dot.saved{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}.status-dot.error{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}.toolbar-sub-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);background:var(--control-bg);color:var(--ink);border-radius:9px;padding:0 12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;min-height:36px;font-size:12px}.btn.small{min-height:30px;height:30px;padding:0 9px;font-size:11px;border-radius:8px}.btn:hover{border-color:var(--brand);background:var(--hover-bg)}.btn:focus-visible,.score-button:focus-visible,.icon-btn:focus-visible{outline:3px solid rgba(23,107,97,.24);outline-offset:2px}.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.primary:hover{background:var(--brand-dark)}.btn.danger{color:var(--danger);border-color:var(--danger-soft);background:var(--danger-soft)}.btn:disabled{opacity:.55;cursor:not-allowed}.icon-btn{width:30px;min-height:30px;height:30px;padding:0;display:grid;place-items:center}.toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}.toggle input{accent-color:var(--brand);width:15px;height:15px}
+    .toolbar{position:sticky;top:66px;z-index:30;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--surface);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);margin-bottom:10px}.toolbar-main,.toolbar-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.field-inline{display:flex;align-items:center;gap:6px}.field-inline label{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}.select{border:1px solid var(--line);background:var(--control-bg);border-radius:9px;padding:0 24px 0 9px;color:var(--ink);font-weight:700;height:36px;min-height:36px}.segmented{display:flex;background:var(--paper);padding:3px;border-radius:10px;gap:2px}.segmented button{border:0;background:transparent;color:var(--muted);border-radius:7px;padding:0 11px;font-weight:800;height:30px;min-height:30px;font-size:12px}.segmented button.active{background:var(--surface);color:var(--brand-dark);box-shadow:0 2px 8px rgba(0,0,0,.1)}.toolbar-status{min-width:0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.status-dot{width:8px;height:8px;border-radius:50%;background:#8b9a97;flex:0 0 auto}.status-dot.dirty{background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}.status-dot.saved{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}.status-dot.error{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}.toolbar-sub-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);background:var(--control-bg);color:var(--ink);border-radius:9px;padding:0 12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;min-height:36px;font-size:12px}.btn.small{min-height:30px;height:30px;padding:0 9px;font-size:11px;border-radius:8px}.btn:hover{border-color:var(--brand);background:var(--hover-bg)}.btn:focus-visible,.score-button:focus-visible,.icon-btn:focus-visible{outline:3px solid rgba(23,107,97,.24);outline-offset:2px}.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.primary:hover{background:var(--brand-dark)}.btn.danger{color:var(--danger);border-color:var(--danger-soft);background:var(--danger-soft)}.btn.warn{color:var(--amber);border-color:var(--amber-soft);background:var(--amber-soft)}.btn:disabled{opacity:.55;cursor:not-allowed}.icon-btn{width:30px;min-height:30px;height:30px;padding:0;display:grid;place-items:center}.toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}.toggle input{accent-color:var(--brand);width:15px;height:15px}
     .notice{padding:10px 12px;border-radius:11px;background:var(--amber-soft);border:1px solid var(--amber);color:var(--amber);font-size:12px;margin-bottom:10px}.empty{min-height:280px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:var(--radius);background:var(--empty-bg);padding:24px}.empty-icon{font-size:28px;margin-bottom:8px}.empty h2{margin:0 0 6px;font-size:18px}.empty p{margin:0;color:var(--muted);max-width:380px;font-size:13px}
     .table-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.table-meta{min-height:36px;padding:6px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}.legend{display:flex;gap:10px;align-items:center}.legend span{display:flex;align-items:center;gap:4px}.legend i{width:7px;height:7px;border-radius:50%;background:var(--brand)}.legend .draft i{background:var(--amber)}.table-scroll{max-height:calc(100vh - 210px);min-height:260px;overflow:auto;position:relative;scrollbar-gutter:stable;-webkit-overflow-scrolling:touch}.score-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}.score-table th,.score-table td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;background:var(--table-bg)}.score-table th{height:42px;background:var(--table-head-bg);font-size:11px;color:var(--table-head-color);text-align:center;font-weight:850;position:sticky;top:0;z-index:10;padding:0!important}.th-sort-btn{width:100%;height:100%;min-height:100%;border:0;background:transparent;padding:2px 4px;display:flex;align-items:center;justify-content:center;gap:3px;font:inherit;font-weight:850;color:inherit;cursor:pointer;border-radius:4px;transition:background .15s,color .15s;text-align:center}.th-sort-btn:hover{background:rgba(23,107,97,.12);color:var(--brand-dark)}.th-sort-btn.is-sorted{background:rgba(23,107,97,.18);color:var(--brand-dark)}.th-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}.th-sort-icon{font-size:10px;font-weight:900;line-height:1;color:var(--muted);flex:0 0 auto;display:inline-flex;align-items:center}.th-sort-btn.is-sorted .th-sort-icon{color:var(--brand);font-weight:900}.score-table tr:last-child td{border-bottom:0}.score-table th:last-child,.score-table td:last-child{border-right:0}.name-head,.name-cell{position:sticky!important;left:0;z-index:20!important;width:var(--name-width);min-width:var(--name-width);max-width:var(--name-width)}.name-head{z-index:25!important}.name-cell{padding:5px 7px!important;background:var(--name-cell-bg)!important}.name-main{font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.group-chip{display:inline-flex;margin-top:2px;padding:1px 5px;border-radius:999px;background:var(--brand-soft);color:var(--brand-dark);font-size:9px;font-weight:800}.group-chip.none{background:var(--paper);color:var(--muted)}.project-head{width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);padding:0!important}.total-head,.total-cell{position:sticky!important;right:0;z-index:20!important;width:var(--total-width);min-width:var(--total-width);max-width:var(--total-width);background:var(--total-cell-bg)!important}.total-head{z-index:25!important;padding:0!important}.total-cell{text-align:center;font-weight:900;color:var(--brand-dark);font-size:15px}.group-total-head,.group-total-cell{width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);text-align:center;background:var(--group-total-bg)!important;font-weight:850;color:var(--group-total-color)}.group-total-head{padding:0!important}.score-button{border:0;width:var(--project-width);min-width:var(--project-width);max-width:var(--project-width);min-height:56px;background:var(--table-bg);padding:4px 6px;text-align:center;color:var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;position:relative}.score-button:hover{background:var(--hover-bg)}.score-button.active-cell{box-shadow:inset 0 0 0 2px var(--brand)}.score-button.draft-cell{background:var(--amber-soft)}.score-button.draft-cell:after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--amber)}.cell-text{font-size:11px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.cell-text.placeholder{color:var(--muted);opacity:.7}.cell-score{font-size:11px;font-weight:900;color:var(--brand);display:flex;align-items:center;gap:3px}.cell-score.negative{color:var(--danger)}.cell-warning{color:var(--amber);font-size:9px}
     .editor{position:fixed;inset:0;z-index:80;pointer-events:none;display:grid;place-items:center}.editor.open{pointer-events:auto}.editor-backdrop{position:absolute;inset:0;background:var(--dialog-backdrop);opacity:0;transition:.18s}.editor.open .editor-backdrop{opacity:1}.editor-panel{position:relative;width:min(440px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.3);padding:20px;opacity:0;transform:scale(.95);transition:.2s cubic-bezier(.16,1,.3,1)}.editor.open .editor-panel{opacity:1;transform:scale(1)}.editor-title{display:flex;justify-content:space-between;gap:10px;align-items:start}.editor-title h2{font-size:18px;margin:0 0 2px}.editor-title p{margin:0;color:var(--muted);font-size:12px}.editor textarea{width:100%;min-height:120px;margin:12px 0 8px;padding:11px;border:1px solid var(--line);border-radius:11px;resize:vertical;line-height:1.5;background:var(--control-bg);color:var(--ink);font-size:13px}.editor textarea:focus{outline:3px solid rgba(23,107,97,.18);border-color:var(--brand)}.preview-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--preview-card-bg);border-radius:10px;padding:9px 11px;margin-bottom:12px}.preview-card small{color:var(--muted);font-size:11px}.preview-score{font-size:22px;font-weight:900;color:var(--brand)}.editor-nav,.editor-actions{display:flex;gap:7px}.editor-actions{justify-content:flex-end;margin-top:10px}.editor-nav .btn{flex:1}.close-btn{border:0;background:var(--paper);border-radius:9px;width:34px;height:34px;color:var(--muted)}
@@ -66,9 +66,14 @@
     .adv-sort-hint{font-size:11px;color:var(--muted);font-weight:700}
     .adv-sort-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
     .adv-sort-footer-right{display:flex;gap:8px}
+    #periodLockBtn{font-weight:850}
+    #periodLockBtn.is-locked{background:var(--amber-soft);color:var(--amber);border-color:var(--amber)}
+    #periodLockBtn.is-locked:hover{background:var(--amber);color:#fff}
+    #periodLockBtn.is-unlocked{background:var(--control-bg);color:var(--muted);border-color:var(--line)}
+    #periodLockBtn.is-unlocked:hover{background:var(--hover-bg);color:var(--brand);border-color:var(--brand)}
     @media(max-width:1120px){.topbar-repo-url{display:none}}
     @media(max-width:980px){.workspace-head{align-items:center}.revision-card{display:none}.topbar-opensource{display:none}}
-    @media(max-width:768px){:root{--name-width:58px;--total-width:38px;--project-width:46px}.topbar{height:44px;padding:0 10px}.topbar-opensource{display:none!important}.mobile-opensource{display:flex;align-items:center;justify-content:center;padding:2px 4px 6px;margin-bottom:2px}.mobile-opensource a{display:inline-flex;align-items:center;justify-content:center;gap:4px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:750;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-opensource svg{width:13px;height:13px;fill:currentColor;flex:0 0 auto}.brand{gap:6px;font-size:13px}.brand-mark{width:24px;height:24px;border-radius:7px;font-size:12px}.brand small{display:none}.user-cluster{gap:5px}.user-pill{padding:3px 6px;font-size:11px;max-width:80px;overflow:hidden;text-overflow:ellipsis}.topbar .btn{min-height:28px;height:28px;padding:0 6px;font-size:11px;border-radius:8px}main{padding:8px 6px 20px}.workspace-head{display:none}.toolbar{position:sticky;top:48px;padding:6px 8px;gap:6px;border-radius:12px;margin-bottom:8px;flex-direction:column;align-items:stretch}.toolbar-main{display:flex;align-items:center;gap:4px;width:100%}.toolbar-main .field-inline{flex:1;min-width:68px}.toolbar-main .field-inline label{display:none}.toolbar-main .select{height:32px;min-height:32px;padding:0 18px 0 6px;font-size:12px;font-weight:800;border-radius:8px}.toolbar-main .segmented{height:32px;padding:2px;border-radius:8px;gap:2px}.toolbar-main .segmented button{height:28px;min-height:28px;padding:0 6px;font-size:11px;font-weight:800;border-radius:6px}.toolbar-main #structureBtn{height:32px;min-height:32px;padding:0 7px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #saveButton{height:32px;min-height:32px;padding:0 9px;font-size:12px;font-weight:900;white-space:nowrap;border-radius:8px}.toolbar-sub{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}.toolbar-status{flex:1;min-width:0;font-size:10px;gap:4px}.status-dot{width:6px;height:6px}.toolbar-status #statusText{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-sub-actions{display:flex;align-items:center;gap:6px}.toolbar-sub-actions .toggle{font-size:10px;gap:3px}.toolbar-sub-actions .toggle input{width:13px;height:13px}.toolbar-sub-actions #refreshButton{height:24px;min-height:24px;padding:0 6px;font-size:10px;border-radius:6px}.table-meta{min-height:28px;height:auto;padding:4px 8px;font-size:10px;flex-wrap:wrap;gap:4px 8px}.table-meta-left{width:100%;justify-content:space-between;gap:6px}.sort-badge{font-size:10px;padding:2px 6px 2px 8px;max-width:100%}.sort-badge-desc{max-width:180px}.adv-sort-modal{padding:14px 12px}.adv-sort-row{flex-wrap:wrap;gap:6px;padding:8px}.adv-sort-priority{width:100%;font-size:11px;color:var(--muted)}.adv-sort-field-select{flex:1 1 54%;min-width:100px;height:32px;min-height:32px;font-size:11px}.adv-sort-dir-select{flex:1 1 36%;min-width:85px;height:32px;min-height:32px;font-size:11px}.adv-sort-row-actions{width:100%;justify-content:flex-end;gap:6px}.adv-sort-add-bar{flex-direction:column;align-items:flex-start;gap:6px}.adv-sort-footer{flex-direction:column-reverse;gap:8px}.adv-sort-footer .btn{width:100%}.adv-sort-footer-right{width:100%;display:flex;gap:6px}.adv-sort-footer-right .btn{flex:1}.legend{gap:6px}.legend i{width:6px;height:6px}.table-scroll{max-height:calc(100vh - 150px);min-height:200px;-webkit-overflow-scrolling:touch}.score-table th{height:34px!important;padding:0!important}.th-sort-btn{padding:1px;gap:1px;flex-direction:column;justify-content:center;line-height:1}.th-label{font-size:10px;line-height:1.1;max-width:44px;text-align:center}.th-sort-icon{font-size:8px;line-height:1}.th-sort-btn:not(.is-sorted) .th-sort-icon{opacity:.35;font-size:7px}.name-cell{padding:3px 2px!important}.name-main{font-size:11px;font-weight:850;text-align:center;line-height:1.2}.group-chip{font-size:8px;padding:1px 3px;margin:1px auto 0;max-width:52px;display:block;text-align:center}.score-button{height:38px;min-height:38px;padding:2px 1px;gap:1px}.score-button.draft-cell:after{top:2px;right:2px;width:4px;height:4px}.cell-text{font-size:9px;line-height:1.1;max-width:44px;text-align:center}.cell-text.placeholder{font-size:8px;opacity:.5}.cell-score{font-size:10px;font-weight:850;line-height:1.1;justify-content:center;gap:0}.cell-warning{font-size:7px}.total-cell{font-size:11px!important;font-weight:900;padding:2px!important}.group-total-cell{font-size:10px!important;font-weight:850;padding:2px!important}.editor{display:block}.editor-panel{position:absolute;top:12px;left:50%;right:auto;bottom:auto;width:calc(100vw - 20px);max-width:390px;max-height:calc(100dvh - 24px);overflow:auto;border-radius:16px;padding:14px 12px;opacity:0;transform:translate(-50%,-12px);transition:.2s ease}.editor.open .editor-panel{opacity:1;transform:translate(-50%,0)}.editor textarea{min-height:72px;height:76px;margin:8px 0 6px;padding:8px 10px;font-size:13px}.preview-card{padding:6px 9px;margin-bottom:8px}.preview-score{font-size:18px}.editor-nav,.editor-actions{gap:6px}.editor-actions{margin-top:8px}.editor-nav .btn,.editor-actions .btn{min-height:32px;height:32px;font-size:12px}.editor-title h2{font-size:16px}.editor-title p{font-size:11px}.conflict-values{grid-template-columns:1fr}.entity-row{grid-template-columns:36px 1fr;padding:6px 8px}.entity-row>div:nth-child(3){grid-column:2}.entity-row .row-actions{grid-column:2;justify-content:flex-start}.ann-modal-body{padding:14px 12px;max-height:85vh}.ann-modal-scroll{max-height:calc(85vh - 120px);margin:10px 0 12px;gap:10px}.ann-dialog-footer{flex-direction:column;align-items:stretch;gap:10px}.ann-dialog-footer .btn{width:100%}.ann-notice-card{padding:10px 12px}.ann-notice-text{font-size:12px}.ann-log-item{padding:10px 12px}}
+    @media(max-width:768px){:root{--name-width:58px;--total-width:38px;--project-width:46px}.topbar{height:44px;padding:0 10px}.topbar-opensource{display:none!important}.mobile-opensource{display:flex;align-items:center;justify-content:center;padding:2px 4px 6px;margin-bottom:2px}.mobile-opensource a{display:inline-flex;align-items:center;justify-content:center;gap:4px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:750;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-opensource svg{width:13px;height:13px;fill:currentColor;flex:0 0 auto}.brand{gap:6px;font-size:13px}.brand-mark{width:24px;height:24px;border-radius:7px;font-size:12px}.brand small{display:none}.user-cluster{gap:5px}.user-pill{padding:3px 6px;font-size:11px;max-width:80px;overflow:hidden;text-overflow:ellipsis}.topbar .btn{min-height:28px;height:28px;padding:0 6px;font-size:11px;border-radius:8px}main{padding:8px 6px 20px}.workspace-head{display:none}.toolbar{position:sticky;top:48px;padding:6px 8px;gap:6px;border-radius:12px;margin-bottom:8px;flex-direction:column;align-items:stretch}.toolbar-main{display:flex;align-items:center;gap:4px;width:100%;flex-wrap:wrap}.toolbar-main .field-inline{flex:1;min-width:68px}.toolbar-main .field-inline label{display:none}.toolbar-main .select{height:32px;min-height:32px;padding:0 18px 0 6px;font-size:12px;font-weight:800;border-radius:8px}.toolbar-main #periodSelect{max-width:130px;font-size:11px;padding:0 16px 0 6px}.toolbar-main #newPeriodBtn,.toolbar-main #periodLockBtn{height:32px;min-height:32px;padding:0 6px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #periodSettingsBtn{height:32px;min-height:32px;width:30px;min-width:30px;padding:0;border-radius:8px}.toolbar-main .segmented{height:32px;padding:2px;border-radius:8px;gap:2px}.toolbar-main .segmented button{height:28px;min-height:28px;padding:0 6px;font-size:11px;font-weight:800;border-radius:6px}.toolbar-main #structureBtn{height:32px;min-height:32px;padding:0 7px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #saveButton{height:32px;min-height:32px;padding:0 9px;font-size:12px;font-weight:900;white-space:nowrap;border-radius:8px}.toolbar-sub{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}.toolbar-status{flex:1;min-width:0;font-size:10px;gap:4px}.status-dot{width:6px;height:6px}.toolbar-status #statusText{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-sub-actions{display:flex;align-items:center;gap:6px}.toolbar-sub-actions .toggle{font-size:10px;gap:3px}.toolbar-sub-actions .toggle input{width:13px;height:13px}.toolbar-sub-actions #refreshButton{height:24px;min-height:24px;padding:0 6px;font-size:10px;border-radius:6px}.table-meta{min-height:28px;height:auto;padding:4px 8px;font-size:10px;flex-wrap:wrap;gap:4px 8px}.table-meta-left{width:100%;justify-content:space-between;gap:6px}.sort-badge{font-size:10px;padding:2px 6px 2px 8px;max-width:100%}.sort-badge-desc{max-width:180px}.adv-sort-modal{padding:14px 12px}.adv-sort-row{flex-wrap:wrap;gap:6px;padding:8px}.adv-sort-priority{width:100%;font-size:11px;color:var(--muted)}.adv-sort-field-select{flex:1 1 54%;min-width:100px;height:32px;min-height:32px;font-size:11px}.adv-sort-dir-select{flex:1 1 36%;min-width:85px;height:32px;min-height:32px;font-size:11px}.adv-sort-row-actions{width:100%;justify-content:flex-end;gap:6px}.adv-sort-add-bar{flex-direction:column;align-items:flex-start;gap:6px}.adv-sort-footer{flex-direction:column-reverse;gap:8px}.adv-sort-footer .btn{width:100%}.adv-sort-footer-right{width:100%;display:flex;gap:6px}.adv-sort-footer-right .btn{flex:1}.legend{gap:6px}.legend i{width:6px;height:6px}.table-scroll{max-height:calc(100vh - 150px);min-height:200px;-webkit-overflow-scrolling:touch}.score-table th{height:34px!important;padding:0!important}.th-sort-btn{padding:1px;gap:1px;flex-direction:column;justify-content:center;line-height:1}.th-label{font-size:10px;line-height:1.1;max-width:44px;text-align:center}.th-sort-icon{font-size:8px;line-height:1}.th-sort-btn:not(.is-sorted) .th-sort-icon{opacity:.35;font-size:7px}.name-cell{padding:3px 2px!important}.name-main{font-size:11px;font-weight:850;text-align:center;line-height:1.2}.group-chip{font-size:8px;padding:1px 3px;margin:1px auto 0;max-width:52px;display:block;text-align:center}.score-button{height:38px;min-height:38px;padding:2px 1px;gap:1px}.score-button.draft-cell:after{top:2px;right:2px;width:4px;height:4px}.cell-text{font-size:9px;line-height:1.1;max-width:44px;text-align:center}.cell-text.placeholder{font-size:8px;opacity:.5}.cell-score{font-size:10px;font-weight:850;line-height:1.1;justify-content:center;gap:0}.cell-warning{font-size:7px}.total-cell{font-size:11px!important;font-weight:900;padding:2px!important}.group-total-cell{font-size:10px!important;font-weight:850;padding:2px!important}.editor{display:block}.editor-panel{position:absolute;top:12px;left:50%;right:auto;bottom:auto;width:calc(100vw - 20px);max-width:390px;max-height:calc(100dvh - 24px);overflow:auto;border-radius:16px;padding:14px 12px;opacity:0;transform:translate(-50%,-12px);transition:.2s ease}.editor.open .editor-panel{opacity:1;transform:translate(-50%,0)}.editor textarea{min-height:72px;height:76px;margin:8px 0 6px;padding:8px 10px;font-size:13px}.preview-card{padding:6px 9px;margin-bottom:8px}.preview-score{font-size:18px}.editor-nav,.editor-actions{gap:6px}.editor-actions{margin-top:8px}.editor-nav .btn,.editor-actions .btn{min-height:32px;height:32px;font-size:12px}.editor-title h2{font-size:16px}.editor-title p{font-size:11px}.conflict-values{grid-template-columns:1fr}.entity-row{grid-template-columns:36px 1fr;padding:6px 8px}.entity-row>div:nth-child(3){grid-column:2}.entity-row .row-actions{grid-column:2;justify-content:flex-start}.ann-modal-body{padding:14px 12px;max-height:85vh}.ann-modal-scroll{max-height:calc(85vh - 120px);margin:10px 0 12px;gap:10px}.ann-dialog-footer{flex-direction:column;align-items:stretch;gap:10px}.ann-dialog-footer .btn{width:100%}.ann-notice-card{padding:10px 12px}.ann-notice-text{font-size:12px}.ann-log-item{padding:10px 12px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
@@ -102,7 +107,12 @@
     <section class="toolbar" aria-label="积分工具栏">
       <div class="toolbar-main">
         <div class="field-inline"><label for="classSelect">班级</label><select class="select" id="classSelect" aria-label="选择班级"></select></div>
-        <div class="segmented" aria-label="计分范围"><button type="button" id="studentTab" class="active" aria-pressed="true">个人积分</button><button type="button" id="groupTab" aria-pressed="false">小组积分</button></div>
+        <div class="field-inline"><label for="periodSelect">期次</label><select class="select" id="periodSelect" aria-label="选择期次"></select></div>
+        <button class="btn small" id="newPeriodBtn" type="button" title="开启新一期记分表">+ 开启新期</button>
+        <button class="btn small is-unlocked" id="periodLockBtn" type="button" title="点击锁定此期次">🔓 可编辑 (点击锁定)</button>
+        <button class="btn small icon-btn" id="periodSettingsBtn" type="button" title="期次管理（修改/删除）" aria-label="期次管理">⚙</button>
+        <div class="segmented" id="scopeSegmented" aria-label="计分范围"><button type="button" id="studentTab" class="active" aria-pressed="true">个人积分</button><button type="button" id="groupTab" aria-pressed="false">小组积分</button></div>
+        <div class="segmented hidden" id="summaryModeSegmented" aria-label="汇总模式"><button type="button" id="summaryPeriodTab" class="active" aria-pressed="true">按期次对照</button><button type="button" id="summaryProjectTab" aria-pressed="false">按项目累计</button></div>
         <button class="btn small" id="structureBtn" type="button">班级设置</button>
         <button class="btn primary small" id="saveButton" type="button">保存 <span id="dirtyCount">0</span></button>
       </div>
@@ -110,7 +120,7 @@
         <div class="toolbar-status" role="status" aria-live="polite"><span class="status-dot" id="statusDot"></span><span id="statusText">正在加载登录状态…</span></div>
         <div class="toolbar-sub-actions">
           <button class="btn small" id="advSortBtn" type="button" title="设置多级自定义排序规则">⚡ 高级排序</button>
-          <label class="toggle" title="仅影响当前浏览器"><input id="groupTotalToggle" type="checkbox">显示小组总分</label>
+          <label class="toggle" id="groupTotalWrap" title="仅影响当前浏览器"><input id="groupTotalToggle" type="checkbox">显示小组总分</label>
           <button class="btn small" id="refreshButton" type="button">刷新</button>
         </div>
       </div>
@@ -239,6 +249,51 @@
         <button class="btn primary small" id="addEntityBtn" type="button">新增学生</button>
       </div>
       <div class="entity-list" id="structureList"></div>
+      <div class="danger-zone" id="structureDangerZone" style="margin-top:14px;padding:12px 14px;border:1px dashed var(--danger);border-radius:12px;background:var(--danger-soft);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div>
+          <strong style="color:var(--danger);font-size:12px;display:block">⚠️ 高危操作：全班学生毕业清空</strong>
+          <span style="font-size:11px;color:var(--muted)">专用于学生毕业离校换届，清空全员学生名单及所有期次个人历史积分，保留评分项目与期次。</span>
+        </div>
+        <button class="btn danger small" id="openPurgeStudentsBtn" type="button" style="white-space:nowrap">全班学生毕业清空</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="purgeStudentsDialog" aria-labelledby="purgeStudentsTitle">
+    <div class="dialog-body" style="max-width:480px">
+      <div class="editor-title">
+        <div>
+          <h2 id="purgeStudentsTitle" style="color:var(--danger)">⚠️ 全班学生毕业清空</h2>
+          <p>此操作将永久彻底清空该班级全部学生名单及全期次个人历史积分！</p>
+        </div>
+        <button class="close-btn" id="purgeStudentsClose" type="button" aria-label="关闭">×</button>
+      </div>
+      <div style="margin:14px 0;padding:12px;background:var(--danger-soft);border:1px solid var(--danger);border-radius:10px;font-size:12px;line-height:1.6;color:var(--ink)">
+        <strong>警告提示：</strong>
+        <ul style="margin:6px 0 0 18px;padding:0">
+          <li>全班所有学生的名单将彻底移除；</li>
+          <li>所有期次中对应的学生打分将被永久清除且<strong>无法恢复</strong>；</li>
+          <li>班级结构、评分项目和期次设置将予以保留，供新一届学生使用。</li>
+        </ul>
+      </div>
+      <div class="purge-countdown-box" id="purgeCountdownBox" style="text-align:center;padding:10px;background:var(--panel-header-bg);border-radius:8px;font-weight:850;color:var(--danger);font-size:13px;margin-bottom:12px">
+        🔒 请仔细阅读警告，冷静等待 (<span id="purgeTimerCount">10</span>s)...
+      </div>
+      <div class="purge-challenge-box" id="purgeChallengeBox" style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <label style="font-size:12px;font-weight:850" for="purgeAnswerInput">安全验证计算题：</label>
+          <button class="btn small ghost" id="purgeRefreshMathBtn" type="button" style="font-size:11px;padding:2px 6px;min-height:auto">🔄 换一题</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div id="purgeMathQuestion" style="font-size:16px;font-weight:900;letter-spacing:1px;padding:8px 14px;background:var(--panel-header-bg);border:1px solid var(--line);border-radius:8px"></div>
+          <input id="purgeAnswerInput" type="number" placeholder="输入计算结果" style="flex:1;min-height:40px;border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:14px" disabled>
+        </div>
+        <div id="purgeAnswerHint" style="font-size:11px;color:var(--muted);margin-top:4px">10秒倒计时结束后解锁输入，算对后点亮确认按键。</div>
+      </div>
+      <div class="dialog-footer" style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn" id="purgeCancelBtn" type="button">取消</button>
+        <button class="btn danger" id="purgeConfirmBtn" type="button" disabled>确认彻底清空全班学生</button>
+      </div>
     </div>
   </dialog>
 
@@ -254,16 +309,97 @@
       </div>
     </form>
   </dialog>
+
+  <dialog id="newPeriodDialog" aria-labelledby="newPeriodTitle">
+    <form class="modal" id="newPeriodForm" method="dialog">
+      <div class="editor-title">
+        <div>
+          <h2 id="newPeriodTitle">✨ 开启新一期积分</h2>
+          <p id="newPeriodDesc">开启新一期后，前一期将自动锁定归档，学生名单与评分项目全盘继承，所有积分清空开始新一轮记分。</p>
+        </div>
+        <button class="close-btn" id="newPeriodCloseBtn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-fields" style="margin-top:10px">
+        <div class="modal-field">
+          <label for="newPeriodNameInput">期次名称 <span>(例如：第 2 期)</span></label>
+          <input id="newPeriodNameInput" name="periodName" type="text" required maxlength="50" placeholder="例如：第 2 期">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="modal-field">
+            <label for="newPeriodStartInput">开始日期 <span>(可选)</span></label>
+            <input id="newPeriodStartInput" name="startDate" type="date">
+          </div>
+          <div class="modal-field">
+            <label for="newPeriodEndInput">结束日期 <span>(可选)</span></label>
+            <input id="newPeriodEndInput" name="endDate" type="date">
+          </div>
+        </div>
+        <div class="modal-field">
+          <label for="newPeriodNoteInput">期次备注 <span>(可选说明)</span></label>
+          <input id="newPeriodNoteInput" name="periodNote" type="text" maxlength="200" placeholder="例如：第三四周班会评比周期">
+        </div>
+      </div>
+      <div class="modal-error hidden" id="newPeriodError" role="alert"></div>
+      <div class="modal-actions">
+        <button class="btn" id="newPeriodCancelBtn" type="button">取消</button>
+        <button class="btn primary" id="newPeriodSubmitBtn" type="submit">确认开启新一期</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="periodSettingsDialog" aria-labelledby="periodSettingsTitle">
+    <form class="modal" id="periodSettingsForm" method="dialog">
+      <div class="editor-title">
+        <div>
+          <h2 id="periodSettingsTitle">⚙ 期次信息与管理</h2>
+          <p id="periodSettingsDesc">修改当前期次的名称、起止日期或备注说明。</p>
+        </div>
+        <button class="close-btn" id="periodSettingsCloseBtn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-fields" style="margin-top:10px">
+        <div class="modal-field">
+          <label for="editPeriodNameInput">期次名称</label>
+          <input id="editPeriodNameInput" name="periodName" type="text" required maxlength="50">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="modal-field">
+            <label for="editPeriodStartInput">开始日期 <span>(可选)</span></label>
+            <input id="editPeriodStartInput" name="startDate" type="date">
+          </div>
+          <div class="modal-field">
+            <label for="editPeriodEndInput">结束日期 <span>(可选)</span></label>
+            <input id="editPeriodEndInput" name="endDate" type="date">
+          </div>
+        </div>
+        <div class="modal-field">
+          <label for="editPeriodNoteInput">期次备注 <span>(可选)</span></label>
+          <input id="editPeriodNoteInput" name="periodNote" type="text" maxlength="200">
+        </div>
+      </div>
+      <div class="modal-error hidden" id="periodSettingsError" role="alert"></div>
+      <div class="modal-actions" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn" id="lockPeriodSettingBtn" type="button">🔒 锁定此期次</button>
+          <button class="btn warn" id="archivePeriodBtn" type="button">归档此期次</button>
+          <button class="btn danger" id="deletePeriodBtn" type="button">彻底删除</button>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn" id="periodSettingsCancelBtn" type="button">取消</button>
+          <button class="btn primary" id="periodSettingsSubmitBtn" type="submit">保存修改</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
   (() => {
     "use strict";
     const $ = (id) => document.getElementById(id);
-    const state = { session:null, classData:null, etag:"", scope:"student", drafts:new Map(), draftStructureRevision:null, positions:[], activeIndex:0, editor:null, conflicts:[], saving:false, lastSaveAttempt:0, structureTab:"student", sort:{column:null, direction:null}, announcement:null, advSort:{active:false, rules:[]} };
+    const state = { session:null, classData:null, etag:"", scope:"student", drafts:new Map(), draftStructureRevision:null, positions:[], activeIndex:0, editor:null, conflicts:[], saving:false, lastSaveAttempt:0, structureTab:"student", sort:{column:null, direction:null}, announcement:null, advSort:{active:false, rules:[]}, currentPeriodId:null, summaryMode:"period", unlockedPeriods:new Set() };
     const isLocalDemo = ["localhost","127.0.0.1"].includes(location.hostname) && new URLSearchParams(location.search).get("demo") === "1";
     const pinyinCollator = new Intl.Collator("zh-Hans-CN", { numeric: true, sensitivity: "base" });
-    const els = { userPill:$("userPill"), themeBtn:$("themeBtn"), themeIcon:$("themeIcon"), announcementBtn:$("announcementBtn"), announcementBadge:$("announcementBadge"), announcementDialog:$("announcementDialog"), announcementCloseBtn:$("announcementCloseBtn"), announcementNoticeSection:$("announcementNoticeSection"), announcementNoticeText:$("announcementNoticeText"), announcementChangelogSection:$("announcementChangelogSection"), announcementChangelogList:$("announcementChangelogList"), dontShowAgainCheck:$("dontShowAgainCheck"), closeAnnouncementBtn:$("closeAnnouncementBtn"), advSortBtn:$("advSortBtn"), sortBadgeWrap:$("sortBadgeWrap"), advSortDialog:$("advSortDialog"), advSortCloseBtn:$("advSortCloseBtn"), advSortList:$("advSortList"), addAdvSortRuleBtn:$("addAdvSortRuleBtn"), advSortHint:$("advSortHint"), resetAdvSortBtn:$("resetAdvSortBtn"), cancelAdvSortBtn:$("cancelAdvSortBtn"), applyAdvSortBtn:$("applyAdvSortBtn"), classSelect:$("classSelect"), studentTab:$("studentTab"), groupTab:$("groupTab"), statusDot:$("statusDot"), statusText:$("statusText"), refreshButton:$("refreshButton"), saveButton:$("saveButton"), dirtyCount:$("dirtyCount"), groupTotalToggle:$("groupTotalToggle"), notice:$("notice"), emptyState:$("emptyState"), tableCard:$("tableCard"), scoreTable:$("scoreTable"), tableSummary:$("tableSummary"), revisionValue:$("revisionValue"), updatedValue:$("updatedValue"), pageTitle:$("pageTitle"), cellEditor:$("cellEditor"), editorHeading:$("editorHeading"), editorContext:$("editorContext"), scoreInput:$("scoreInput"), scorePreview:$("scorePreview"), parserHint:$("parserHint"), conflictDialog:$("conflictDialog"), conflictTitle:$("conflictTitle"), conflictDescription:$("conflictDescription"), conflictList:$("conflictList"), passwordDialog:$("passwordDialog"), passwordForm:$("passwordForm"), passwordError:$("passwordError"), initialPasswordNotice:$("initialPasswordNotice"), passwordPolicyRules:$("passwordPolicyRules"), newPasswordHint:$("newPasswordHint"), passwordCancel:$("passwordCancel"), passwordSubmit:$("passwordSubmit"), structureDialog:$("structureDialog"), structureTabs:$("structureTabs"), structureList:$("structureList"), structureCountInfo:$("structureCountInfo"), addEntityBtn:$("addEntityBtn"), tabStudent:$("tabStudent"), tabProject:$("tabProject"), tabGroup:$("tabGroup"), entityDialog:$("entityDialog"), entityForm:$("entityForm"), entityFormTitle:$("entityFormTitle"), entityFormDesc:$("entityFormDesc"), entityFormFields:$("entityFormFields"), entityFormError:$("entityFormError"), toast:$("toast") };
+    const els = { userPill:$("userPill"), themeBtn:$("themeBtn"), themeIcon:$("themeIcon"), announcementBtn:$("announcementBtn"), announcementBadge:$("announcementBadge"), announcementDialog:$("announcementDialog"), announcementCloseBtn:$("announcementCloseBtn"), announcementNoticeSection:$("announcementNoticeSection"), announcementNoticeText:$("announcementNoticeText"), announcementChangelogSection:$("announcementChangelogSection"), announcementChangelogList:$("announcementChangelogList"), dontShowAgainCheck:$("dontShowAgainCheck"), closeAnnouncementBtn:$("closeAnnouncementBtn"), advSortBtn:$("advSortBtn"), sortBadgeWrap:$("sortBadgeWrap"), advSortDialog:$("advSortDialog"), advSortCloseBtn:$("advSortCloseBtn"), advSortList:$("advSortList"), addAdvSortRuleBtn:$("addAdvSortRuleBtn"), advSortHint:$("advSortHint"), resetAdvSortBtn:$("resetAdvSortBtn"), cancelAdvSortBtn:$("cancelAdvSortBtn"), applyAdvSortBtn:$("applyAdvSortBtn"), classSelect:$("classSelect"), periodSelect:$("periodSelect"), newPeriodBtn:$("newPeriodBtn"), periodLockBtn:$("periodLockBtn"), periodSettingsBtn:$("periodSettingsBtn"), scopeSegmented:$("scopeSegmented"), summaryModeSegmented:$("summaryModeSegmented"), summaryPeriodTab:$("summaryPeriodTab"), summaryProjectTab:$("summaryProjectTab"), groupTotalWrap:$("groupTotalWrap"), studentTab:$("studentTab"), groupTab:$("groupTab"), statusDot:$("statusDot"), statusText:$("statusText"), refreshButton:$("refreshButton"), saveButton:$("saveButton"), dirtyCount:$("dirtyCount"), groupTotalToggle:$("groupTotalToggle"), notice:$("notice"), emptyState:$("emptyState"), tableCard:$("tableCard"), scoreTable:$("scoreTable"), tableSummary:$("tableSummary"), revisionValue:$("revisionValue"), updatedValue:$("updatedValue"), pageTitle:$("pageTitle"), cellEditor:$("cellEditor"), editorHeading:$("editorHeading"), editorContext:$("editorContext"), scoreInput:$("scoreInput"), scorePreview:$("scorePreview"), parserHint:$("parserHint"), conflictDialog:$("conflictDialog"), conflictTitle:$("conflictTitle"), conflictDescription:$("conflictDescription"), conflictList:$("conflictList"), passwordDialog:$("passwordDialog"), passwordForm:$("passwordForm"), passwordError:$("passwordError"), initialPasswordNotice:$("initialPasswordNotice"), passwordPolicyRules:$("passwordPolicyRules"), newPasswordHint:$("newPasswordHint"), passwordCancel:$("passwordCancel"), passwordSubmit:$("passwordSubmit"), structureDialog:$("structureDialog"), structureTabs:$("structureTabs"), structureList:$("structureList"), structureCountInfo:$("structureCountInfo"), addEntityBtn:$("addEntityBtn"), tabStudent:$("tabStudent"), tabProject:$("tabProject"), tabGroup:$("tabGroup"), entityDialog:$("entityDialog"), entityForm:$("entityForm"), entityFormTitle:$("entityFormTitle"), entityFormDesc:$("entityFormDesc"), entityFormFields:$("entityFormFields"), entityFormError:$("entityFormError"), newPeriodDialog:$("newPeriodDialog"), newPeriodForm:$("newPeriodForm"), newPeriodCloseBtn:$("newPeriodCloseBtn"), newPeriodNameInput:$("newPeriodNameInput"), newPeriodStartInput:$("newPeriodStartInput"), newPeriodEndInput:$("newPeriodEndInput"), newPeriodNoteInput:$("newPeriodNoteInput"), newPeriodError:$("newPeriodError"), newPeriodCancelBtn:$("newPeriodCancelBtn"), newPeriodSubmitBtn:$("newPeriodSubmitBtn"), periodSettingsDialog:$("periodSettingsDialog"), periodSettingsForm:$("periodSettingsForm"), periodSettingsCloseBtn:$("periodSettingsCloseBtn"), editPeriodNameInput:$("editPeriodNameInput"), editPeriodStartInput:$("editPeriodStartInput"), editPeriodEndInput:$("editPeriodEndInput"), editPeriodNoteInput:$("editPeriodNoteInput"), periodSettingsError:$("periodSettingsError"), lockPeriodSettingBtn:$("lockPeriodSettingBtn"), deletePeriodBtn:$("deletePeriodBtn"), archivePeriodBtn:$("archivePeriodBtn"), periodSettingsCancelBtn:$("periodSettingsCancelBtn"), periodSettingsSubmitBtn:$("periodSettingsSubmitBtn"), openPurgeStudentsBtn:$("openPurgeStudentsBtn"), purgeStudentsDialog:$("purgeStudentsDialog"), purgeStudentsClose:$("purgeStudentsClose"), purgeCountdownBox:$("purgeCountdownBox"), purgeTimerCount:$("purgeTimerCount"), purgeChallengeBox:$("purgeChallengeBox"), purgeRefreshMathBtn:$("purgeRefreshMathBtn"), purgeMathQuestion:$("purgeMathQuestion"), purgeAnswerInput:$("purgeAnswerInput"), purgeAnswerHint:$("purgeAnswerHint"), purgeCancelBtn:$("purgeCancelBtn"), purgeConfirmBtn:$("purgeConfirmBtn"), toast:$("toast") };
     let entitySubmitCallback = null;
     let modalDraftRules = [];
 
@@ -275,22 +411,186 @@
     let toastTimer=0; function toast(text){ clearTimeout(toastTimer); els.toast.textContent=text; els.toast.classList.add("show"); toastTimer=setTimeout(()=>els.toast.classList.remove("show"),2200); }
     function apiError(data,status){ const error=new Error(data?.error?.message||`请求失败（${status}）`); error.status=status; error.code=data?.error?.code; error.details=data?.error?.details; return error; }
     async function api(path,options={}) { const headers={Accept:"application/json",...(options.headers||{})}; if(options.body!==undefined){headers["Content-Type"]="application/json"; options.body=JSON.stringify(options.body);} const response=await fetch(path,{credentials:"same-origin",...options,headers}); let data; try{data=await response.json();}catch{data={ok:false,error:{message:"服务器返回了无法识别的响应。"}};} if(!response.ok){if(response.status===401 && !isLocalDemo) location.replace("/login.html"); throw apiError(data,response.status);} return {body:data,etag:response.headers.get("ETag")||data.etag||""}; }
-    function demoClass(){ const stamp=new Date().toISOString(); return {schemaVersion:1,classId:"class-a",name:"示范班",revision:12,structureRevision:5,updatedAt:stamp,students:[{id:"s_demo_001234567890",name:"林晓雨",groupId:"g_demo_001234567890",active:true,order:0,version:1},{id:"s_demo_001234567891",name:"陈子安",groupId:"g_demo_001234567890",active:true,order:1,version:1},{id:"s_demo_001234567892",name:"周予晴",groupId:"g_demo_001234567891",active:true,order:2,version:1},{id:"s_demo_001234567893",name:"许明哲",groupId:null,active:true,order:3,version:1}],groups:[{id:"g_demo_001234567890",name:"晨星组",active:true,order:0,version:1},{id:"g_demo_001234567891",name:"远航组",active:true,order:1,version:1}],projects:[{id:"p_demo_001234567890",name:"语文",active:true,order:0,version:1},{id:"p_demo_001234567891",name:"数学",active:true,order:1,version:1},{id:"p_demo_001234567892",name:"英语",active:true,order:2,version:1},{id:"p_demo_001234567893",name:"课堂表现",active:true,order:3,version:1}],personalScores:{"s_demo_001234567890":{"p_demo_001234567890":{raw:"主动回答+2",score:2,revision:2},"p_demo_001234567891":{raw:"作业整洁+1",score:1,revision:1}},"s_demo_001234567891":{"p_demo_001234567892":{raw:"单词听写+2迟到-1",score:1,revision:3}},"s_demo_001234567892":{"p_demo_001234567893":{raw:"帮助同学+2",score:2,revision:1}}},groupScores:{"g_demo_001234567890":{"p_demo_001234567893":{raw:"合作完成任务+3",score:3,revision:1}},"g_demo_001234567891":{"p_demo_001234567890":{raw:"朗读表现+2",score:2,revision:1}}}}; }
+    function activePeriodId() {
+      if (state.currentPeriodId && state.currentPeriodId !== "__summary__") {
+        if (state.classData?.periods?.some(p => p.id === state.currentPeriodId)) {
+          return state.currentPeriodId;
+        }
+      }
+      return state.classData?.currentPeriodId || state.classData?.periods?.[0]?.id || "period_default";
+    }
+    function isSummaryView() {
+      return state.currentPeriodId === "__summary__";
+    }
+    function currentPeriodObj() {
+      const pid = activePeriodId();
+      return state.classData?.periods?.find(p => p.id === pid) || null;
+    }
+    function isPeriodLocked(periodId = activePeriodId()) {
+      if (state.unlockedPeriods.has(periodId)) return false;
+      const p = state.classData?.periods?.find(item => item.id === periodId);
+      return Boolean(p?.locked);
+    }
+    function updatePeriodSettingsLockBtn() {
+      if (!els.lockPeriodSettingBtn) return;
+      const cur = currentPeriodObj();
+      if (!cur) return;
+      if (cur.active === false) {
+        els.lockPeriodSettingBtn.disabled = true;
+        els.lockPeriodSettingBtn.textContent = "🔒 已锁定";
+        els.lockPeriodSettingBtn.title = "已归档期次处于封存只读状态";
+      } else {
+        els.lockPeriodSettingBtn.disabled = false;
+        const locked = isPeriodLocked(cur.id);
+        if (locked) {
+          els.lockPeriodSettingBtn.textContent = "🔓 解锁此期次";
+          els.lockPeriodSettingBtn.title = "点击解锁以纠错或补录此期次积分";
+        } else {
+          els.lockPeriodSettingBtn.textContent = "🔒 锁定此期次";
+          els.lockPeriodSettingBtn.title = "点击锁定此期次，转为只读防误触";
+        }
+      }
+    }
+    async function togglePeriodLock(periodId = activePeriodId()) {
+      const cur = state.classData?.periods?.find(item => item.id === periodId);
+      const pName = cur?.name || "当前期次";
+      const currentlyLocked = isPeriodLocked(periodId);
+      const nextLocked = !currentlyLocked;
+
+      if (nextLocked) {
+        if (state.drafts.size > 0) {
+          toast("当前有未保存的积分草稿，请先保存修改再锁定期次。");
+          return;
+        }
+        if (!confirm(`确定主动锁定【${pName}】吗？\n\n锁定后该期次将转为只读防误触状态。后续若需纠错，可随时再次点击解锁。`)) {
+          return;
+        }
+      } else {
+        if (!confirm(`期次【${pName}】当前已被锁定归档。\n\n如需纠错或补录积分，是否立即【解锁】此期次？`)) {
+          return;
+        }
+      }
+
+      const wasUnlockedInSet = state.unlockedPeriods.has(periodId);
+      if (nextLocked) {
+        state.unlockedPeriods.delete(periodId);
+      } else {
+        state.unlockedPeriods.add(periodId);
+      }
+
+      try {
+        setStatus("", nextLocked ? "正在锁定期次…" : "正在解锁期次…");
+        if (isLocalDemo) {
+          if (cur) cur.locked = nextLocked;
+          toast(nextLocked ? `期次【${pName}】已锁定，转为只读防误触状态` : `期次【${pName}】已解锁，可以修改历史积分`);
+          renderTable();
+          updatePeriodSettingsLockBtn();
+          return;
+        }
+        await patchStructure({ type: "period.lock", id: periodId, locked: nextLocked }, nextLocked ? `期次【${pName}】已锁定，转为只读防误触状态` : `期次【${pName}】已成功解锁，可补录或纠正积分`);
+        if (cur) cur.locked = nextLocked;
+        updatePeriodSettingsLockBtn();
+      } catch (error) {
+        if (wasUnlockedInSet) state.unlockedPeriods.add(periodId);
+        else state.unlockedPeriods.delete(periodId);
+        toast(`${nextLocked ? "锁定" : "解锁"}失败：${error.message}`);
+        setStatus("error", error.message);
+      }
+    }
+    async function unlockPeriod(periodId) {
+      if (isPeriodLocked(periodId)) {
+        await togglePeriodLock(periodId);
+      }
+    }
+    function parseDraftKey(key) {
+      const parts = key.split(":");
+      if (parts.length === 4) {
+        return { periodId: parts[0], scope: parts[1], subjectId: parts[2], projectId: parts[3] };
+      }
+      return { periodId: activePeriodId(), scope: parts[0], subjectId: parts[1], projectId: parts[2] };
+    }
+    function demoClass(){
+      const stamp=new Date().toISOString();
+      const p1Id = "period_demo_1";
+      const p2Id = "period_demo_2";
+      const p1Scores = {"s_demo_001234567890":{"p_demo_001234567890":{raw:"主动回答+2",score:2,revision:2},"p_demo_001234567891":{raw:"作业整洁+1",score:1,revision:1}},"s_demo_001234567891":{"p_demo_001234567892":{raw:"单词听写+2迟到-1",score:1,revision:3}},"s_demo_001234567892":{"p_demo_001234567893":{raw:"帮助同学+2",score:2,revision:1}}};
+      const p2Scores = {"s_demo_001234567890":{"p_demo_001234567892":{raw:"背诵课文+3",score:3,revision:1}},"s_demo_001234567891":{"p_demo_001234567890":{raw:"随堂练习+2",score:2,revision:1}}};
+      const gScores = {"g_demo_001234567890":{"p_demo_001234567893":{raw:"合作完成任务+3",score:3,revision:1}},"g_demo_001234567891":{"p_demo_001234567890":{raw:"朗读表现+2",score:2,revision:1}}};
+      return {
+        schemaVersion:1,
+        classId:"class-a",
+        name:"示范班",
+        revision:15,
+        structureRevision:6,
+        updatedAt:stamp,
+        students:[
+          {id:"s_demo_001234567890",name:"林晓雨",groupId:"g_demo_001234567890",active:true,order:0,version:1},
+          {id:"s_demo_001234567891",name:"陈子安",groupId:"g_demo_001234567890",active:true,order:1,version:1},
+          {id:"s_demo_001234567892",name:"周予晴",groupId:"g_demo_001234567891",active:true,order:2,version:1},
+          {id:"s_demo_001234567893",name:"许明哲",groupId:null,active:true,order:3,version:1}
+        ],
+        groups:[
+          {id:"g_demo_001234567890",name:"晨星组",active:true,order:0,version:1},
+          {id:"g_demo_001234567891",name:"远航组",active:true,order:1,version:1}
+        ],
+        projects:[
+          {id:"p_demo_001234567890",name:"语文",active:true,order:0,version:1},
+          {id:"p_demo_001234567891",name:"数学",active:true,order:1,version:1},
+          {id:"p_demo_001234567892",name:"英语",active:true,order:2,version:1},
+          {id:"p_demo_001234567893",name:"课堂表现",active:true,order:3,version:1}
+        ],
+        periods:[
+          {id:p1Id,name:"第 1 期",startDate:"2026-09-01",endDate:"2026-09-14",note:"开学前两周",locked:true,createdAt:stamp},
+          {id:p2Id,name:"第 2 期",startDate:"2026-09-15",endDate:"2026-09-28",note:"常规评比",locked:false,createdAt:stamp}
+        ],
+        currentPeriodId:p2Id,
+        periodScores:{
+          [p1Id]:{personalScores:p1Scores,groupScores:gScores},
+          [p2Id]:{personalScores:p2Scores,groupScores:{}}
+        },
+        personalScores:p2Scores,
+        groupScores:{}
+      };
+    }
     function active(items){return (items||[]).filter(item=>item.active).sort((a,b)=>(a.order||0)-(b.order||0));}
     function currentGroup(id){return state.classData?.groups.find(group=>group.id===id&&group.active)||null;}
     function groupName(id){return currentGroup(id)?.name||"未分组";}
-    function draftKey(scope,subjectId,projectId){return `${scope}:${subjectId}:${projectId}`;}
-    function serverCell(scope,subjectId,projectId){const container=scope==="student"?state.classData?.personalScores:state.classData?.groupScores; return container?.[subjectId]?.[projectId]||{raw:"",score:0,revision:0,parserVersion:1};}
-    function displayCell(scope,subjectId,projectId){const draft=state.drafts.get(draftKey(scope,subjectId,projectId)); if(!draft)return serverCell(scope,subjectId,projectId); const parsed=parseScore(draft.text); return {...serverCell(scope,subjectId,projectId),raw:draft.text,score:parsed.score,hasUnsignedNumber:parsed.warning};}
-    function totalFor(scope,subjectId){return active(state.classData?.projects).reduce((sum,project)=>sum+Number(displayCell(scope,subjectId,project.id).score||0),0);}
+    function draftKey(scope,subjectId,projectId,pId=activePeriodId()){return `${pId}:${scope}:${subjectId}:${projectId}`;}
+    function serverCell(scope,subjectId,projectId,pId=activePeriodId()){
+      const periodData = state.classData?.periodScores?.[pId];
+      const container = scope === "student"
+        ? (periodData?.personalScores || state.classData?.personalScores)
+        : (periodData?.groupScores || state.classData?.groupScores);
+      return container?.[subjectId]?.[projectId] || {raw:"",score:0,revision:0,parserVersion:1};
+    }
+    function displayCell(scope,subjectId,projectId,pId=activePeriodId()){
+      const draft=state.drafts.get(draftKey(scope,subjectId,projectId,pId));
+      if(!draft)return serverCell(scope,subjectId,projectId,pId);
+      const parsed=parseScore(draft.text);
+      return {...serverCell(scope,subjectId,projectId,pId),raw:draft.text,score:parsed.score,hasUnsignedNumber:parsed.warning};
+    }
+    function totalFor(scope,subjectId,pId=activePeriodId()){
+      return active(state.classData?.projects).reduce((sum,project)=>sum+Number(displayCell(scope,subjectId,project.id,pId).score||0),0);
+    }
+    function studentPeriodTotal(studentId,pId){
+      return active(state.classData?.projects).reduce((sum,project)=>sum+Number(displayCell("student",studentId,project.id,pId).score||0),0);
+    }
+    function studentProjectGrandTotal(studentId,projectId){
+      const periods=state.classData?.periods||[];
+      return periods.reduce((sum,p)=>sum+Number(displayCell("student",studentId,projectId,p.id).score||0),0);
+    }
+    function studentGrandTotal(studentId){
+      const periods=state.classData?.periods||[];
+      return periods.reduce((sum,p)=>sum+studentPeriodTotal(studentId,p.id),0);
+    }
     function persistDrafts(){if(!state.session||!state.classData)return; const key=`cloud-score:draft:${state.session.username}:${state.classData.classId}`; if(state.drafts.size){sessionStorage.setItem(key,JSON.stringify({revision:state.classData.revision,structureRevision:state.draftStructureRevision??state.classData.structureRevision,items:[...state.drafts]}));}else{state.draftStructureRevision=null;sessionStorage.removeItem(key);}}
     function restoreDrafts(){state.drafts.clear();state.draftStructureRevision=null;if(!state.session||!state.classData)return; const key=`cloud-score:draft:${state.session.username}:${state.classData.classId}`; try{const saved=JSON.parse(sessionStorage.getItem(key)||"null"); if(Array.isArray(saved?.items)&&saved.items.length){state.drafts=new Map(saved.items);state.draftStructureRevision=Number.isInteger(saved.structureRevision)?saved.structureRevision:state.classData.structureRevision;toast(`已恢复 ${state.drafts.size} 项未保存草稿`);if(state.draftStructureRevision!==state.classData.structureRevision){els.notice.textContent="草稿创建后班级结构曾发生变化。草稿已保留，请核对后保存；系统会先要求确认最新结构。";els.notice.classList.remove("hidden");}}}catch{sessionStorage.removeItem(key);}}
-    function updateDirtyStatus(){els.dirtyCount.textContent=String(state.drafts.size); els.saveButton.disabled=state.saving||state.drafts.size===0||!navigator.onLine; if(state.saving)setStatus("dirty","正在批量保存…"); else if(!navigator.onLine)setStatus("error",state.drafts.size?`当前离线 · ${state.drafts.size} 个单元格尚未保存`:"当前离线"); else if(state.drafts.size)setStatus("dirty",`${state.drafts.size} 个单元格尚未保存`); else setStatus("saved","所有修改均已保存");}
+    function updateDirtyStatus(){els.dirtyCount.textContent=String(state.drafts.size); els.saveButton.disabled=state.saving||state.drafts.size===0||!navigator.onLine||isSummaryView(); if(state.saving)setStatus("dirty","正在批量保存…"); else if(!navigator.onLine)setStatus("error",state.drafts.size?`当前离线 · ${state.drafts.size} 个单元格尚未保存`:"当前离线"); else if(state.drafts.size)setStatus("dirty",`${state.drafts.size} 个单元格尚未保存`); else setStatus("saved",isSummaryView()?"期末总评汇总（只读点评）":"所有修改均已保存");}
     function showEmpty(title,description){els.emptyState.classList.remove("hidden");els.tableCard.classList.add("hidden");const heading=els.emptyState.querySelector("h2");const paragraph=els.emptyState.querySelector("p");heading.textContent=title;paragraph.textContent=description;}
     function advSortStorageKey(scope = state.scope) {
       const username = state.session?.username || "anonymous";
       const classId = state.classData?.classId || "none";
-      return `cloud-score:adv-sort:${username}:${classId}:${scope}`;
+      return `cloud-score:adv-sort:${username}:${classId}:${isSummaryView() ? "summary" : scope}`;
     }
     function saveAdvSortToStorage() {
       if (!state.session || !state.classData) return;
@@ -328,6 +628,20 @@
       } catch {}
     }
     function getAvailableSortFields() {
+      if (isSummaryView()) {
+        const fields = [{ id: "summary_grand_total", label: "全期累计总分" }];
+        if (state.summaryMode === "period") {
+          for (const period of (state.classData?.periods || [])) {
+            fields.push({ id: `period_${period.id}`, label: period.name });
+          }
+        } else {
+          const projects = active(state.classData?.projects);
+          for (const proj of projects) {
+            fields.push({ id: `project_${proj.id}`, label: `${proj.name}(全期)` });
+          }
+        }
+        return fields;
+      }
       const fields = [{ id: "total", label: state.scope === "student" ? "个人总分" : "小组总分" }];
       const projects = active(state.classData?.projects);
       for (const proj of projects) {
@@ -339,6 +653,17 @@
       return fields;
     }
     function getSortFieldLabel(fieldId) {
+      if (fieldId === "summary_grand_total") return "全期总分";
+      if (fieldId.startsWith("period_")) {
+        const pid = fieldId.slice(7);
+        const p = state.classData?.periods?.find(item => item.id === pid);
+        return p?.name || "期次";
+      }
+      if (fieldId.startsWith("project_")) {
+        const pjid = fieldId.slice(8);
+        const proj = state.classData?.projects?.find(item => item.id === pjid);
+        return proj ? `${proj.name}(全期)` : "项目";
+      }
       if (fieldId === "total") return state.scope === "student" ? "总分" : "小组总分";
       if (fieldId === "groupTotal") return "小组总分";
       const proj = state.classData?.projects.find(p => p.id === fieldId);
@@ -378,8 +703,17 @@
         let colName = "";
         let dirName = "";
         if (state.sort.column === "name") {
-          colName = state.scope === "student" ? "姓名" : "小组";
+          colName = state.scope === "student" || isSummaryView() ? "姓名" : "小组";
           dirName = state.sort.direction === "asc" ? "拼音 A-Z" : "拼音 Z-A";
+        } else if (state.sort.column === "summary_grand_total") {
+          colName = "全期总分";
+          dirName = state.sort.direction === "asc" ? "从低到高" : "从高到低";
+        } else if (state.sort.column?.startsWith("period_")) {
+          colName = getSortFieldLabel(state.sort.column);
+          dirName = state.sort.direction === "asc" ? "从低到高" : "从高到低";
+        } else if (state.sort.column?.startsWith("project_")) {
+          colName = getSortFieldLabel(state.sort.column);
+          dirName = state.sort.direction === "asc" ? "从低到高" : "从高到低";
         } else if (state.sort.column === "total") {
           colName = state.scope === "student" ? "个人总分" : "小组总分";
           dirName = state.sort.direction === "asc" ? "从低到高" : "从高到低";
@@ -535,6 +869,69 @@
         return ((a.order||0)-(b.order||0));
       });
     }
+    function getSortedSummarySubjects(rawStudents){
+      const items=[...rawStudents];
+      if(state.advSort?.active && Array.isArray(state.advSort.rules) && state.advSort.rules.length > 0){
+        return items.sort((a,b)=>{
+          for(const rule of state.advSort.rules){
+            const dir=rule.dir==="asc"?1:-1;
+            let scoreA=0;
+            let scoreB=0;
+            if(rule.field==="summary_grand_total"){
+              scoreA=studentGrandTotal(a.id);
+              scoreB=studentGrandTotal(b.id);
+            }else if(rule.field.startsWith("period_")){
+              const pid=rule.field.slice(7);
+              scoreA=studentPeriodTotal(a.id,pid);
+              scoreB=studentPeriodTotal(b.id,pid);
+            }else if(rule.field.startsWith("project_")){
+              const pjid=rule.field.slice(8);
+              scoreA=studentProjectGrandTotal(a.id,pjid);
+              scoreB=studentProjectGrandTotal(b.id,pjid);
+            }
+            if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          }
+          const pinyinCmp=pinyinCollator.compare(a.name||"",b.name||"");
+          if(pinyinCmp!==0)return pinyinCmp;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      if(!state.sort.column||!state.sort.direction)return items;
+      const dir=state.sort.direction==="asc"?1:-1;
+      if(state.sort.column==="name"){
+        return items.sort((a,b)=>{
+          const cmp=pinyinCollator.compare(a.name||"",b.name||"");
+          return cmp!==0?cmp*dir:((a.order||0)-(b.order||0));
+        });
+      }
+      if(state.sort.column==="summary_grand_total"){
+        return items.sort((a,b)=>{
+          const scoreA=studentGrandTotal(a.id);
+          const scoreB=studentGrandTotal(b.id);
+          if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      if(state.sort.column.startsWith("period_")){
+        const pid=state.sort.column.slice(7);
+        return items.sort((a,b)=>{
+          const scoreA=studentPeriodTotal(a.id,pid);
+          const scoreB=studentPeriodTotal(b.id,pid);
+          if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      if(state.sort.column.startsWith("project_")){
+        const pjid=state.sort.column.slice(8);
+        return items.sort((a,b)=>{
+          const scoreA=studentProjectGrandTotal(a.id,pjid);
+          const scoreB=studentProjectGrandTotal(b.id,pjid);
+          if(scoreA!==scoreB)return (scoreA-scoreB)*dir;
+          return ((a.order||0)-(b.order||0));
+        });
+      }
+      return items;
+    }
     function toggleSort(columnId,isName=false){
       if(state.advSort?.active){
         state.advSort.active=false;
@@ -563,11 +960,18 @@
     function sortSummaryText(){
       if(state.advSort?.active)return "";
       if(!state.sort.column||!state.sort.direction)return "";
+      const dirText=state.sort.direction==="asc"?"升序":"降序";
+      if(isSummaryView()){
+        if(state.sort.column==="name")return ` · 按姓名拼音 ${state.sort.direction==="asc"?"A-Z":"Z-A"}`;
+        if(state.sort.column==="summary_grand_total")return ` · 按全期总分 ${dirText}`;
+        if(state.sort.column.startsWith("period_"))return ` · 按${getSortFieldLabel(state.sort.column)} ${dirText}`;
+        if(state.sort.column.startsWith("project_"))return ` · 按${getSortFieldLabel(state.sort.column)} ${dirText}`;
+      }
       if(state.sort.column==="name")return ` · 按${state.scope==="student"?"姓名":"小组"}拼音 ${state.sort.direction==="asc"?"A-Z":"Z-A"}`;
-      if(state.sort.column==="total")return ` · 按${state.scope==="student"?"个人总分":"小组总分"} ${state.sort.direction==="asc"?"升序":"降序"}`;
-      if(state.sort.column==="groupTotal")return ` · 按小组总分 ${state.sort.direction==="asc"?"升序":"降序"}`;
+      if(state.sort.column==="total")return ` · 按${state.scope==="student"?"个人总分":"小组总分"} ${dirText}`;
+      if(state.sort.column==="groupTotal")return ` · 按小组总分 ${dirText}`;
       const project=state.classData?.projects.find(p=>p.id===state.sort.column);
-      return ` · 按${project?.name||"项目"} ${state.sort.direction==="asc"?"升序":"降序"}`;
+      return ` · 按${project?.name||"项目"} ${dirText}`;
     }
     function createHeaderCell(columnId,labelText,className,isName=false){
       const th=node("th",className);
@@ -594,15 +998,260 @@
       th.append(btn);
       return th;
     }
-    function createScoreButton(subject,project,rowIndex,colIndex){const cell=displayCell(state.scope,subject.id,project.id);const key=draftKey(state.scope,subject.id,project.id);const button=node("button","score-button");button.type="button";button.dataset.key=key;button.dataset.row=String(rowIndex);button.dataset.col=String(colIndex);button.tabIndex=state.positions.length===state.activeIndex?0:-1;button.setAttribute("aria-label",`${subject.name}，${project.name}，${cell.raw||"无记录"}，小计 ${formatScore(cell.score)}`);if(state.drafts.has(key))button.classList.add("draft-cell");const text=node("span",`cell-text${cell.raw?"":" placeholder"}`,cell.raw||"点击记分");const score=node("span",`cell-score${Number(cell.score)<0?" negative":""}`,`小计 ${Number(cell.score)>0?"+":""}${formatScore(cell.score)}`);button.append(text,score);if(cell.hasUnsignedNumber)button.append(node("span","cell-warning","含无符号数字，未计入"));const position={key,scope:state.scope,subjectId:subject.id,projectId:project.id,row:rowIndex,col:colIndex,button};state.positions.push(position);button.addEventListener("click",()=>{state.activeIndex=state.positions.indexOf(position);openEditor(position);});button.addEventListener("keydown",event=>handleCellKey(event,position));return button;}
-    function renderTable(){if(!state.classData){showEmpty("尚未选择班级","请选择一个已绑定的班级。");return;}const projects=active(state.classData.projects);const rawSubjects=state.scope==="student"?active(state.classData.students):active(state.classData.groups);const subjects=getSortedSubjects(rawSubjects,projects);els.pageTitle.textContent=state.classData.name;els.revisionValue.textContent=`v${state.classData.revision}`;els.updatedValue.textContent=state.classData.updatedAt?new Date(state.classData.updatedAt).toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}):"—";els.advSortBtn.classList.toggle("is-active",Boolean(state.advSort?.active));if(!subjects.length){showEmpty(state.scope==="student"?"还没有学生":"还没有小组",state.scope==="student"?"请点击上方“班级设置”添加学生。":"请点击上方“班级设置”添加小组。");updateDirtyStatus();return;}els.emptyState.classList.add("hidden");els.tableCard.classList.remove("hidden");els.scoreTable.replaceChildren();state.positions=[];const thead=node("thead");const headerRow=node("tr");headerRow.append(createHeaderCell("name",state.scope==="student"?"学生姓名":"小组名称","name-head",true));for(const project of projects){headerRow.append(createHeaderCell(project.id,project.name,"project-head",false));}if(state.scope==="student"&&els.groupTotalToggle.checked){headerRow.append(createHeaderCell("groupTotal","小组总分","group-total-head",false));}headerRow.append(createHeaderCell("total",state.scope==="student"?"个人总分":"小组总分","total-head",false));thead.append(headerRow);const tbody=node("tbody");subjects.forEach((subject,rowIndex)=>{const row=node("tr");const nameCell=node("td","name-cell");nameCell.append(node("div","name-main",subject.name));const studentGroup=state.scope==="student"?currentGroup(subject.groupId):null;if(state.scope==="student"){const chip=node("span",`group-chip${studentGroup?"":" none"}`,groupName(subject.groupId));nameCell.append(chip);}row.append(nameCell);projects.forEach((project,colIndex)=>{const td=node("td");td.append(createScoreButton(subject,project,rowIndex,colIndex));row.append(td);});if(state.scope==="student"&&els.groupTotalToggle.checked){const groupTotal=studentGroup?totalFor("group",studentGroup.id):0;row.append(node("td","group-total-cell",formatScore(groupTotal)));}row.append(node("td","total-cell",formatScore(totalFor(state.scope,subject.id))));tbody.append(row);});els.scoreTable.append(thead,tbody);renderSortBadge();els.tableSummary.textContent=`${subjects.length} ${state.scope==="student"?"名学生":"个小组"} · ${projects.length} 个项目 · 第 ${state.classData.revision} 版`;if(state.activeIndex>=state.positions.length)state.activeIndex=Math.max(0,state.positions.length-1);state.positions.forEach((position,index)=>{position.button.tabIndex=index===state.activeIndex?0:-1;position.button.classList.toggle("active-cell",index===state.activeIndex);});updateDirtyStatus();}
-    function handleCellKey(event,position){const index=state.positions.indexOf(position);let target=-1;if(event.key==="Enter"||event.key===" "){event.preventDefault();openEditor(position);return;}if(event.key==="ArrowLeft")target=index-1;else if(event.key==="ArrowRight")target=index+1;else if(event.key==="ArrowUp")target=state.positions.findIndex(item=>item.row===position.row-1&&item.col===position.col);else if(event.key==="ArrowDown")target=state.positions.findIndex(item=>item.row===position.row+1&&item.col===position.col);else if(event.key==="Tab")target=index+(event.shiftKey?-1:1);else if(event.key==="Home")target=state.positions.findIndex(item=>item.row===position.row);else if(event.key==="End"){const rowItems=state.positions.filter(item=>item.row===position.row);target=state.positions.indexOf(rowItems[rowItems.length-1]);}else return;if(target<0||target>=state.positions.length)return;event.preventDefault();state.activeIndex=target;renderTable();state.positions[target]?.button.focus({preventScroll:false});}
+    function createScoreButton(subject,project,rowIndex,colIndex){
+      const cell=displayCell(state.scope,subject.id,project.id);
+      const key=draftKey(state.scope,subject.id,project.id);
+      const button=node("button","score-button");
+      button.type="button";
+      button.dataset.key=key;
+      button.dataset.row=String(rowIndex);
+      button.dataset.col=String(colIndex);
+      button.tabIndex=state.positions.length===state.activeIndex?0:-1;
+      button.setAttribute("aria-label",`${subject.name}，${project.name}，${cell.raw||"无记录"}，小计 ${formatScore(cell.score)}`);
+      if(state.drafts.has(key))button.classList.add("draft-cell");
+      const text=node("span",`cell-text${cell.raw?"":" placeholder"}`,cell.raw||"点击记分");
+      const score=node("span",`cell-score${Number(cell.score)<0?" negative":""}`,`小计 ${Number(cell.score)>0?"+":""}${formatScore(cell.score)}`);
+      button.append(text,score);
+      if(cell.hasUnsignedNumber)button.append(node("span","cell-warning","含无符号数字，未计入"));
+      const position={key,scope:state.scope,subjectId:subject.id,projectId:project.id,row:rowIndex,col:colIndex,button};
+      state.positions.push(position);
+      button.addEventListener("click",()=>{
+        if(isPeriodLocked()){
+          togglePeriodLock(activePeriodId());
+          return;
+        }
+        state.activeIndex=state.positions.indexOf(position);
+        openEditor(position);
+      });
+      button.addEventListener("keydown",event=>handleCellKey(event,position));
+      return button;
+    }
+    function renderPeriodSelect(){
+      if(!state.classData)return;
+      const periods=state.classData.periods||[];
+      const currentId=activePeriodId();
+      els.periodSelect.replaceChildren();
+      const activeList = periods.filter(p => p.active !== false);
+      const archivedList = periods.filter(p => p.active === false);
+      activeList.forEach(p=>{
+        let label=p.name;
+        if(p.startDate||p.endDate){
+          label+=` (${p.startDate||""} ~ ${p.endDate||""})`;
+        }
+        if(p.locked&&!state.unlockedPeriods.has(p.id)){
+          label+=" 🔒";
+        }
+        const opt=node("option","",label);
+        opt.value=p.id;
+        if(p.id===currentId&&!isSummaryView())opt.selected=true;
+        els.periodSelect.append(opt);
+      });
+      if(archivedList.length > 0){
+        const optgroup = document.createElement("optgroup");
+        optgroup.label = "📦 已归档期次";
+        archivedList.forEach(p=>{
+          let label=`${p.name} (已归档)`;
+          if(p.startDate||p.endDate){
+            label+=` (${p.startDate||""} ~ ${p.endDate||""})`;
+          }
+          const opt=node("option","",label);
+          opt.value=p.id;
+          if(p.id===currentId&&!isSummaryView())opt.selected=true;
+          optgroup.append(opt);
+        });
+        els.periodSelect.append(optgroup);
+      }
+      const sumOpt=node("option","","📊 期末总评分汇总");
+      sumOpt.value="__summary__";
+      if(isSummaryView())sumOpt.selected=true;
+      els.periodSelect.append(sumOpt);
+
+      if(isSummaryView()){
+        els.summaryModeSegmented.classList.remove("hidden");
+        els.scopeSegmented.classList.add("hidden");
+        els.periodLockBtn.classList.add("hidden");
+        els.periodSettingsBtn.classList.add("hidden");
+        els.groupTotalWrap.classList.add("hidden");
+        els.summaryPeriodTab.classList.toggle("active",state.summaryMode==="period");
+        els.summaryPeriodTab.setAttribute("aria-pressed",state.summaryMode==="period"?"true":"false");
+        els.summaryProjectTab.classList.toggle("active",state.summaryMode==="project");
+        els.summaryProjectTab.setAttribute("aria-pressed",state.summaryMode==="project"?"true":"false");
+      }else{
+        els.summaryModeSegmented.classList.add("hidden");
+        els.scopeSegmented.classList.remove("hidden");
+        els.periodSettingsBtn.classList.remove("hidden");
+        els.groupTotalWrap.classList.toggle("hidden",state.scope!=="student");
+        els.periodLockBtn.classList.remove("hidden");
+        const locked = isPeriodLocked();
+        if(locked){
+          els.periodLockBtn.className = "btn small is-locked";
+          els.periodLockBtn.textContent = "🔒 已锁定 (点击解锁)";
+          els.periodLockBtn.title = "当前期次已锁定（只读防误触）。点击可解锁以修改往期积分";
+        }else{
+          els.periodLockBtn.className = "btn small is-unlocked";
+          els.periodLockBtn.textContent = "🔓 可编辑 (点击锁定)";
+          els.periodLockBtn.title = "当前期次处于可编辑状态。点击可主动锁定防误触";
+        }
+      }
+    }
+    function renderSummaryTable(){
+      const rawStudents=active(state.classData.students);
+      const students=getSortedSummarySubjects(rawStudents);
+      els.pageTitle.textContent=`${state.classData.name} · 期末总评`;
+      els.revisionValue.textContent=`v${state.classData.revision}`;
+      els.updatedValue.textContent=state.classData.updatedAt?new Date(state.classData.updatedAt).toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}):"—";
+      els.advSortBtn.classList.toggle("is-active",Boolean(state.advSort?.active));
+      if(!students.length){
+        showEmpty("还没有学生","请点击上方“班级设置”添加学生。");
+        updateDirtyStatus();
+        return;
+      }
+      els.emptyState.classList.add("hidden");
+      els.tableCard.classList.remove("hidden");
+      els.scoreTable.replaceChildren();
+      state.positions=[];
+      const thead=node("thead");
+      const headerRow=node("tr");
+      headerRow.append(createHeaderCell("name","学生姓名","name-head",true));
+      if(state.summaryMode==="period"){
+        const periods=state.classData.periods||[];
+        periods.forEach(p=>{
+          headerRow.append(createHeaderCell(`period_${p.id}`,p.name,"project-head",false));
+        });
+      }else{
+        const projects=active(state.classData.projects);
+        projects.forEach(proj=>{
+          headerRow.append(createHeaderCell(`project_${proj.id}`,proj.name,"project-head",false));
+        });
+      }
+      headerRow.append(createHeaderCell("summary_grand_total","全期总分","total-head",false));
+      thead.append(headerRow);
+
+      const tbody=node("tbody");
+      students.forEach(student=>{
+        const row=node("tr");
+        const nameCell=node("td","name-cell");
+        nameCell.append(node("div","name-main",student.name));
+        const studentGroup=currentGroup(student.groupId);
+        const chip=node("span",`group-chip${studentGroup?"":" none"}`,groupName(student.groupId));
+        nameCell.append(chip);
+        row.append(nameCell);
+
+        if(state.summaryMode==="period"){
+          const periods=state.classData.periods||[];
+          periods.forEach(p=>{
+            const score=studentPeriodTotal(student.id,p.id);
+            const td=node("td","project-head");
+            td.style.textAlign="center";
+            td.style.padding="6px 4px";
+            const scoreSpan=node("span",`cell-score${score<0?" negative":""}`,`${score>0?"+":""}${formatScore(score)}`);
+            scoreSpan.style.justifyContent="center";
+            td.append(scoreSpan);
+            row.append(td);
+          });
+        }else{
+          const projects=active(state.classData.projects);
+          projects.forEach(proj=>{
+            const score=studentProjectGrandTotal(student.id,proj.id);
+            const td=node("td","project-head");
+            td.style.textAlign="center";
+            td.style.padding="6px 4px";
+            const scoreSpan=node("span",`cell-score${score<0?" negative":""}`,`${score>0?"+":""}${formatScore(score)}`);
+            scoreSpan.style.justifyContent="center";
+            td.append(scoreSpan);
+            row.append(td);
+          });
+        }
+        const grandTotal=studentGrandTotal(student.id);
+        row.append(node("td","total-cell",formatScore(grandTotal)));
+        tbody.append(row);
+      });
+      els.scoreTable.append(thead,tbody);
+      renderSortBadge();
+      const countDesc=state.summaryMode==="period"?`${(state.classData.periods||[]).length} 个期次`:`${active(state.classData.projects).length} 个评分项目`;
+      els.tableSummary.textContent=`${students.length} 名学生 · ${countDesc} · 个人全期汇总（只读点评）`;
+      updateDirtyStatus();
+    }
+    function renderTable(){
+      if(!state.classData){showEmpty("尚未选择班级","请选择一个已绑定的班级。");return;}
+      renderPeriodSelect();
+      if(isSummaryView()){renderSummaryTable();return;}
+      const projects=active(state.classData.projects);
+      const rawSubjects=state.scope==="student"?active(state.classData.students):active(state.classData.groups);
+      const subjects=getSortedSubjects(rawSubjects,projects);
+      const curP=currentPeriodObj();
+      els.pageTitle.textContent=curP?`${state.classData.name} · ${curP.name}`:state.classData.name;
+      els.revisionValue.textContent=`v${state.classData.revision}`;
+      els.updatedValue.textContent=state.classData.updatedAt?new Date(state.classData.updatedAt).toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"}):"—";
+      els.advSortBtn.classList.toggle("is-active",Boolean(state.advSort?.active));
+      if(!subjects.length){showEmpty(state.scope==="student"?"还没有学生":"还没有小组",state.scope==="student"?"请点击上方“班级设置”添加学生。":"请点击上方“班级设置”添加小组。");updateDirtyStatus();return;}
+      els.emptyState.classList.add("hidden");
+      els.tableCard.classList.remove("hidden");
+      els.scoreTable.replaceChildren();
+      state.positions=[];
+      const thead=node("thead");
+      const headerRow=node("tr");
+      headerRow.append(createHeaderCell("name",state.scope==="student"?"学生姓名":"小组名称","name-head",true));
+      for(const project of projects){headerRow.append(createHeaderCell(project.id,project.name,"project-head",false));}
+      if(state.scope==="student"&&els.groupTotalToggle.checked){headerRow.append(createHeaderCell("groupTotal","小组总分","group-total-head",false));}
+      headerRow.append(createHeaderCell("total",state.scope==="student"?"个人总分":"小组总分","total-head",false));
+      thead.append(headerRow);
+      const tbody=node("tbody");
+      subjects.forEach((subject,rowIndex)=>{
+        const row=node("tr");
+        const nameCell=node("td","name-cell");
+        nameCell.append(node("div","name-main",subject.name));
+        const studentGroup=state.scope==="student"?currentGroup(subject.groupId):null;
+        if(state.scope==="student"){const chip=node("span",`group-chip${studentGroup?"":" none"}`,groupName(subject.groupId));nameCell.append(chip);}
+        row.append(nameCell);
+        projects.forEach((project,colIndex)=>{
+          const td=node("td");
+          td.append(createScoreButton(subject,project,rowIndex,colIndex));
+          row.append(td);
+        });
+        if(state.scope==="student"&&els.groupTotalToggle.checked){const groupTotal=studentGroup?totalFor("group",studentGroup.id):0;row.append(node("td","group-total-cell",formatScore(groupTotal)));}
+        row.append(node("td","total-cell",formatScore(totalFor(state.scope,subject.id))));
+        tbody.append(row);
+      });
+      els.scoreTable.append(thead,tbody);
+      renderSortBadge();
+      els.tableSummary.textContent=`${subjects.length} ${state.scope==="student"?"名学生":"个小组"} · ${projects.length} 个项目 · 第 ${state.classData.revision} 版${curP?` · ${curP.name}`:""}`;
+      if(state.activeIndex>=state.positions.length)state.activeIndex=Math.max(0,state.positions.length-1);
+      state.positions.forEach((position,index)=>{position.button.tabIndex=index===state.activeIndex?0:-1;position.button.classList.toggle("active-cell",index===state.activeIndex);});
+      updateDirtyStatus();
+    }
+    function handleCellKey(event,position){const index=state.positions.indexOf(position);let target=-1;if(event.key==="Enter"||event.key===" "){event.preventDefault();if(isPeriodLocked()){togglePeriodLock(activePeriodId());return;}openEditor(position);return;}if(event.key==="ArrowLeft")target=index-1;else if(event.key==="ArrowRight")target=index+1;else if(event.key==="ArrowUp")target=state.positions.findIndex(item=>item.row===position.row-1&&item.col===position.col);else if(event.key==="ArrowDown")target=state.positions.findIndex(item=>item.row===position.row+1&&item.col===position.col);else if(event.key==="Tab")target=index+(event.shiftKey?-1:1);else if(event.key==="Home")target=state.positions.findIndex(item=>item.row===position.row);else if(event.key==="End"){const rowItems=state.positions.filter(item=>item.row===position.row);target=state.positions.indexOf(rowItems[rowItems.length-1]);}else return;if(target<0||target>=state.positions.length)return;event.preventDefault();state.activeIndex=target;renderTable();state.positions[target]?.button.focus({preventScroll:false});}
     function openEditor(position){state.editor=position;const subject=(position.scope==="student"?state.classData.students:state.classData.groups).find(item=>item.id===position.subjectId);const project=state.classData.projects.find(item=>item.id===position.projectId);els.editorHeading.textContent=`编辑${position.scope==="student"?"个人":"小组"}积分`;els.editorContext.textContent=`${subject?.name||"—"} · ${project?.name||"—"}`;els.scoreInput.value=displayCell(position.scope,position.subjectId,position.projectId).raw||"";updatePreview();els.cellEditor.classList.add("open");els.cellEditor.setAttribute("aria-hidden","false");setTimeout(()=>els.scoreInput.focus(),40);}
     function closeEditor(focus=true){els.cellEditor.classList.remove("open");els.cellEditor.setAttribute("aria-hidden","true");if(focus)state.positions[state.activeIndex]?.button.focus();state.editor=null;}
     function updatePreview(){const parsed=parseScore(els.scoreInput.value);els.scorePreview.textContent=`${parsed.score>0?"+":""}${formatScore(parsed.score)}`;els.parserHint.textContent=parsed.error|| (parsed.warning?"发现无符号数字，已忽略":"只统计带有 + 或 - 的数字");els.parserHint.style.color=parsed.error?"#b3473d":parsed.warning?"#a36213":"";$("editorApply").disabled=Boolean(parsed.error);}
     function applyEditor(){if(!state.editor)return;const parsed=parseScore(els.scoreInput.value);if(parsed.error){toast(parsed.error);return;}const {scope,subjectId,projectId}=state.editor;const key=draftKey(scope,subjectId,projectId);const original=serverCell(scope,subjectId,projectId);const text=els.scoreInput.value;if(text===original.raw)state.drafts.delete(key);else{if(!state.drafts.size)state.draftStructureRevision=state.classData.structureRevision;state.drafts.set(key,{text,baseCellRevision:Number(original.revision||0)});}persistDrafts();closeEditor(false);renderTable();state.positions[state.activeIndex]?.button.focus();}
     function moveEditor(delta){if(!state.editor)return;applyEditor();const next=Math.min(state.positions.length-1,Math.max(0,state.activeIndex+delta));state.activeIndex=next;renderTable();if(state.positions[next])openEditor(state.positions[next]);}
-    async function loadClass(classId,{discard=false}={}){if(state.drafts.size&&!discard&&!confirm("当前有未保存修改。刷新或切换班级会先保留草稿，但可能产生冲突，是否继续？"))return false;setStatus("","正在读取班级数据…");try{if(isLocalDemo){state.classData=demoClass();state.etag='"demo-etag"';}else{const result=await api(`/api/classes/${encodeURIComponent(classId)}`);state.classData=result.body.data.class;state.etag=result.etag||result.body.etag;}localStorage.setItem("cloud-score:last-class",classId);restoreDrafts();restoreAdvSort();renderTable();return true;}catch(error){showEmpty("无法加载班级",error.message);setStatus("error",error.message);return false;}}
+    async function loadClass(classId,{discard=false}={}){
+      if(state.drafts.size&&!discard&&!confirm("当前有未保存修改。刷新或切换班级会先保留草稿，但可能产生冲突，是否继续？"))return false;
+      setStatus("","正在读取班级数据…");
+      try{
+        if(isLocalDemo){
+          state.classData=demoClass();
+          state.etag='"demo-etag"';
+        }else{
+          const result=await api(`/api/classes/${encodeURIComponent(classId)}`);
+          state.classData=result.body.data.class;
+          state.etag=result.etag||result.body.etag;
+        }
+        if(!state.currentPeriodId || (state.currentPeriodId !== "__summary__" && !state.classData?.periods?.some(p => p.id === state.currentPeriodId))){
+          state.currentPeriodId = state.classData?.currentPeriodId || state.classData?.periods?.[0]?.id || null;
+        }
+        localStorage.setItem("cloud-score:last-class",classId);
+        restoreDrafts();
+        restoreAdvSort();
+        renderTable();
+        return true;
+      }catch(error){
+        showEmpty("无法加载班级",error.message);
+        setStatus("error",error.message);
+        return false;
+      }
+    }
     function mutationId(){const uuid=crypto.randomUUID?crypto.randomUUID().replace(/-/g,""):Array.from(crypto.getRandomValues(new Uint8Array(16)),value=>value.toString(16).padStart(2,"0")).join("");return `m_${Date.now()}_${uuid}`;}
     async function saveScores(){
       if(!state.classData||!state.drafts.size||state.saving)return;
@@ -612,27 +1261,56 @@
       let savedCount=0;
       let finalStatus=null;
       try{
-        for(let offset=0;offset<pending.length;offset+=500){
-          const elapsed=Date.now()-state.lastSaveAttempt;
-          if(elapsed<1200)await new Promise(resolve=>setTimeout(resolve,1200-elapsed));
-          state.lastSaveAttempt=Date.now();
-          const batch=pending.slice(offset,offset+500);
-          const changes=batch.map(([key,draft])=>{const [scope,subjectId,projectId]=key.split(":");return {scope,subjectId,projectId,baseCellRevision:draft.baseCellRevision,text:draft.text};});
-          if(isLocalDemo){
-            await new Promise(resolve=>setTimeout(resolve,350));
-            changes.forEach(change=>{const container=change.scope==="student"?state.classData.personalScores:state.classData.groupScores;if(!container[change.subjectId])container[change.subjectId]={};const parsed=parseScore(change.text);container[change.subjectId][change.projectId]={raw:change.text,score:parsed.score,hasUnsignedNumber:parsed.warning,revision:change.baseCellRevision+1,updatedAt:new Date().toISOString(),updatedBy:"demo-teacher"};});
-            state.classData.revision+=1;
-            state.classData.updatedAt=new Date().toISOString();
-          }else{
-            const result=await api(`/api/classes/${encodeURIComponent(state.classData.classId)}/scores`,{method:"PATCH",headers:{"If-Match":state.etag,"X-CSRF-Token":state.session.csrf},body:{mutationId:mutationId(),baseRevision:state.classData.revision,baseStructureRevision:state.draftStructureRevision??state.classData.structureRevision,changes}});
-            state.classData=result.body.data.class;
-            state.etag=result.etag||result.body.etag;
-            if(result.body.data.merged)toast("已自动合并其他教师在不同单元格的修改");
+        const periodGroups=new Map();
+        for(const [key,draft] of pending){
+          const {periodId}=parseDraftKey(key);
+          if(!periodGroups.has(periodId))periodGroups.set(periodId,[]);
+          periodGroups.get(periodId).push([key,draft]);
+        }
+        for(const [pId,pDrafts] of periodGroups){
+          for(let offset=0;offset<pDrafts.length;offset+=500){
+            const elapsed=Date.now()-state.lastSaveAttempt;
+            if(elapsed<1200)await new Promise(resolve=>setTimeout(resolve,1200-elapsed));
+            state.lastSaveAttempt=Date.now();
+            const batch=pDrafts.slice(offset,offset+500);
+            const changes=batch.map(([key,draft])=>{const {scope,subjectId,projectId}=parseDraftKey(key);return {scope,subjectId,projectId,baseCellRevision:draft.baseCellRevision,text:draft.text};});
+            if(isLocalDemo){
+              await new Promise(resolve=>setTimeout(resolve,350));
+              if(!state.classData.periodScores)state.classData.periodScores={};
+              if(!state.classData.periodScores[pId])state.classData.periodScores[pId]={personalScores:{},groupScores:{}};
+              const periodTarget=state.classData.periodScores[pId];
+              changes.forEach(change=>{
+                const container=change.scope==="student"?periodTarget.personalScores:periodTarget.groupScores;
+                if(!container[change.subjectId])container[change.subjectId]={};
+                const parsed=parseScore(change.text);
+                container[change.subjectId][change.projectId]={raw:change.text,score:parsed.score,hasUnsignedNumber:parsed.warning,revision:change.baseCellRevision+1,updatedAt:new Date().toISOString(),updatedBy:"demo-teacher"};
+                if(pId===state.classData.currentPeriodId){
+                  const curContainer=change.scope==="student"?state.classData.personalScores:state.classData.groupScores;
+                  if(!curContainer[change.subjectId])curContainer[change.subjectId]={};
+                  curContainer[change.subjectId][change.projectId]=container[change.subjectId][change.projectId];
+                }
+              });
+              state.classData.revision+=1;
+              state.classData.updatedAt=new Date().toISOString();
+            }else{
+              const result=await api(`/api/classes/${encodeURIComponent(state.classData.classId)}/scores`,{method:"PATCH",headers:{"If-Match":state.etag,"X-CSRF-Token":state.session.csrf},body:{mutationId:mutationId(),baseRevision:state.classData.revision,baseStructureRevision:state.draftStructureRevision??state.classData.structureRevision,periodId:pId,changes}});
+              state.classData=result.body.data.class;
+              state.etag=result.etag||result.body.etag;
+              if(result.body.data.merged)toast("已自动合并其他教师在不同单元格的修改");
+            }
+            batch.forEach(([key,submitted])=>{
+              const current=state.drafts.get(key);
+              if(current&&current.text===submitted.text&&current.baseCellRevision===submitted.baseCellRevision){
+                state.drafts.delete(key);
+              }else if(current){
+                const {scope,subjectId,projectId}=parseDraftKey(key);
+                current.baseCellRevision=Number(serverCell(scope,subjectId,projectId,pId).revision||0);
+              }
+            });
+            savedCount+=batch.length;
+            persistDrafts();
+            renderTable();
           }
-          batch.forEach(([key,submitted])=>{const current=state.drafts.get(key);if(current&&current.text===submitted.text&&current.baseCellRevision===submitted.baseCellRevision)state.drafts.delete(key);else if(current){const [scope,subjectId,projectId]=key.split(":");current.baseCellRevision=Number(serverCell(scope,subjectId,projectId).revision||0);}});
-          savedCount+=batch.length;
-          persistDrafts();
-          renderTable();
         }
         els.notice.classList.add("hidden");
         toast(`${savedCount} 项积分已安全保存`);
@@ -641,6 +1319,11 @@
           if(error.details.class){state.classData=error.details.class;state.etag=error.details.etag||state.etag;renderTable();}
           showConflicts(error.details.conflicts,"cell");
           finalStatus={kind:"error",text:"发现同一单元格冲突"};
+        }
+        else if(error.code==="PERIOD_LOCKED"){
+          finalStatus={kind:"error",text:"该期次已被锁定，无法直接保存修改"};
+          els.notice.textContent="该期次已被锁定归档，无法保存修改。请在顶部工具栏点击“🔒 已锁定”进行解锁后再保存。";
+          els.notice.classList.remove("hidden");
         }
         else if(error.code==="STRUCTURE_CONFLICT"&&error.details?.class){
           state.classData=error.details.class;
@@ -666,9 +1349,47 @@
         else{finalStatus={kind:"error",text:error.message};els.notice.textContent=error.message;els.notice.classList.remove("hidden");}
       }finally{state.saving=false;updateDirtyStatus();if(finalStatus)setStatus(finalStatus.kind,finalStatus.text);}
     }
-    function findStructureInvalidDrafts(){const projects=new Map((state.classData?.projects||[]).map(item=>[item.id,item]));const students=new Map((state.classData?.students||[]).map(item=>[item.id,item]));const groups=new Map((state.classData?.groups||[]).map(item=>[item.id,item]));const conflicts=[];for(const [key,draft] of state.drafts){const [scope,subjectId,projectId]=key.split(":");const subject=(scope==="student"?students:groups).get(subjectId);const project=projects.get(projectId);let structureReason="";if(!subject?.active)structureReason=`${scope==="student"?"学生":"小组"}已归档`;else if(!project?.active)structureReason="评分项目已归档";if(structureReason)conflicts.push({scope,subjectId,projectId,localText:draft.text,current:serverCell(scope,subjectId,projectId),structureInvalid:true,structureReason});}return conflicts;}
-    function setServerCellFromConflict(conflict){const container=conflict.scope==="student"?state.classData.personalScores:state.classData.groupScores;if(!container[conflict.subjectId])container[conflict.subjectId]={};container[conflict.subjectId][conflict.projectId]=conflict.current;}
-    function resolveConflict(conflict,keepLocal){if(conflict.structureInvalid&&keepLocal)return;const key=draftKey(conflict.scope,conflict.subjectId,conflict.projectId);if(!conflict.structureInvalid)setServerCellFromConflict(conflict);if(keepLocal){const draft=state.drafts.get(key);if(draft)draft.baseCellRevision=Number(conflict.current.revision||0);}else state.drafts.delete(key);conflict.resolved=true;persistDrafts();}
+    function findStructureInvalidDrafts(){
+      const projects=new Map((state.classData?.projects||[]).map(item=>[item.id,item]));
+      const students=new Map((state.classData?.students||[]).map(item=>[item.id,item]));
+      const groups=new Map((state.classData?.groups||[]).map(item=>[item.id,item]));
+      const conflicts=[];
+      for(const [key,draft] of state.drafts){
+        const {periodId,scope,subjectId,projectId}=parseDraftKey(key);
+        const subject=(scope==="student"?students:groups).get(subjectId);
+        const project=projects.get(projectId);
+        let structureReason="";
+        if(!subject?.active)structureReason=`${scope==="student"?"学生":"小组"}已归档`;
+        else if(!project?.active)structureReason="评分项目已归档";
+        if(structureReason)conflicts.push({periodId,scope,subjectId,projectId,localText:draft.text,current:serverCell(scope,subjectId,projectId,periodId),structureInvalid:true,structureReason});
+      }
+      return conflicts;
+    }
+    function setServerCellFromConflict(conflict){
+      const pId=conflict.periodId||activePeriodId();
+      if(!state.classData.periodScores)state.classData.periodScores={};
+      if(!state.classData.periodScores[pId])state.classData.periodScores[pId]={personalScores:{},groupScores:{}};
+      const periodTarget=state.classData.periodScores[pId];
+      const container=conflict.scope==="student"?periodTarget.personalScores:periodTarget.groupScores;
+      if(!container[conflict.subjectId])container[conflict.subjectId]={};
+      container[conflict.subjectId][conflict.projectId]=conflict.current;
+      if(pId===state.classData.currentPeriodId){
+        const curContainer=conflict.scope==="student"?state.classData.personalScores:state.classData.groupScores;
+        if(!curContainer[conflict.subjectId])curContainer[conflict.subjectId]={};
+        curContainer[conflict.subjectId][conflict.projectId]=conflict.current;
+      }
+    }
+    function resolveConflict(conflict,keepLocal){
+      if(conflict.structureInvalid&&keepLocal)return;
+      const key=draftKey(conflict.scope,conflict.subjectId,conflict.projectId,conflict.periodId||activePeriodId());
+      if(!conflict.structureInvalid)setServerCellFromConflict(conflict);
+      if(keepLocal){
+        const draft=state.drafts.get(key);
+        if(draft)draft.baseCellRevision=Number(conflict.current.revision||0);
+      }else state.drafts.delete(key);
+      conflict.resolved=true;
+      persistDrafts();
+    }
     function conflictLabel(conflict){const subject=(conflict.scope==="student"?state.classData.students:state.classData.groups).find(item=>item.id===conflict.subjectId);const project=state.classData.projects.find(item=>item.id===conflict.projectId);return `${subject?.name||"未知"} · ${project?.name||"未知"}`;}
     function renderConflicts(){els.conflictList.replaceChildren();state.conflicts.forEach(conflict=>{const item=node("section","conflict-item");const suffix=conflict.resolved?" · 已处理":conflict.structureReason?` · ${conflict.structureReason}`:"";item.append(node("div","conflict-context",`${conflictLabel(conflict)}${suffix}`));const values=node("div","conflict-values");const local=node("div","conflict-value");local.append(node("small","","本地草稿"),node("div","",conflict.localText||"（空）"));const server=node("div","conflict-value");server.append(node("small","",conflict.structureInvalid?"服务器历史记录":"服务器版本"),node("div","",conflict.current?.raw||"（空）"));values.append(local,server);const actions=node("div","conflict-actions");const useServer=node("button","btn",conflict.structureInvalid?"丢弃本地草稿":"采用服务器");useServer.type="button";const keepLocal=node("button","btn primary",conflict.structureInvalid?"需先恢复对象":"保留本地");keepLocal.type="button";useServer.disabled=Boolean(conflict.resolved);keepLocal.disabled=Boolean(conflict.resolved||conflict.structureInvalid);useServer.addEventListener("click",()=>{resolveConflict(conflict,false);renderConflicts();});keepLocal.addEventListener("click",()=>{resolveConflict(conflict,true);renderConflicts();});actions.append(useServer,keepLocal);item.append(values,actions);els.conflictList.append(item);});$("keepLocalAll").disabled=state.conflicts.some(conflict=>!conflict.resolved&&conflict.structureInvalid);}
     function showConflicts(conflicts,mode="cell"){state.conflicts=conflicts.map(item=>({...item,resolved:false}));els.conflictTitle.textContent=mode==="structure"?"部分草稿无法应用":"发现多人编辑冲突";els.conflictDescription.textContent=mode==="structure"?"这些草稿对应的学生、项目或小组已归档。可丢弃草稿；若必须保留，请先在班级设置中恢复对应对象。":"服务器中的同一单元格已经改变。请逐项选择要保留的版本，然后再次保存。";$("useServerAll").textContent=mode==="structure"?"全部丢弃草稿":"全部采用服务器";$("keepLocalAll").textContent=mode==="structure"?"需先恢复对象":"全部保留本地";renderConflicts();els.conflictDialog.showModal();}
@@ -749,7 +1470,8 @@
           const actions = node("div", "row-actions");
           actions.append(
             btn("编辑", "btn small", () => openEntityForm(kind, item)),
-            btn("归档", "btn small danger", () => archiveEntity(kind, item))
+            btn("归档", "btn small warn", () => archiveEntity(kind, item)),
+            btn("删除", "btn small danger", () => deleteEntity(kind, item, false))
           );
           row.append(orderBox, ident, meta, actions);
           els.structureList.append(row);
@@ -765,7 +1487,10 @@
           ident.append(node("div", "entity-name", item.name), node("div", "entity-meta", "历史数据已保留"));
           const meta = node("div", "entity-meta", `v${item.version}`);
           const actions = node("div", "row-actions");
-          actions.append(btn("恢复", "btn small", () => patchStructure({ type: `${kind}.restore`, id: item.id, expectedVersion: item.version }, `${kindLabels(kind)[0]}已恢复`)));
+          actions.append(
+            btn("恢复", "btn small", () => patchStructure({ type: `${kind}.restore`, id: item.id, expectedVersion: item.version }, `${kindLabels(kind)[0]}已恢复`)),
+            btn("彻底删除", "btn small danger", () => deleteEntity(kind, item, true))
+          );
           row.append(ident, meta, actions);
           els.structureList.append(row);
         });
@@ -784,6 +1509,15 @@
       const [singular] = kindLabels(kind);
       if (!confirm(`确定归档${singular}“${item.name}”？历史积分数据将完整保留并可随时恢复。`)) return;
       await patchStructure({ type: `${kind}.archive`, id: item.id, expectedVersion: item.version }, `${singular}已归档`);
+    }
+
+    async function deleteEntity(kind, item, isFromArchive = false) {
+      const [singular] = kindLabels(kind);
+      const promptText = isFromArchive
+        ? `确定彻底删除已归档${singular}“${item.name}”？\n\n注意：此操作将永久彻底销毁该${singular}及其所有历史积分，不可恢复！`
+        : `确定直接彻底删除${singular}“${item.name}”？\n\n注意：此操作无需先归档，将永久物理移除该${singular}及其所有历史打分数据，不可撤销！`;
+      if (!confirm(promptText)) return;
+      await patchStructure({ type: `${kind}.delete`, id: item.id, expectedVersion: item.version }, `${singular}已彻底删除`);
     }
 
     function openEntityForm(kind, item = null) {
@@ -1261,6 +1995,402 @@
       }
       renderTable();
     });
+    els.periodSelect.addEventListener("change", (e) => {
+      const targetVal = e.target.value;
+      if (state.drafts.size > 0 && !confirm("切换期次前，本地有尚未保存的修改。是否继续切换？")) {
+        e.target.value = state.currentPeriodId || state.classData?.currentPeriodId || "";
+        return;
+      }
+      state.currentPeriodId = targetVal;
+      state.sort = { column: null, direction: null };
+      restoreAdvSort();
+      renderTable();
+    });
+    els.summaryPeriodTab.addEventListener("click", () => {
+      state.summaryMode = "period";
+      state.sort = { column: null, direction: null };
+      restoreAdvSort();
+      renderTable();
+    });
+    els.summaryProjectTab.addEventListener("click", () => {
+      state.summaryMode = "project";
+      state.sort = { column: null, direction: null };
+      restoreAdvSort();
+      renderTable();
+    });
+    els.newPeriodBtn.addEventListener("click", () => {
+      if (!state.classData) {
+        toast("请先选择班级");
+        return;
+      }
+      els.newPeriodForm.reset();
+      els.newPeriodError.classList.add("hidden");
+      const nextNum = (state.classData.periods?.length || 0) + 1;
+      els.newPeriodNameInput.value = `第 ${nextNum} 期`;
+      els.newPeriodDialog.showModal();
+      els.newPeriodNameInput.focus();
+    });
+    els.newPeriodCloseBtn.addEventListener("click", () => els.newPeriodDialog.close());
+    els.newPeriodCancelBtn.addEventListener("click", () => els.newPeriodDialog.close());
+    els.newPeriodForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      els.newPeriodError.classList.add("hidden");
+      const name = els.newPeriodNameInput.value.trim();
+      const startDate = els.newPeriodStartInput.value.trim();
+      const endDate = els.newPeriodEndInput.value.trim();
+      const note = els.newPeriodNoteInput.value.trim();
+      if (!name) {
+        els.newPeriodError.textContent = "请输入期次名称。";
+        els.newPeriodError.classList.remove("hidden");
+        return;
+      }
+      els.newPeriodSubmitBtn.disabled = true;
+      try {
+        if (isLocalDemo) {
+          const newId = `period_demo_${Date.now()}`;
+          const stamp = new Date().toISOString();
+          state.classData.periods.forEach(p => { p.locked = true; });
+          state.classData.periods.push({ id: newId, name, startDate, endDate, note, locked: false, createdAt: stamp });
+          state.classData.currentPeriodId = newId;
+          state.currentPeriodId = newId;
+          state.classData.periodScores[newId] = { personalScores: {}, groupScores: {} };
+          state.classData.personalScores = {};
+          state.classData.groupScores = {};
+          state.classData.revision += 1;
+          state.classData.structureRevision += 1;
+          toast("新一期已开启！前一期已归档锁定");
+          els.newPeriodDialog.close();
+          renderTable();
+          return;
+        }
+        await patchStructure({ type: "period.create", name, startDate, endDate, note }, "新一期已开启！前一期已归档锁定");
+        state.currentPeriodId = state.classData.currentPeriodId;
+        els.newPeriodDialog.close();
+        renderTable();
+      } catch (err) {
+        els.newPeriodError.textContent = err.message;
+        els.newPeriodError.classList.remove("hidden");
+      } finally {
+        els.newPeriodSubmitBtn.disabled = false;
+      }
+    });
+    els.periodLockBtn.addEventListener("click", () => {
+      togglePeriodLock(activePeriodId());
+    });
+    els.lockPeriodSettingBtn.addEventListener("click", () => {
+      togglePeriodLock(activePeriodId());
+    });
+    els.periodSettingsBtn.addEventListener("click", () => {
+      if (isSummaryView()) {
+        toast("期末总评为汇总视图，无需管理单期");
+        return;
+      }
+      const cur = currentPeriodObj();
+      if (!cur) return;
+      els.periodSettingsForm.reset();
+      els.periodSettingsError.classList.add("hidden");
+      els.editPeriodNameInput.value = cur.name || "";
+      els.editPeriodStartInput.value = cur.startDate || "";
+      els.editPeriodEndInput.value = cur.endDate || "";
+      els.editPeriodNoteInput.value = cur.note || "";
+      els.deletePeriodBtn.disabled = (state.classData.periods?.length || 0) <= 1;
+      updatePeriodSettingsLockBtn();
+      if (cur.active === false) {
+        els.archivePeriodBtn.textContent = "恢复此期次";
+        els.archivePeriodBtn.className = "btn";
+        els.archivePeriodBtn.disabled = false;
+      } else {
+        els.archivePeriodBtn.textContent = "归档此期次";
+        els.archivePeriodBtn.className = "btn warn";
+        const activeCount = (state.classData.periods || []).filter(p => p.active !== false).length;
+        els.archivePeriodBtn.disabled = activeCount <= 1;
+      }
+      els.periodSettingsDialog.showModal();
+      els.editPeriodNameInput.focus();
+    });
+    els.periodSettingsCloseBtn.addEventListener("click", () => els.periodSettingsDialog.close());
+    els.periodSettingsCancelBtn.addEventListener("click", () => els.periodSettingsDialog.close());
+    els.periodSettingsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      els.periodSettingsError.classList.add("hidden");
+      const name = els.editPeriodNameInput.value.trim();
+      const startDate = els.editPeriodStartInput.value.trim();
+      const endDate = els.editPeriodEndInput.value.trim();
+      const note = els.editPeriodNoteInput.value.trim();
+      if (!name) {
+        els.periodSettingsError.textContent = "请输入期次名称。";
+        els.periodSettingsError.classList.remove("hidden");
+        return;
+      }
+      els.periodSettingsSubmitBtn.disabled = true;
+      try {
+        const cur = currentPeriodObj();
+        if (isLocalDemo) {
+          if (cur) {
+            cur.name = name;
+            cur.startDate = startDate;
+            cur.endDate = endDate;
+            cur.note = note;
+          }
+          toast("期次信息已更新");
+          els.periodSettingsDialog.close();
+          renderTable();
+          return;
+        }
+        await patchStructure({ type: "period.update", id: cur.id, name, startDate, endDate, note }, "期次信息已更新");
+        els.periodSettingsDialog.close();
+        renderTable();
+      } catch (err) {
+        els.periodSettingsError.textContent = err.message;
+        els.periodSettingsError.classList.remove("hidden");
+      } finally {
+        els.periodSettingsSubmitBtn.disabled = false;
+      }
+    });
+    els.archivePeriodBtn.addEventListener("click", async () => {
+      const cur = currentPeriodObj();
+      if (!cur) return;
+      if (cur.active === false) {
+        els.archivePeriodBtn.disabled = true;
+        try {
+          if (isLocalDemo) {
+            cur.active = true;
+            toast("期次已恢复");
+            els.periodSettingsDialog.close();
+            renderTable();
+            return;
+          }
+          await patchStructure({ type: "period.restore", id: cur.id }, "期次已恢复");
+          els.periodSettingsDialog.close();
+          renderTable();
+        } catch (err) {
+          els.periodSettingsError.textContent = err.message;
+          els.periodSettingsError.classList.remove("hidden");
+        } finally {
+          els.archivePeriodBtn.disabled = false;
+        }
+      } else {
+        const activePeriods = (state.classData.periods || []).filter(p => p.active !== false);
+        if (activePeriods.length <= 1) {
+          toast("班级至少需要保留一个使用中的期次，无法归档。");
+          return;
+        }
+        if (!confirm(`确定归档期次“${cur.name}”吗？\n归档后期次将被封存为只读历史，不再显示在常规评比列表中，但可随时在管理后台查看与恢复。`)) return;
+        els.archivePeriodBtn.disabled = true;
+        try {
+          if (isLocalDemo) {
+            cur.active = false;
+            toast("期次已归档");
+            const remaining = (state.classData.periods || []).filter(p => p.active !== false);
+            if (remaining.length) {
+              state.currentPeriodId = remaining[remaining.length - 1].id;
+            }
+            els.periodSettingsDialog.close();
+            renderTable();
+            return;
+          }
+          await patchStructure({ type: "period.archive", id: cur.id }, "期次已归档");
+          const remaining = (state.classData.periods || []).filter(p => p.active !== false);
+          if (remaining.length) {
+            state.currentPeriodId = remaining[remaining.length - 1].id;
+          }
+          els.periodSettingsDialog.close();
+          renderTable();
+        } catch (err) {
+          els.periodSettingsError.textContent = err.message;
+          els.periodSettingsError.classList.remove("hidden");
+        } finally {
+          els.archivePeriodBtn.disabled = false;
+        }
+      }
+    });
+    els.deletePeriodBtn.addEventListener("click", async () => {
+      const cur = currentPeriodObj();
+      if (!cur) return;
+      if ((state.classData.periods?.length || 0) <= 1) {
+        toast("班级至少需要保留一个期次，无法删除。");
+        return;
+      }
+      const pScores = state.classData.periodScores?.[cur.id]?.personalScores || {};
+      const hasScores = Object.values(pScores).some(s => Object.keys(s).length > 0);
+      let force = false;
+      if (hasScores) {
+        const inputName = prompt(`期次“${cur.name}”中已录入过积分！\n删除期次将销毁该期次下的全部积分记录。\n\n如确认强制删除，请在下方准确输入期次名称【${cur.name}】：`);
+        if (inputName !== cur.name) {
+          toast("输入的期次名称不匹配，删除已取消");
+          return;
+        }
+        force = true;
+      } else {
+        if (!confirm(`确定删除空白期次“${cur.name}”吗？`)) return;
+      }
+      els.deletePeriodBtn.disabled = true;
+      try {
+        if (isLocalDemo) {
+          const idx = state.classData.periods.findIndex(p => p.id === cur.id);
+          if (idx !== -1) state.classData.periods.splice(idx, 1);
+          delete state.classData.periodScores[cur.id];
+          state.classData.currentPeriodId = state.classData.periods[state.classData.periods.length - 1].id;
+          state.currentPeriodId = state.classData.currentPeriodId;
+          toast("期次已成功删除");
+          els.periodSettingsDialog.close();
+          renderTable();
+          return;
+        }
+        await patchStructure({ type: "period.delete", id: cur.id, force }, "期次已成功删除");
+        const remaining = (state.classData.periods || []).filter(p => p.id !== cur.id);
+        const activeRemain = remaining.filter(p => p.active !== false);
+        state.currentPeriodId = activeRemain.length ? activeRemain[activeRemain.length - 1].id : (remaining[0]?.id || null);
+        els.periodSettingsDialog.close();
+        renderTable();
+      } catch (err) {
+        els.periodSettingsError.textContent = err.message;
+        els.periodSettingsError.classList.remove("hidden");
+      } finally {
+        els.deletePeriodBtn.disabled = false;
+      }
+    });
+
+    let purgeCountdownTimer = null;
+    let purgeTargetAnswer = null;
+
+    function generatePurgeMathChallenge() {
+      const ops = ["+", "-", "×"];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let a, b, answer;
+      if (op === "+") {
+        a = Math.floor(Math.random() * 40) + 10;
+        b = Math.floor(Math.random() * 40) + 10;
+        answer = a + b;
+      } else if (op === "-") {
+        a = Math.floor(Math.random() * 40) + 30;
+        b = Math.floor(Math.random() * 25) + 5;
+        answer = a - b;
+      } else {
+        a = Math.floor(Math.random() * 8) + 3;
+        b = Math.floor(Math.random() * 8) + 3;
+        answer = a * b;
+      }
+      purgeTargetAnswer = answer;
+      if (els.purgeMathQuestion) els.purgeMathQuestion.textContent = `${a} ${op} ${b} = ?`;
+      if (els.purgeAnswerInput) {
+        els.purgeAnswerInput.value = "";
+        checkPurgeAnswer();
+      }
+    }
+
+    function checkPurgeAnswer() {
+      if (!els.purgeAnswerInput || !els.purgeConfirmBtn) return;
+      const val = parseInt(els.purgeAnswerInput.value, 10);
+      const isUnlocked = !els.purgeAnswerInput.disabled;
+      if (isUnlocked && !isNaN(val) && val === purgeTargetAnswer) {
+        els.purgeConfirmBtn.disabled = false;
+        if (els.purgeAnswerHint) {
+          els.purgeAnswerHint.textContent = "✅ 计算正确！危险操作按键已点亮。";
+          els.purgeAnswerHint.style.color = "var(--brand)";
+        }
+      } else {
+        els.purgeConfirmBtn.disabled = true;
+        if (els.purgeAnswerHint) {
+          if (isUnlocked) {
+            els.purgeAnswerHint.textContent = isNaN(val) ? "请输入计算题结果以解锁确认按键。" : "❌ 计算结果不正确，请重新计算。";
+            els.purgeAnswerHint.style.color = isNaN(val) ? "var(--muted)" : "var(--danger)";
+          } else {
+            els.purgeAnswerHint.textContent = "10秒倒计时结束后解锁输入，算对后点亮确认按键。";
+            els.purgeAnswerHint.style.color = "var(--muted)";
+          }
+        }
+      }
+    }
+
+    function openPurgeModal() {
+      if (!state.classData) return;
+      if ((state.classData.students || []).length === 0) {
+        toast("当前班级尚无学生，无需清空。");
+        return;
+      }
+      if (purgeCountdownTimer) clearInterval(purgeCountdownTimer);
+      generatePurgeMathChallenge();
+      let remainingSec = 10;
+      els.purgeTimerCount.textContent = String(remainingSec);
+      els.purgeCountdownBox.style.display = "";
+      els.purgeCountdownBox.style.color = "var(--danger)";
+      els.purgeCountdownBox.textContent = `🔒 请仔细阅读警告，冷静等待 (${remainingSec}s)...`;
+      els.purgeAnswerInput.disabled = true;
+      els.purgeConfirmBtn.disabled = true;
+
+      purgeCountdownTimer = setInterval(() => {
+        remainingSec--;
+        if (remainingSec <= 0) {
+          clearInterval(purgeCountdownTimer);
+          purgeCountdownTimer = null;
+          els.purgeCountdownBox.textContent = "🔓 倒计时结束，请在下方解答验证算式";
+          els.purgeCountdownBox.style.color = "var(--brand)";
+          els.purgeAnswerInput.disabled = false;
+          els.purgeAnswerInput.focus();
+          checkPurgeAnswer();
+        } else {
+          els.purgeCountdownBox.textContent = `🔒 请仔细阅读警告，冷静等待 (${remainingSec}s)...`;
+        }
+      }, 1000);
+
+      els.purgeStudentsDialog.showModal();
+    }
+
+    function closePurgeModal() {
+      if (purgeCountdownTimer) {
+        clearInterval(purgeCountdownTimer);
+        purgeCountdownTimer = null;
+      }
+      els.purgeStudentsDialog?.close();
+    }
+
+    if (els.openPurgeStudentsBtn) {
+      els.openPurgeStudentsBtn.addEventListener("click", () => {
+        els.structureDialog.close();
+        openPurgeModal();
+      });
+    }
+    if (els.purgeStudentsClose) els.purgeStudentsClose.addEventListener("click", closePurgeModal);
+    if (els.purgeCancelBtn) els.purgeCancelBtn.addEventListener("click", closePurgeModal);
+    if (els.purgeRefreshMathBtn) {
+      els.purgeRefreshMathBtn.addEventListener("click", () => {
+        generatePurgeMathChallenge();
+        if (!els.purgeAnswerInput.disabled) els.purgeAnswerInput.focus();
+      });
+    }
+    if (els.purgeAnswerInput) els.purgeAnswerInput.addEventListener("input", checkPurgeAnswer);
+
+    if (els.purgeConfirmBtn) {
+      els.purgeConfirmBtn.addEventListener("click", async () => {
+        if (!state.classData) return;
+        const count = (state.classData.students || []).length;
+        if (!confirm(`【终极二次确认】\n\n即将永久彻底清空班级“${state.classData.name}”的全部 ${count} 名学生及所有期次个人历史积分记录！\n此操作不可撤销，确定执行毕业清空吗？`)) {
+          return;
+        }
+        els.purgeConfirmBtn.disabled = true;
+        try {
+          if (isLocalDemo) {
+            state.classData.students = [];
+            for (const pid of Object.keys(state.classData.periodScores || {})) {
+              state.classData.periodScores[pid].personalScores = {};
+            }
+            state.classData.personalScores = {};
+            toast("全班学生及个人历史积分已全部清空！");
+            closePurgeModal();
+            renderTable();
+            return;
+          }
+          await patchStructure({ type: "class.purgeStudents" }, "全班学生及个人历史积分已全部清空！");
+          closePurgeModal();
+          renderTable();
+        } catch (err) {
+          toast(err.message);
+        } finally {
+          els.purgeConfirmBtn.disabled = false;
+        }
+      });
+    }
     $("useServerAll").addEventListener("click",()=>{state.conflicts.forEach(conflict=>{if(!conflict.resolved)resolveConflict(conflict,false);});renderConflicts();});
     $("keepLocalAll").addEventListener("click",()=>{state.conflicts.forEach(conflict=>{if(!conflict.resolved)resolveConflict(conflict,true);});renderConflicts();});
     $("conflictDone").addEventListener("click",()=>{if(state.conflicts.some(item=>!item.resolved)){toast("请先处理所有冲突");return;}els.conflictDialog.close();renderTable();});

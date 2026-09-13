@@ -22,6 +22,7 @@ const MAX_TEACHERS = 100;
 const MAX_STUDENTS = 100;
 const MAX_PROJECTS = 30;
 const MAX_GROUPS = 20;
+const MAX_PERIODS = 50;
 const MAX_ABS_CELL_SCORE = 1_000_000;
 const ID_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 const MUTATION_PATTERN = /^[a-zA-Z0-9_-]{12,96}$/;
@@ -348,6 +349,8 @@ function defaultCatalog() {
 }
 
 function defaultClass(classId, name) {
+  const defaultPeriodId = "period_default";
+  const stamp = nowIso();
   return {
     schemaVersion: APP_SCHEMA_VERSION,
     classId,
@@ -357,11 +360,30 @@ function defaultClass(classId, name) {
     students: [],
     projects: [],
     groups: [],
+    periods: [
+      {
+        id: defaultPeriodId,
+        name: "第 1 期",
+        startDate: "",
+        endDate: "",
+        note: "初始期次",
+        locked: false,
+        active: true,
+        createdAt: stamp,
+      },
+    ],
+    currentPeriodId: defaultPeriodId,
+    periodScores: {
+      [defaultPeriodId]: {
+        personalScores: {},
+        groupScores: {},
+      },
+    },
     personalScores: {},
     groupScores: {},
     recentMutations: [],
     receipts: {},
-    updatedAt: nowIso(),
+    updatedAt: stamp,
     lastWriteAtMs: 0,
   };
 }
@@ -400,16 +422,77 @@ function migrateClass(value, classId, fallbackName = classId) {
   if ((value.schemaVersion || 1) > APP_SCHEMA_VERSION) {
     throw new ApiError(503, "SCHEMA_TOO_NEW", "班级数据版本高于当前程序支持版本。" );
   }
+  const base = defaultClass(classId, fallbackName);
+  const students = Array.isArray(value.students) ? value.students : [];
+  const projects = Array.isArray(value.projects) ? value.projects : [];
+  const groups = Array.isArray(value.groups) ? value.groups : [];
+  const personalScores = value.personalScores && typeof value.personalScores === "object" ? value.personalScores : {};
+  const groupScores = value.groupScores && typeof value.groupScores === "object" ? value.groupScores : {};
+
+  let periods = Array.isArray(value.periods) && value.periods.length > 0 ? value.periods : null;
+  let periodScores = value.periodScores && typeof value.periodScores === "object" ? value.periodScores : null;
+  let currentPeriodId = typeof value.currentPeriodId === "string" && value.currentPeriodId ? value.currentPeriodId : null;
+
+  if (!periods) {
+    const defaultPeriodId = "period_default";
+    periods = [
+      {
+        id: defaultPeriodId,
+        name: "第 1 期",
+        startDate: "",
+        endDate: "",
+        note: "初始期次",
+        locked: false,
+        active: true,
+        createdAt: value.updatedAt || base.updatedAt,
+      },
+    ];
+    periodScores = {
+      [defaultPeriodId]: {
+        personalScores,
+        groupScores,
+      },
+    };
+    currentPeriodId = defaultPeriodId;
+  } else {
+    periods = periods.map((p, idx) => ({
+      id: String(p.id || `period_${idx + 1}`),
+      name: String(p.name || `第 ${idx + 1} 期`),
+      startDate: String(p.startDate || ""),
+      endDate: String(p.endDate || ""),
+      note: String(p.note || ""),
+      locked: Boolean(p.locked),
+      active: p.active !== false,
+      createdAt: p.createdAt || value.updatedAt || base.updatedAt,
+    }));
+    if (!periodScores) {
+      periodScores = {};
+    }
+    for (const p of periods) {
+      if (!periodScores[p.id] || typeof periodScores[p.id] !== "object") {
+        periodScores[p.id] = { personalScores: {}, groupScores: {} };
+      }
+    }
+    if (!currentPeriodId || !periods.some((p) => p.id === currentPeriodId)) {
+      currentPeriodId = periods[periods.length - 1].id;
+    }
+  }
+
+  const activePeriodScores = periodScores[currentPeriodId] || { personalScores: {}, groupScores: {} };
+
   return {
-    ...defaultClass(classId, fallbackName),
+    ...base,
     ...value,
     schemaVersion: APP_SCHEMA_VERSION,
     classId,
-    students: Array.isArray(value.students) ? value.students : [],
-    projects: Array.isArray(value.projects) ? value.projects : [],
-    groups: Array.isArray(value.groups) ? value.groups : [],
-    personalScores: value.personalScores && typeof value.personalScores === "object" ? value.personalScores : {},
-    groupScores: value.groupScores && typeof value.groupScores === "object" ? value.groupScores : {},
+    students,
+    projects,
+    groups,
+    periods,
+    currentPeriodId,
+    periodScores,
+    personalScores: Object.keys(personalScores).length > 0 && !value.periodScores ? personalScores : (activePeriodScores.personalScores || {}),
+    groupScores: Object.keys(groupScores).length > 0 && !value.periodScores ? groupScores : (activePeriodScores.groupScores || {}),
     recentMutations: Array.isArray(value.recentMutations) ? value.recentMutations.slice(-50) : [],
     receipts: value.receipts && typeof value.receipts === "object" ? value.receipts : {},
   };
@@ -893,6 +976,10 @@ async function applyCatalogOperations(env, source, operations) {
         }
         teacher.active = true;
       }
+      else if (type === "teacher.delete") {
+        delete catalog.teachers[username];
+        continue;
+      }
       else throw new ApiError(400, "UNKNOWN_OPERATION", `不支持的操作：${type}`);
       teacher.version = Number(teacher.version || 0) + 1;
       teacher.authVersion = Number(teacher.authVersion || 0) + 1;
@@ -924,6 +1011,24 @@ async function applyCatalogOperations(env, source, operations) {
         }
         item.active = true;
       }
+      else if (type === "class.delete") {
+        delete catalog.classes[classId];
+        for (const t of Object.values(catalog.teachers || {})) {
+          if (Array.isArray(t?.classIds) && t.classIds.includes(classId)) {
+            t.classIds = t.classIds.filter((id) => id !== classId);
+            t.version = Number(t.version || 0) + 1;
+            t.updatedAt = nowIso();
+          }
+        }
+        try {
+          if (env?.R2) {
+            await env.R2.delete(classKey(classId));
+          }
+        } catch {
+          // ignore cleanup failures
+        }
+        continue;
+      }
       else throw new ApiError(400, "UNKNOWN_OPERATION", `不支持的操作：${type}`);
       item.version = Number(item.version || 0) + 1;
       item.updatedAt = nowIso();
@@ -944,6 +1049,9 @@ function publicClassData(value) {
     students: value.students,
     projects: value.projects,
     groups: value.groups,
+    periods: value.periods,
+    currentPeriodId: value.currentPeriodId,
+    periodScores: value.periodScores,
     personalScores: value.personalScores,
     groupScores: value.groupScores,
     updatedAt: value.updatedAt,
@@ -1017,7 +1125,140 @@ function applyStructureOperations(source, operations) {
       value.groups.push({ id: randomId("g"), name, active: true, order: nextActiveOrder(value.groups), version: 1, createdAt: timestamp, updatedAt: timestamp });
       continue;
     }
-    const match = /^(student|project|group)\.(update|archive|restore|reorder)$/.exec(type);
+    if (type === "class.purgeStudents") {
+      value.students = [];
+      value.personalScores = {};
+      if (value.periodScores && typeof value.periodScores === "object") {
+        for (const pId of Object.keys(value.periodScores)) {
+          if (value.periodScores[pId]) {
+            value.periodScores[pId].personalScores = {};
+          }
+        }
+      }
+      continue;
+    }
+    if (type === "period.create") {
+      if (!Array.isArray(value.periods)) value.periods = [];
+      if (value.periods.length >= MAX_PERIODS) throw new ApiError(409, "PERIOD_LIMIT", `每班最多支持 ${MAX_PERIODS} 个期次。`);
+      const name = cleanLabel(operation.name, "期次名称", 50);
+      const startDate = String(operation.startDate || "").slice(0, 30).trim();
+      const endDate = String(operation.endDate || "").slice(0, 30).trim();
+      const note = String(operation.note || "").slice(0, 200).trim();
+      const timestamp = nowIso();
+      for (const p of value.periods) {
+        p.locked = true;
+      }
+      const newPeriodId = randomId("period");
+      value.periods.push({
+        id: newPeriodId,
+        name,
+        startDate,
+        endDate,
+        note,
+        locked: false,
+        active: true,
+        createdAt: timestamp,
+      });
+      value.currentPeriodId = newPeriodId;
+      if (!value.periodScores) value.periodScores = {};
+      value.periodScores[newPeriodId] = {
+        personalScores: {},
+        groupScores: {},
+      };
+      value.personalScores = {};
+      value.groupScores = {};
+      continue;
+    }
+    if (type === "period.update") {
+      const id = String(operation.id || "");
+      const period = (value.periods || []).find((p) => p.id === id);
+      if (!period) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      if (operation.name !== undefined) {
+        period.name = cleanLabel(operation.name, "期次名称", 50);
+      }
+      if (operation.startDate !== undefined) {
+        period.startDate = String(operation.startDate || "").slice(0, 30).trim();
+      }
+      if (operation.endDate !== undefined) {
+        period.endDate = String(operation.endDate || "").slice(0, 30).trim();
+      }
+      if (operation.note !== undefined) {
+        period.note = String(operation.note || "").slice(0, 200).trim();
+      }
+      continue;
+    }
+    if (type === "period.lock") {
+      const id = String(operation.id || "");
+      const period = (value.periods || []).find((p) => p.id === id);
+      if (!period) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      period.locked = Boolean(operation.locked);
+      continue;
+    }
+    if (type === "period.archive") {
+      const id = String(operation.id || "");
+      const period = (value.periods || []).find((p) => p.id === id);
+      if (!period) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      const activePeriods = (value.periods || []).filter((p) => p.active !== false);
+      if (activePeriods.length <= 1 && period.active !== false) {
+        throw new ApiError(409, "PERIOD_CANNOT_ARCHIVE_LAST", "班级至少须保留一个使用中期次，无法归档。");
+      }
+      period.active = false;
+      period.locked = true;
+      if (value.currentPeriodId === id) {
+        const remaining = (value.periods || []).filter((p) => p.active !== false);
+        if (remaining.length > 0) {
+          value.currentPeriodId = remaining[remaining.length - 1].id;
+          const curScores = value.periodScores?.[value.currentPeriodId];
+          value.personalScores = curScores?.personalScores || {};
+          value.groupScores = curScores?.groupScores || {};
+        }
+      }
+      continue;
+    }
+    if (type === "period.restore") {
+      const id = String(operation.id || "");
+      const period = (value.periods || []).find((p) => p.id === id);
+      if (!period) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      period.active = true;
+      continue;
+    }
+    if (type === "period.switch") {
+      const id = String(operation.id || "");
+      const period = (value.periods || []).find((p) => p.id === id);
+      if (!period) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      value.currentPeriodId = id;
+      if (value.periodScores?.[id]) {
+        value.personalScores = value.periodScores[id].personalScores || {};
+        value.groupScores = value.periodScores[id].groupScores || {};
+      }
+      continue;
+    }
+    if (type === "period.delete") {
+      const id = String(operation.id || "");
+      if (!Array.isArray(value.periods) || value.periods.length <= 1) {
+        throw new ApiError(409, "PERIOD_CANNOT_DELETE_LAST", "班级至少须保留一个期次，无法删除。");
+      }
+      const periodIndex = value.periods.findIndex((p) => p.id === id);
+      if (periodIndex === -1) throw new ApiError(404, "PERIOD_NOT_FOUND", "期次不存在。");
+      const pScores = value.periodScores?.[id]?.personalScores || {};
+      const hasScores = Object.values(pScores).some((sub) => Object.keys(sub || {}).length > 0);
+      if (hasScores && !operation.force) {
+        throw new ApiError(409, "PERIOD_HAS_SCORES", "该期次已包含学生积分，若确认删除请启用强制确认。");
+      }
+      value.periods.splice(periodIndex, 1);
+      if (value.periodScores?.[id]) {
+        delete value.periodScores[id];
+      }
+      if (value.currentPeriodId === id) {
+        const remaining = (value.periods || []).filter((p) => p.active !== false);
+        value.currentPeriodId = remaining.length ? remaining[remaining.length - 1].id : value.periods[value.periods.length - 1].id;
+        const curScores = value.periodScores?.[value.currentPeriodId];
+        value.personalScores = curScores?.personalScores || {};
+        value.groupScores = curScores?.groupScores || {};
+      }
+      continue;
+    }
+    const match = /^(student|project|group)\.(update|archive|restore|delete|reorder)$/.exec(type);
     if (!match) throw new ApiError(400, "UNKNOWN_OPERATION", `不支持的操作：${type}`);
     const [, kind, action] = match;
     const collection = kind === "student" ? value.students : kind === "project" ? value.projects : value.groups;
@@ -1064,6 +1305,60 @@ function applyStructureOperations(source, operations) {
       if (!entity.active) entity.order = nextActiveOrder(collection);
       entity.active = true;
     }
+    else if (action === "delete") {
+      const entityIndex = collection.findIndex((entry) => entry.id === id);
+      if (entityIndex !== -1) {
+        collection.splice(entityIndex, 1);
+      }
+      if (kind === "student") {
+        if (value.personalScores) {
+          delete value.personalScores[id];
+        }
+        if (value.periodScores && typeof value.periodScores === "object") {
+          for (const pId of Object.keys(value.periodScores)) {
+            if (value.periodScores[pId]?.personalScores) {
+              delete value.periodScores[pId].personalScores[id];
+            }
+          }
+        }
+      } else if (kind === "group") {
+        for (const student of value.students) {
+          if (student.groupId === id) {
+            student.groupId = null;
+            student.version = Number(student.version || 0) + 1;
+            student.updatedAt = nowIso();
+          }
+        }
+        if (value.groupScores) {
+          delete value.groupScores[id];
+        }
+        if (value.periodScores && typeof value.periodScores === "object") {
+          for (const pId of Object.keys(value.periodScores)) {
+            if (value.periodScores[pId]?.groupScores) {
+              delete value.periodScores[pId].groupScores[id];
+            }
+          }
+        }
+      } else if (kind === "project") {
+        const cleanProjectScores = (container) => {
+          if (!container || typeof container !== "object") return;
+          for (const subjectId of Object.keys(container)) {
+            if (container[subjectId] && typeof container[subjectId] === "object") {
+              delete container[subjectId][id];
+            }
+          }
+        };
+        cleanProjectScores(value.personalScores);
+        cleanProjectScores(value.groupScores);
+        if (value.periodScores && typeof value.periodScores === "object") {
+          for (const pId of Object.keys(value.periodScores)) {
+            cleanProjectScores(value.periodScores[pId]?.personalScores);
+            cleanProjectScores(value.periodScores[pId]?.groupScores);
+          }
+        }
+      }
+      continue;
+    }
     entity.version = Number(entity.version || 0) + 1;
     entity.updatedAt = nowIso();
   }
@@ -1079,8 +1374,19 @@ function setCell(container, subjectId, projectId, cell) {
   container[subjectId][projectId] = cell;
 }
 
-function applyScoreChanges(source, changes, actor) {
+function applyScoreChanges(source, changes, actor, targetPeriodId = null) {
   const value = structuredClone(source);
+  const periodId = targetPeriodId || value.currentPeriodId || (value.periods?.[0]?.id || "period_default");
+  if (!value.periodScores) value.periodScores = {};
+  if (!value.periodScores[periodId]) {
+    value.periodScores[periodId] = { personalScores: {}, groupScores: {} };
+  }
+  const periodTarget = value.periodScores[periodId];
+  const periodObj = (value.periods || []).find((p) => p.id === periodId);
+  if (periodObj?.locked) {
+    throw new ApiError(409, "PERIOD_LOCKED", "该期次已被锁定，请先解锁后再修改积分。");
+  }
+
   const conflicts = [];
   const targets = new Set();
   const prepared = [];
@@ -1100,7 +1406,7 @@ function applyScoreChanges(source, changes, actor) {
     if (parsed.error) throw new ApiError(400, "INVALID_SCORE_TEXT", parsed.error);
     const expected = Number(change.baseCellRevision);
     if (!Number.isInteger(expected) || expected < 0) throw new ApiError(400, "INVALID_CELL_REVISION", "单元格版本无效。" );
-    const container = scope === "student" ? value.personalScores : value.groupScores;
+    const container = scope === "student" ? periodTarget.personalScores : periodTarget.groupScores;
     const current = getCell(container, subjectId, projectId);
     if (Number(current.revision || 0) !== expected && current.raw !== raw) {
       conflicts.push({ scope, subjectId, projectId, localText: raw, current });
@@ -1110,7 +1416,7 @@ function applyScoreChanges(source, changes, actor) {
   if (conflicts.length) throw new ApiError(409, "CELL_CONFLICT", "部分单元格已被其他教师修改。", { conflicts, currentRevision: value.revision });
   const nextRevision = Number(value.revision || 0) + 1;
   for (const item of prepared) {
-    const container = item.scope === "student" ? value.personalScores : value.groupScores;
+    const container = item.scope === "student" ? periodTarget.personalScores : periodTarget.groupScores;
     setCell(container, item.subjectId, item.projectId, {
       raw: item.raw,
       score: item.parsed.score,
@@ -1120,6 +1426,10 @@ function applyScoreChanges(source, changes, actor) {
       updatedBy: actor,
       updatedAt: nowIso(),
     });
+  }
+  if (periodId === value.currentPeriodId) {
+    value.personalScores = periodTarget.personalScores;
+    value.groupScores = periodTarget.groupScores;
   }
   value.revision = nextRevision;
   value.updatedAt = nowIso();
@@ -1496,6 +1806,7 @@ async function handleClassScoresPatch(context, classId) {
   const mutationId = assertMutationId(body.mutationId);
   const baseRevision = requireBaseRevision(body.baseRevision);
   const baseStructureRevision = requireBaseRevision(body.baseStructureRevision);
+  const periodId = body.periodId ? String(body.periodId) : null;
   const changes = Array.isArray(body.changes) ? body.changes : [];
   if (changes.length < 1 || changes.length > 500) throw new ApiError(400, "INVALID_CHANGES", "积分修改数量须为 1–500。" );
   const payloadHash = await mutationHash(auth.session.username, `class:${classId}:scores`, body);
@@ -1515,7 +1826,7 @@ async function handleClassScoresPatch(context, classId) {
     merged ||= baseRevision !== current.data.revision || clientEtag !== current.etag;
     let next;
     try {
-      next = applyScoreChanges(current.data, changes, auth.session.username);
+      next = applyScoreChanges(current.data, changes, auth.session.username, periodId);
     } catch (error) {
       if (error instanceof ApiError && error.code === "CELL_CONFLICT") {
         error.details = {
