@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-QCrNMh3UwA9ub0llwXi4dJt07NJ9zSoZiQQwdFjtK20='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-SHMnISumXju5iz4I6c5U1gcyvyo1yENqp13RjdlBXGs='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
   <title>登录 · Cloud Score</title>
   <style>
     :root{color-scheme:light;--ink:#173934;--muted:#667b77;--paper:#f3f4ec;--card:#fffef9;--line:#dce5e0;--brand:#176b61;--brand-dark:#104d46;--brand-soft:#dceee9;--amber:#bc7a25;--danger:#b3473d;--danger-soft:#fbe9e5;--shadow:0 28px 80px rgba(24,54,49,.15);--control-bg:#fff;--captcha-bg:#eef5f3;--glow-1:#cce9e1;--glow-2:#f1dcb8}
@@ -98,6 +98,7 @@
     let captchaId = "";
     let blockedUntil = 0;
     let countdownTimer = 0;
+    let blockedReasonTemplate = "登录暂时受限，请在 {s} 秒后重试。";
 
     function showError(message) {
       errorBox.textContent = message;
@@ -134,7 +135,7 @@
         return;
       }
       submitButton.disabled = true;
-      showError(`登录暂时受限，请在 ${seconds} 秒后重试。`);
+      showError(blockedReasonTemplate.replace("{s}", String(seconds)));
       countdownTimer = window.setTimeout(updateBlockedState, 1000);
     }
 
@@ -192,6 +193,13 @@
         const until = Number(error.details?.blockedUntil || 0);
         if (error.status === 429 || until > Date.now()) {
           blockedUntil = until > Date.now() ? until : Date.now() + Math.max(1, error.retryAfter) * 1000;
+          if (error.code === "ACCOUNT_LOCKED") {
+            blockedReasonTemplate = "该账号在当前网络下连续错误次数过多，已进入保护冷却，请在 {s} 秒后重试，或联系管理员解除。";
+          } else if (error.code === "IP_BLOCKED") {
+            blockedReasonTemplate = "当前网络登录尝试过于频繁，已触发安全保护，请在 {s} 秒后重试。";
+          } else {
+            blockedReasonTemplate = "登录暂时受限，请在 {s} 秒后重试。";
+          }
           updateBlockedState();
         } else {
           showError(error.message);

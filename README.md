@@ -6,9 +6,9 @@
 
 <p align="center">
   <a href="https://github.com/mayunqing1230/Cloud-Score"><img src="https://img.shields.io/badge/GitHub-mayunqing1230%2FCloud--Score-blue?logo=github" alt="GitHub Repo"></a>
-  <img src="https://img.shields.io/badge/Version-v1.7.1-brightgreen.svg" alt="Version: v1.7.1">
+  <img src="https://img.shields.io/badge/Version-v1.8.0-brightgreen.svg" alt="Version: v1.8.0">
   <img src="https://img.shields.io/badge/Architecture-Serverless%20%7C%204--Files-orange.svg" alt="Serverless">
-  <img src="https://img.shields.io/badge/Tests-39%2F39%20Pass-success.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-40%2F40%20Pass-success.svg" alt="Tests">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
 </p>
 
@@ -22,7 +22,7 @@
 
 ### 1. 纯无服务器与零框架架构（Zero Server & Zero Framework）
 - **4 核心文件，零外部运行时依赖**：全站由恰好 4 个纯原生文件（`_worker.js`、`login.html`、`admin.html`、`teacher.html`）组成。原生 ES2022 JavaScript + 现代语义化 HTML5 + CSS3 变量与响应式网格，无 Webpack/Vite 等繁复构建产物，无外部 CDN 脚本，加载毫秒级响应。
-- **强一致性 R2 存储**：完全基于 Cloudflare 私有 R2 Standard 对象存储，放弃最终一致性的 KV，依托对象 ETag 乐观锁保障多名教师高并发记分零覆盖。
+- **强一致性 R2 存储**：完全基于 Cloudflare 私有 R2 Standard 强一致性对象存储，依托对象 ETag 乐观锁保障多名教师高并发记分零覆盖。
 - **极简极低运维成本**：Cloudflare 后台仅需配置**唯一加密密钥** `ADMIN`，存储绑定名固定为 `R2`，零数据库实例，免费额度即可支持普通学校全年稳定运行。
 
 ### 2. 双角色体系与严格权限隔离
@@ -52,7 +52,6 @@
   - 针对初三/高三学生毕业离校整班换届场景，在班级设置中提供【全班学生毕业清空】功能；
   - 原子清空该班级全部学生名单及全期次个人历史积分，同时完整保留班级评分项目、期次与小组结构，供新一届学生无缝接续使用。
 - **三重安全防误触防线**：
-  - 严禁采用繁琐易错的手工输入全班姓名名单确认；
   - **第一重防线：10 秒强制冷静等待**，倒计时归零前输入框与提交按钮强制置灰禁用；
   - **第二重防线：动态随机算式验证**，前端生成趣味加减乘混合算式（如 `23 + 19 = ?` 或 `7 × 8 = ?`，支持换题），算对后方可点亮确认；
   - **第三重防线：浏览器原生终极确认**，二次阻断误触可能。
@@ -93,14 +92,17 @@
 - **桌面端（PC）**：冻结左侧姓名列、顶部表头与右侧总分列；支持键盘上下左右方向键无缝跳格快速录入；编辑弹窗正居中聚焦。
 - **移动端（手机）防异常专属排版（v1.5.1）**：
   - 44px 紧凑顶栏针对性隐藏长文本链接，杜绝顶栏折行撑破与横向滚动条，各操作按钮触控精准；
-  - 顶栏 `[分] Cloud Score` 标志升级为可点击链接，移动端轻触直达 GitHub 仓库；
   - 主内容区顶部提供仅 20px 高的轻量流式指示行，在表格滚动记分时自然滑出视野，零挤占记分屏幕空间；
   - 悬浮工具栏双行紧凑排布（~68px 高），单屏横向容纳 6 个以上评分项目，支持平滑横向滑动浏览全部项目；
   - 记分编辑抽屉靠顶排布（`top: 12px`），彻底避开手机虚拟软键盘遮挡。
 
-### 10. 企业级安全防线
+### 10. 企业级复合安全防线（v1.8.0 升级）
 - **纯数学计算题验证码**：加减乘整数动态算式挑战，防机器人碰撞与暴力破解，彻底告别图形验证码加载失败与小屏扭曲问题。
-- **防爆破临时 IP 封禁**：密码连续错误 8 次自动触发 15 分钟临时 IP 封禁（哈希存储于 R2，不暴露原始 IP，隐私合规）。
+- **复合防爆破与校园网防误伤体系**：
+  - **`IP + 账号` 组合键锁定**：单账号在某 IP 连续输错 8 次仅锁定该账号 2 分钟，同校园网出口（NAT）下的其他教师完全不受影响，彻底杜绝“一人输错，全校被封”的误伤与恶意 DoS 漏洞；
+  - **阶梯式渐进延时**：4~5 次连续失败强制延迟 2 秒响应，6~7 次延迟 4 秒，大幅拉长自动化爆破脚本的时间成本；
+  - **单 IP 宽松全局频控**：15 分钟内累计失败 60 次触发 10 分钟全局网络保护，严密防范跨账号“密码喷洒”撞库；
+  - **管理端安全监控与一键解封**：管理员后台（`admin.html`）提供【🛡️ 登录安全】面板，脱敏展示受限名单，支持单项精准解封与一键解除所有锁定。
 - **严格 CSP 与安全 Cookie**：全站启用严格 Content-Security-Policy 内联脚本 SHA-256 哈希校验，禁止内联动态拼接；Cookie 强制启用 `HttpOnly; SameSite=Strict; Secure; Path=/`（生产环境使用 `__Host-` 前缀）。
 
 ---
@@ -155,9 +157,17 @@ guards/{ipHash}.json           # 登录失败计数时间窗口与临时 IP 封�
 
 ### 方式一：Cloudflare Pages Direct Upload（网页拖拽 ZIP，最简推荐，3 分钟上线）
 
-1. **获取 4 文件发布包**：
-   下载本项目 Releases 中最新发布的 **`Cloud-Score-upload.zip`**（或由本地执行 `npm run build:release` 自动生成的无目录 ZIP 包）。
-   *（注：该 ZIP 内部直接包含 `_worker.js`、`login.html`、`admin.html`、`teacher.html` 4 个文件，绝无嵌套子目录）*
+1. **获取 4 文件发布包**（提供两种便捷方式）：
+   - **方式 A（免 Git / 最简）：直接下载仓库 ZIP**：
+     - 点击 GitHub 仓库页面右上角绿色的 **Code** 按钮 $\rightarrow$ **Download ZIP**；
+     - 解压下载的 ZIP 压缩包，直接使用其中已预先打包好的 **`Cloud-Score-upload.zip`**（位于解压后根目录）；
+     - *（注：该 ZIP 内部直接包含 `_worker.js`、`login.html`、`admin.html`、`teacher.html` 4 个核心文件，绝无嵌套子目录，可直接用于 Cloudflare 拖拽上传）*。
+   - **方式 B：克隆仓库（Git Clone）**：
+     ```bash
+     git clone https://github.com/mayunqing1230/Cloud-Score.git
+     cd Cloud-Score
+     ```
+     仓库根目录下已内置打包好的 `Cloud-Score-upload.zip`；若自行修改了源码，亦可在本地执行 `npm run build:release` 重新生成最新发布包。
 
 2. **创建 Cloudflare Pages 项目**：
    - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)；
@@ -200,8 +210,8 @@ guards/{ipHash}.json           # 登录失败计数时间窗口与临时 IP 封�
   3. 配置变量后必须重新部署一次（上传 ZIP 或推送提交）才能让绑定生效。
 
 ### Q2: 教师登录连续提示密码错误后被锁定了？
-- **排查原因**：系统内置防暴力破解机制，同一 IP 连续 8 次密码错误将触发 15 分钟临时 IP 封禁保护。
-- **解决方案**：等待 15 分钟后系统自动解封；或者管理员可在管理后台（`admin.html`）一键为该教师重置密码。
+- **排查原因**：系统内置复合登录安全防线。单一账号在某 IP 连续输错 8 次密码后，仅该账号进入 2 分钟短冷静期（同一网络下其他教师完全不受影响）；若同一 IP 累计失败达到 60 次，将触发 10 分钟全局网络保护。
+- **解决方案**：单账号锁定只需等待 2 分钟冷却结束即可自动恢复登录；管理员也可随时登录管理后台（`admin.html`），在教师管理工具栏点击【🛡️ 登录安全】，直接查看被锁账号/IP 并点击【🔓 解除】或【一键解除所有锁定】立即恢复。
 
 ### Q3: 为什么修改教师密码后登录提示改密弹窗？
 - **排查原因**：v1.5.0 起引入了初始密码状态跟踪机制。由管理员新创建的教师或被管理员重置密码的教师，账号会被自动标记为【初始密码】状态。

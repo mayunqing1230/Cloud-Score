@@ -11,9 +11,11 @@ const COOKIE_LOCAL = "cs_session";
 const SESSION_ADMIN_SECONDS = 2 * 60 * 60;
 const SESSION_TEACHER_SECONDS = 8 * 60 * 60;
 const CAPTCHA_SECONDS = 2 * 60;
-const LOGIN_WINDOW_MS = 10 * 60 * 1000;
-const LOGIN_BLOCK_MS = 15 * 60 * 1000;
-const LOGIN_FAILURE_LIMIT = 8;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const ACCOUNT_FAILURE_LIMIT = 8;
+const ACCOUNT_LOCK_MS = 2 * 60 * 1000;
+const IP_FAILURE_LIMIT = 60;
+const IP_BLOCK_MS = 10 * 60 * 1000;
 const PBKDF2_ITERATIONS = 100_000;
 const MAX_BODY_BYTES = 256 * 1024;
 const MAX_CELL_LENGTH = 500;
@@ -680,48 +682,163 @@ async function consumeCaptcha(env, request, captchaId, captchaCode) {
   return false;
 }
 
-async function loadGuard(env, ipHash) {
-  return readJsonObject(env.R2, `guards/${ipHash}.json`);
+function maskIp(ip) {
+  if (!ip || ip === "unknown") return "unknown";
+  if (ip.includes(":")) {
+    const parts = ip.split(":");
+    return parts.slice(0, Math.min(3, parts.length)).join(":") + "::***";
+  }
+  const parts = ip.split(".");
+  if (parts.length === 4) return `${parts[0]}.${parts[1]}.${parts[2]}.***`;
+  return ip.slice(0, Math.max(3, Math.floor(ip.length / 2))) + "***";
 }
 
-async function guardStatus(env, ipHash) {
-  const record = await loadGuard(env, ipHash);
-  const blockedUntil = Number(record?.data?.blockedUntil || 0);
-  return { record, blockedUntil, blocked: blockedUntil > Date.now() };
+async function getAccountGuardKey(env, clientIp, username) {
+  const normUser = String(username || "invalid").normalize("NFKC").trim().toLowerCase();
+  const hash = await hmacBase64Url(env.ADMIN, `cloud-score/acc/${clientIp}/${normUser}`);
+  return `guards/acc_${hash}.json`;
 }
 
-async function recordLoginFailure(env, ipHash) {
-  const key = `guards/${ipHash}.json`;
+async function getIpGuardKey(env, clientIp) {
+  const hash = await hmacBase64Url(env.ADMIN, `cloud-score/ip/${clientIp}`);
+  return `guards/ip_${hash}.json`;
+}
+
+async function checkLoginGuards(env, clientIp, username) {
+  const now = Date.now();
+  // 1. Check Global IP guard
+  const ipKey = await getIpGuardKey(env, clientIp);
+  const ipRecord = await readJsonObject(env.R2, ipKey);
+  const ipBlockedUntil = Number(ipRecord?.data?.blockedUntil || 0);
+  if (ipBlockedUntil > now) {
+    const retryAfter = Math.max(1, Math.ceil((ipBlockedUntil - now) / 1000));
+    return {
+      blocked: true,
+      code: "IP_BLOCKED",
+      message: "当前网络登录尝试过于频繁，已触发安全保护，请稍后再试。",
+      retryAfter,
+      blockedUntil: ipBlockedUntil,
+    };
+  }
+
+  // 2. Check Account-level guard (IP + Account)
+  const accKey = await getAccountGuardKey(env, clientIp, username);
+  const accRecord = await readJsonObject(env.R2, accKey);
+  const accBlockedUntil = Number(accRecord?.data?.blockedUntil || 0);
+  if (accBlockedUntil > now) {
+    const retryAfter = Math.max(1, Math.ceil((accBlockedUntil - now) / 1000));
+    return {
+      blocked: true,
+      code: "ACCOUNT_LOCKED",
+      message: `该账号在当前网络下连续错误次数过多，已进入保护冷却，请在 ${retryAfter} 秒后重试，或联系管理员解除。`,
+      retryAfter,
+      blockedUntil: accBlockedUntil,
+    };
+  }
+
+  return { blocked: false };
+}
+
+async function recordLoginFailure(env, clientIp, username) {
+  const now = Date.now();
+  const normUser = String(username || "invalid").normalize("NFKC").trim().toLowerCase();
+  const accKey = await getAccountGuardKey(env, clientIp, normUser);
+  const ipKey = await getIpGuardKey(env, clientIp);
+  const ipMasked = maskIp(clientIp);
+
+  let accFailCount = 0;
+  let accBlockedUntil = 0;
+  let progressiveDelay = 0;
+
+  // 1. Update Account Guard
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const current = await readJsonObject(env.R2, key);
-    const now = Date.now();
+    const current = await readJsonObject(env.R2, accKey);
     const failures = Array.isArray(current?.data?.failures)
       ? current.data.failures.map(Number).filter((value) => value > now - LOGIN_WINDOW_MS)
       : [];
     failures.push(now);
-    const blockedUntil = failures.length >= LOGIN_FAILURE_LIMIT ? now + LOGIN_BLOCK_MS : Number(current?.data?.blockedUntil || 0);
-    const next = { schemaVersion: 1, failures, blockedUntil, expiresAt: Math.max(blockedUntil, now + LOGIN_WINDOW_MS), updatedAt: nowIso() };
+    accFailCount = failures.length;
+    accBlockedUntil = accFailCount >= ACCOUNT_FAILURE_LIMIT
+      ? now + ACCOUNT_LOCK_MS
+      : Number(current?.data?.blockedUntil || 0);
+    const next = {
+      schemaVersion: 2,
+      type: "account",
+      username: normUser,
+      ipMasked,
+      failures,
+      blockedUntil: accBlockedUntil,
+      expiresAt: Math.max(accBlockedUntil, now + LOGIN_WINDOW_MS),
+      updatedAt: nowIso(),
+    };
     try {
       const saved = await putJsonObject(
         env.R2,
-        key,
+        accKey,
         next,
         current ? { etagMatches: current.etag } : new Headers({ "If-None-Match": "*" }),
       );
-      if (saved) return { failures: failures.length, blockedUntil };
+      if (saved) break;
     } catch (error) {
       if (!isRetryableR2Error(error) || attempt === 2) throw error;
     }
-    await wait(1100 + secureRandomInt(240));
+    await wait(100 + secureRandomInt(100));
   }
-  throw new ApiError(429, "LOGIN_BUSY", "登录请求过于频繁，请稍后重试。" );
+
+  // Progressive delay: 4~5 failures -> 2000ms; 6~7 failures -> 4000ms
+  if (accFailCount >= 6) {
+    progressiveDelay = 4000;
+  } else if (accFailCount >= 4) {
+    progressiveDelay = 2000;
+  }
+
+  // 2. Update Global IP Guard
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const current = await readJsonObject(env.R2, ipKey);
+    const failures = Array.isArray(current?.data?.failures)
+      ? current.data.failures.map(Number).filter((value) => value > now - LOGIN_WINDOW_MS)
+      : [];
+    failures.push(now);
+    const ipFailCount = failures.length;
+    const ipBlockedUntil = ipFailCount >= IP_FAILURE_LIMIT
+      ? now + IP_BLOCK_MS
+      : Number(current?.data?.blockedUntil || 0);
+    const next = {
+      schemaVersion: 2,
+      type: "ip",
+      ipMasked,
+      failures,
+      blockedUntil: ipBlockedUntil,
+      expiresAt: Math.max(ipBlockedUntil, now + LOGIN_WINDOW_MS),
+      updatedAt: nowIso(),
+    };
+    try {
+      const saved = await putJsonObject(
+        env.R2,
+        ipKey,
+        next,
+        current ? { etagMatches: current.etag } : new Headers({ "If-None-Match": "*" }),
+      );
+      if (saved) break;
+    } catch (error) {
+      if (!isRetryableR2Error(error) || attempt === 2) throw error;
+    }
+    await wait(100 + secureRandomInt(100));
+  }
+
+  return {
+    accountFailures: accFailCount,
+    blockedUntil: accBlockedUntil,
+    progressiveDelay,
+  };
 }
 
-async function clearLoginFailures(env, ipHash) {
+async function clearAccountLoginFailures(env, clientIp, username) {
   try {
-    await env.R2.delete(`guards/${ipHash}.json`);
+    const accKey = await getAccountGuardKey(env, clientIp, username);
+    await env.R2.delete(accKey);
   } catch {
-    // Successful authentication must not fail only because cleanup failed.
+    // Cleanup non-blocking
   }
 }
 
@@ -1456,24 +1573,32 @@ async function handleCaptcha(context) {
 async function handleLogin(context) {
   const { request, env } = context;
   const startedAt = Date.now();
-  const targetDelay = 500 + secureRandomInt(501);
   let response;
+  let extraDelay = 0;
   try {
     assertSameOrigin(request);
     const body = await readRequestJson(request);
-    const ipHash = await getIpHash(env, request);
-    const status = await guardStatus(env, ipHash);
-    if (status.blocked) {
-      const retryAfter = Math.max(1, Math.ceil((status.blockedUntil - Date.now()) / 1000));
-      response = jsonResponse({ ok: false, error: { code: "IP_BLOCKED", message: "错误次数过多，请稍后再试。", details: { retryAfter } } }, 429, { "Retry-After": String(retryAfter) });
+    const clientIp = getClientIp(request);
+    let username = "";
+    try { username = normalizeIdentifier(body.username, "账号"); } catch { username = "invalid"; }
+
+    const guardCheck = await checkLoginGuards(env, clientIp, username);
+    if (guardCheck.blocked) {
+      response = jsonResponse(
+        { ok: false, error: { code: guardCheck.code, message: guardCheck.message, details: { retryAfter: guardCheck.retryAfter } } },
+        429,
+        { "Retry-After": String(guardCheck.retryAfter) }
+      );
     } else {
       const captchaValid = await consumeCaptcha(env, request, body.captchaId, body.captchaCode);
       if (!captchaValid) {
-        const failure = await recordLoginFailure(env, ipHash);
-        response = jsonResponse({ ok: false, error: { code: "INVALID_CAPTCHA", message: "验证码错误或已过期，请重新获取。", details: { blockedUntil: failure.blockedUntil || 0 } } }, 400);
+        const failure = await recordLoginFailure(env, clientIp, username);
+        extraDelay = failure.progressiveDelay;
+        response = jsonResponse(
+          { ok: false, error: { code: "INVALID_CAPTCHA", message: "验证码错误或已过期，请重新获取。", details: { blockedUntil: failure.blockedUntil || 0 } } },
+          400
+        );
       } else {
-        let username = "";
-        try { username = normalizeIdentifier(body.username, "账号"); } catch { username = "invalid"; }
         const password = String(body.password ?? "").slice(0, 128);
         let valid = false;
         let role = "teacher";
@@ -1489,19 +1614,31 @@ async function handleLogin(context) {
           authVersion = Number(teacher?.authVersion || 0);
         }
         if (!valid) {
-          const failure = await recordLoginFailure(env, ipHash);
-          response = jsonResponse({ ok: false, error: { code: "INVALID_CREDENTIALS", message: "账号、密码或验证码不正确。", details: { blockedUntil: failure.blockedUntil || 0 } } }, 401);
+          const failure = await recordLoginFailure(env, clientIp, username);
+          extraDelay = failure.progressiveDelay;
+          response = jsonResponse(
+            { ok: false, error: { code: "INVALID_CREDENTIALS", message: "账号、密码或验证码不正确。", details: { blockedUntil: failure.blockedUntil || 0 } } },
+            401
+          );
         } else {
+          await clearAccountLoginFailures(env, clientIp, username);
           if (role === "admin") await loadCatalog(env.R2, true);
           const session = await createSession(env, request, role, username, authVersion);
-          response = okResponse({ role, username, redirect: role === "admin" ? "/admin.html" : "/teacher.html" }, {}, 200, { "Set-Cookie": session.cookie });
+          response = okResponse(
+            { role, username, redirect: role === "admin" ? "/admin.html" : "/teacher.html" },
+            {},
+            200,
+            { "Set-Cookie": session.cookie }
+          );
         }
       }
     }
   } catch (error) {
     response = errorResponse(error);
   }
-  await wait(Math.max(0, targetDelay - (Date.now() - startedAt)));
+  const baseDelay = 500 + secureRandomInt(501);
+  const totalTargetDelay = baseDelay + extraDelay;
+  await wait(Math.max(0, totalTargetDelay - (Date.now() - startedAt)));
   return response;
 }
 
@@ -1666,6 +1803,59 @@ async function handleAdminAnnouncementPut(context) {
   }
 
   return okResponse({ announcement: next }, { etag: written.httpEtag }, 200, { ETag: written.httpEtag || `"${written.etag}"` });
+}
+
+async function handleAdminSecurityGuardsGet(context) {
+  await authenticate(context.env, context.request, "admin");
+  const listing = await context.env.R2.list({ prefix: "guards/", limit: 100 });
+  const now = Date.now();
+  const guards = [];
+  for (const obj of listing.objects || []) {
+    const record = await readJsonObject(context.env.R2, obj.key);
+    if (!record?.data) continue;
+    const data = record.data;
+    const failures = Array.isArray(data.failures)
+      ? data.failures.map(Number).filter((v) => v > now - LOGIN_WINDOW_MS)
+      : [];
+    const blockedUntil = Number(data.blockedUntil || 0);
+    const blocked = blockedUntil > now;
+    if (blocked || failures.length > 0) {
+      const keyShort = obj.key.replace(/^guards\//, "").replace(/\.json$/, "");
+      guards.push({
+        key: keyShort,
+        type: data.type || (obj.key.includes("/acc_") ? "account" : "ip"),
+        username: data.username || (data.type === "ip" ? "— (全局网络)" : "未知"),
+        ipMasked: data.ipMasked || "未知",
+        failureCount: failures.length,
+        blocked,
+        blockedUntil,
+        retryAfter: blocked ? Math.max(1, Math.ceil((blockedUntil - now) / 1000)) : 0,
+        updatedAt: data.updatedAt || "",
+      });
+    }
+  }
+  return okResponse({ guards });
+}
+
+async function handleAdminSecurityGuardsClear(context) {
+  const auth = await authenticate(context.env, context.request, "admin");
+  assertSameOrigin(context.request);
+  assertCsrf(context.request, auth.session);
+  const body = await readRequestJson(context.request);
+  let cleared = 0;
+  if (body?.all) {
+    const listing = await context.env.R2.list({ prefix: "guards/", limit: 500 });
+    for (const obj of listing.objects || []) {
+      await context.env.R2.delete(obj.key);
+      cleared += 1;
+    }
+  } else if (typeof body?.key === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(body.key)) {
+    await context.env.R2.delete(`guards/${body.key}.json`);
+    cleared = 1;
+  } else {
+    throw new ApiError(400, "INVALID_PARAMS", "参数无效。");
+  }
+  return okResponse({ cleared });
 }
 
 async function handleClassGet(context, classId) {
@@ -1896,6 +2086,14 @@ export async function onRequest(context) {
       if (method === "PUT") return await handleAdminAnnouncementPut(context);
       return methodNotAllowed(["GET", "PUT"]);
     }
+    if (path === "/api/admin/security/guards") {
+      if (method === "GET") return await handleAdminSecurityGuardsGet(context);
+      return methodNotAllowed(["GET"]);
+    }
+    if (path === "/api/admin/security/guards/clear") {
+      if (method === "POST") return await handleAdminSecurityGuardsClear(context);
+      return methodNotAllowed(["POST"]);
+    }
     const classRoute = /^\/api\/classes\/([a-zA-Z0-9_-]+)(?:\/(structure|scores))?$/.exec(path);
     if (classRoute) {
       const classId = normalizeIdentifier(classRoute[1], "班级号");
@@ -1926,6 +2124,7 @@ export const __test = Object.freeze({
   defaultPasswordPolicy,
   migratePasswordPolicy,
   applyCatalogOperations,
+  maskIp,
 });
 
 // Flat Cloudflare Pages Advanced Mode adapter. Generated by scripts/build-release.mjs.

@@ -6,9 +6,9 @@
 
 <p align="center">
   <a href="https://github.com/mayunqing1230/Cloud-Score"><img src="https://img.shields.io/badge/GitHub-mayunqing1230%2FCloud--Score-blue?logo=github" alt="GitHub Repo"></a>
-  <img src="https://img.shields.io/badge/Version-v1.7.1-brightgreen.svg" alt="Version: v1.7.1">
+  <img src="https://img.shields.io/badge/Version-v1.8.0-brightgreen.svg" alt="Version: v1.8.0">
   <img src="https://img.shields.io/badge/Architecture-Serverless%20%7C%204--Files-orange.svg" alt="Serverless">
-  <img src="https://img.shields.io/badge/Tests-39%2F39%20Pass-success.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-40%2F40%20Pass-success.svg" alt="Tests">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
 </p>
 
@@ -22,7 +22,7 @@
 
 ### 1. Pure Serverless & Zero Framework
 - **4 Core Files, Zero External Runtime Dependencies**: The entire platform runs on strictly 4 vanilla files (`_worker.js`, `login.html`, `admin.html`, `teacher.html`). Built with modern ES2022 JavaScript, semantic HTML5, and responsive CSS3 variables without node_modules bundles, build step artifacts, or third-party CDN scripts. Instant sub-second loading speeds.
-- **Strongly Consistent R2 Storage**: Uses private Cloudflare R2 Standard object storage (avoiding eventually consistent KV). Leverages object ETag optimistic concurrency control to prevent accidental data overwrites during simultaneous multi-teacher grading.
+- **Strongly Consistent R2 Storage**: Uses private Cloudflare R2 Standard strongly consistent object storage. Leverages object ETag optimistic concurrency control to prevent accidental data overwrites during simultaneous multi-teacher grading.
 - **Minimalist Operations**: Only a single encrypted secret `ADMIN` is required in Cloudflare Dashboard; R2 binding name is fixed as `R2`. Zero database instances to maintain, running permanently within Cloudflare's free tier for standard school usage.
 
 ### 2. Dual-Role Architecture & Strict Permission Isolation
@@ -52,7 +52,6 @@
   - Designed for graduating senior cohorts (e.g. Grade 9 / Grade 12 departures), providing an atomic **[Class Graduation Purge]** action in Class Settings;
   - Atomically purges all student rosters and historical personal scores across all periods, while fully preserving scoring projects, periods, and class structures for incoming cohorts.
 - **Triple Security Guardrail Against Accidental Purge**:
-  - Avoids error-prone manual typing of full student rosters;
   - **Guardrail 1: 10-Second Mandatory Calm Delay**, inputs and submit buttons remain strictly disabled until the countdown finishes;
   - **Guardrail 2: Dynamic Arithmetic Challenge**, generates dynamic mixed math equations (e.g. `23 + 19 = ?` or `7 × 8 = ?`), enabling submission only upon correct calculation;
   - **Guardrail 3: Native Browser Confirmation Dialog**, providing an ultimate sanity check.
@@ -93,14 +92,17 @@
 - **Desktop (PC)**: Sticky frozen columns (Student Name on left, Total on right, Header on top); keyboard arrow key navigation for rapid grading; centered popup drawers.
 - **Mobile Responsive Layout (v1.5.1 Anti-Anomaly Design)**:
   - 44px topbar hides long URLs to prevent line breaks, overflow, or button clipping;
-  - `[分] Cloud Score` brand mark functions as a direct link to the GitHub repository;
   - Lightweight 20px status row at the top of content scrolls out of view naturally, leaving 100% screen height for grading;
   - Compact floating toolbar (~68px height) displaying **6+ scoring projects simultaneously** with smooth horizontal swipe;
   - Top-anchored score editing drawer (`top: 12px`) completely avoiding virtual software keyboard occlusion.
 
-### 10. Enterprise-Grade Security
+### 10. Enterprise-Grade Security (v1.8.0 Upgraded)
 - **Pure Mathematics Challenge Captcha**: Dynamic arithmetic challenges (addition, subtraction, multiplication) eliminating image rendering and mobile browser compatibility glitches.
-- **Brute-Force Temporary IP Ban**: 8 consecutive password failures trigger a 15-minute temporary IP ban (stored hashed in R2 without exposing raw IPs, fully privacy-compliant).
+- **Compound Anti-Brute-Force & Campus Network Misblock Prevention**:
+  - **`IP + Account` Composite Key Lock**: 8 consecutive password failures for a specific account only lock that account for 2 minutes; other teachers sharing the same campus network outbound IP (NAT) remain completely unaffected, eliminating the "one teacher wrong, whole school locked" misblocking and student DoS vulnerability;
+  - **Progressive Response Delay**: 4–5 consecutive failures enforce a 2-second server delay, and 6–7 failures enforce 4 seconds, drastically raising the time cost for automated brute-force attacks;
+  - **Single-IP Wide Rate Limit**: 60 cumulative failures within 15 minutes trigger a 10-minute global network protection to guard against password spraying across accounts;
+  - **Admin Security Monitor & 1-Click Unlock**: Admin console (`admin.html`) features a **[🛡️ Login Security]** modal with masked IP listings, supporting single unblocking and 1-click unlock-all.
 - **Strict CSP & Cookie Standards**: Strict Content Security Policy (CSP) with inline script SHA-256 hash enforcement; Cookies strictly set to `HttpOnly; SameSite=Strict; Secure; Path=/` (with `__Host-` prefix in production).
 
 ---
@@ -155,9 +157,17 @@ guards/{ipHash}.json           # Login failure count sliding window & temporary 
 
 ### Method 1: Cloudflare Pages Direct Upload (Recommended, Drag-and-Drop ZIP, 3-Min Setup)
 
-1. **Obtain the 4-File ZIP Package**:
-   Download the latest **`Cloud-Score-upload.zip`** from Releases (or build it locally via `npm run build:release`).
-   *(Note: This ZIP strictly contains `_worker.js`, `login.html`, `admin.html`, and `teacher.html` at its root with zero nested subdirectories).*
+1. **Obtain the 4-File ZIP Package** (Two convenient options):
+   - **Option A (No Git / Recommended): Download Repository ZIP**:
+     - Click the green **Code** button at the top right of the GitHub repository $\rightarrow$ **Download ZIP**;
+     - Extract the downloaded archive, and use the pre-built **`Cloud-Score-upload.zip`** located in the root directory;
+     - *(Note: This ZIP strictly contains `_worker.js`, `login.html`, `admin.html`, and `teacher.html` at its root with zero nested subdirectories, ready for direct Cloudflare Pages upload)*.
+   - **Option B: Clone the Repository (Git Clone)**:
+     ```bash
+     git clone https://github.com/mayunqing1230/Cloud-Score.git
+     cd Cloud-Score
+     ```
+     The pre-packaged `Cloud-Score-upload.zip` is directly available in the root folder; if you modify the source code, you can also run `npm run build:release` to rebuild it.
 
 2. **Create Pages Project in Cloudflare**:
    - Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/);
@@ -200,8 +210,8 @@ guards/{ipHash}.json           # Login failure count sliding window & temporary 
   3. Re-deploy the ZIP (or push a commit) after setting variables to apply changes.
 
 ### Q2: A teacher account was locked due to incorrect password attempts?
-- **Cause**: The built-in brute-force protection triggers a 15-minute temporary IP ban after 8 consecutive failed attempts from the same IP.
-- **Solution**: Wait 15 minutes for automatic release, or have the administrator reset the teacher's password in `/admin.html`.
+- **Cause**: Built-in compound login security defense. After 8 consecutive failed password attempts for an account on a specific IP, only that account enters a short 2-minute cooldown (other teachers sharing the same network are completely unaffected). If cumulative failures from the same IP reach 60, a 10-minute global network protection triggers.
+- **Solution**: For single-account lockouts, simply wait 2 minutes for automatic restoration. Alternatively, the administrator can log in to `/admin.html`, click **[🛡️ Login Security]** in the teacher toolbar to view the locked entry, and click **[🔓 Unlock]** or **[Unlock All]** for instant recovery.
 
 ### Q3: Why does a teacher see a password change modal immediately upon login?
 - **Cause**: Starting in v1.5.0, new or admin-reset accounts are tracked with an initial password state.

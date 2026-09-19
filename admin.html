@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-jogAsaCVJftfRFaJJfBztbQTOUEMWhh0uhKpzMHPZZ0='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-7V9F66t1CB6hglkcjFNtJtO0SFcyZE7033HsD1Dd6Iw='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
   <title>系统管理 · Cloud Score</title>
   <style>
     :root{color-scheme:light;--ink:#18332f;--muted:#687a77;--paper:#f4f5ee;--surface:#fffef9;--line:#dce4df;--brand:#176b61;--brand-dark:#104b45;--brand-soft:#deefea;--amber:#bd7b25;--amber-soft:#fff0d7;--danger:#b3473d;--danger-soft:#fbe8e4;--blue:#365d83;--shadow:0 18px 50px rgba(24,51,47,.1);--radius:17px;--control-bg:#fff;--hover-bg:#f1f5f2;--panel-header-bg:#f4f7f4;--tag-bg:#eef3f0;--tag-color:#455e59;--code-bg:#eef2ef;--dialog-backdrop:rgba(15,33,30,.45)}
@@ -46,7 +46,7 @@
     <div class="notice hidden" id="notice" role="alert"></div>
     <nav class="nav" aria-label="管理区域"><button class="active" id="teacherNav" type="button">教师账号</button><button id="classNav" type="button">班级设置</button><button id="announcementNav" type="button">系统公告</button></nav>
     <section id="teacherView">
-      <div class="panel"><div class="panel-head"><div><h2>教师账号</h2><p>一个教师可绑定多个班级，同一班级也可绑定多名教师。</p></div><div class="head-actions"><span class="status-line"><span class="status-dot" id="catalogDot"></span><span id="catalogStatus">正在加载…</span></span><button class="btn" id="passwordPolicyBtn" type="button">🛡️ 密码策略</button><button class="btn primary" id="addTeacher" type="button">新增教师</button></div></div><div class="teacher-list" id="teacherList"></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>教师账号</h2><p>一个教师可绑定多个班级，同一班级也可绑定多名教师。</p></div><div class="head-actions"><span class="status-line"><span class="status-dot" id="catalogDot"></span><span id="catalogStatus">正在加载…</span></span><button class="btn" id="securityGuardsBtn" type="button">🛡️ 登录安全</button><button class="btn" id="passwordPolicyBtn" type="button">🛡️ 密码策略</button><button class="btn primary" id="addTeacher" type="button">新增教师</button></div></div><div class="teacher-list" id="teacherList"></div></div>
     </section>
     <section id="classView" class="hidden">
       <div class="class-layout"><aside class="class-sidebar"><div class="class-sidebar-head"><strong>班级目录</strong><button class="btn primary small" id="addClass" type="button">新增</button></div><div class="class-list" id="classList"></div></aside><div class="class-work" id="classWork"><div class="class-placeholder"><div><strong>选择一个有效班级</strong><span>可管理学生、评分项目与小组。</span></div></div></div></div>
@@ -92,6 +92,32 @@
   </main>
   <dialog id="formDialog"><form class="modal" id="modalForm" method="dialog"><h2 id="modalTitle"></h2><p id="modalDescription"></p><div class="modal-fields" id="modalFields"></div><div class="modal-error hidden" id="modalError" role="alert"></div><div class="modal-actions"><button class="btn" id="modalCancel" value="cancel" type="button">取消</button><button class="btn primary" id="modalSubmit" type="submit">保存</button></div></form></dialog>
   <dialog id="passwordPolicyDialog"><form class="modal" id="passwordPolicyForm" method="dialog" style="max-width:520px"><h2>🛡️ 全局密码安全策略</h2><p>配置全校教师账号的密码强度与初始密码修改要求。管理员重置或新增教师不受自定义强度限制。</p><div class="modal-fields"><div><label class="toggle-label" style="font-size:14px;font-weight:900"><input type="checkbox" id="policyEnabled"> 启用密码复杂度与长度要求</label></div><div id="policyOptions" style="display:grid;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel-header-bg)"><div class="modal-field"><label class="field-label" for="policyMinLength">最小密码长度（6–32 位）：</label><input type="number" id="policyMinLength" min="6" max="32" value="8" style="width:100%"></div><div><div class="field-label" style="margin-bottom:6px">必须包含的字符类型（可选自由组合）：</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="toggle-label"><input type="checkbox" id="policyUppercase"> 大写字母 (A-Z)</label><label class="toggle-label"><input type="checkbox" id="policyLowercase"> 小写字母 (a-z)</label><label class="toggle-label"><input type="checkbox" id="policyNumber"> 阿拉伯数字 (0-9)</label><label class="toggle-label"><input type="checkbox" id="policySpecial"> 特殊标点符号</label></div></div><div style="margin-top:4px"><div class="field-label" style="margin-bottom:6px">初始密码修改模式：</div><div style="display:flex;gap:16px"><label class="toggle-label"><input type="radio" name="policyPromptMode" value="reminder" id="policyModeReminder" checked> 提醒修改（可跳过）</label><label class="toggle-label"><input type="radio" name="policyPromptMode" value="mandatory" id="policyModeMandatory"> 强制修改（不可跳过）</label></div></div></div><div style="padding:12px;border:1px dashed var(--amber);background:var(--amber-soft);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:12px"><div><strong style="display:block;font-size:13px;color:var(--ink)">⚠️ 全员改密要求</strong><span style="font-size:11px;color:var(--muted)">将所有教师初始密码状态重置为“未修改”，下次登录自动弹窗提示。</span></div><button class="btn danger small" id="requireAllResetBtn" type="button" style="white-space:nowrap">要求全员改密</button></div></div><div class="modal-error hidden" id="passwordPolicyError" role="alert"></div><div class="modal-actions"><button class="btn" id="passwordPolicyCancel" type="button">取消</button><button class="btn primary" id="passwordPolicySubmit" type="submit">保存策略</button></div></form></dialog>
+  <dialog id="securityGuardsDialog">
+    <div class="modal" style="max-width:640px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <h2 style="margin:0 0 4px;font-size:20px">🛡️ 登录安全与解封</h2>
+          <p style="margin:0;color:var(--muted);font-size:12px;line-height:1.5">
+            采用【IP + 账号】组合锁定与渐进式延迟机制。单账号在同一网络下连续错误 8 次将锁定 2 分钟，不影响同一校园网内其他教师；同一网络 15 分钟内累计错误超 60 次触发全局网络保护。
+          </p>
+        </div>
+        <button class="btn ghost small icon-btn" id="closeSecurityGuardsX" type="button" title="关闭" style="border-radius:50%">✕</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:800;color:var(--ink)">当前限制与锁定状态：</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn small" id="refreshSecurityGuardsBtn" type="button">🔄 刷新</button>
+          <button class="btn danger small" id="clearAllSecurityGuardsBtn" type="button">🔓 一键解除所有锁定</button>
+        </div>
+      </div>
+      <div id="securityGuardsList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel-header-bg)">
+        <div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">正在加载…</div>
+      </div>
+      <div class="modal-actions" style="margin-top:16px">
+        <button class="btn" id="closeSecurityGuardsBtn" type="button">关闭</button>
+      </div>
+    </div>
+  </dialog>
   <dialog id="purgeStudentsDialog" aria-labelledby="adminPurgeStudentsTitle">
     <div class="modal" style="max-width:480px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
@@ -134,7 +160,7 @@
     "use strict";
     const $ = (id) => document.getElementById(id);
     const state = { session: null, catalog: null, catalogRevision: 0, catalogEtag: "", classId: "", classData: null, classRevision: 0, classEtag: "", view: "teachers", structureTab: "student", busy: false, announcement: null, announcementLoaded: false };
-    const ui = { notice: $("notice"), teacherList: $("teacherList"), classList: $("classList"), classWork: $("classWork"), dialog: $("formDialog"), modalForm: $("modalForm"), modalTitle: $("modalTitle"), modalDescription: $("modalDescription"), modalFields: $("modalFields"), modalError: $("modalError"), modalSubmit: $("modalSubmit"), toast: $("toast"), announcementDot: $("announcementDot"), announcementStatus: $("announcementStatus"), announcementEnabledCheck: $("announcementEnabledCheck"), publishAsNewCheck: $("publishAsNewCheck"), announcementNoticeInput: $("announcementNoticeInput"), changelogList: $("changelogList"), passwordPolicyDialog: $("passwordPolicyDialog"), passwordPolicyForm: $("passwordPolicyForm"), policyEnabled: $("policyEnabled"), policyOptions: $("policyOptions"), policyMinLength: $("policyMinLength"), policyUppercase: $("policyUppercase"), policyLowercase: $("policyLowercase"), policyNumber: $("policyNumber"), policySpecial: $("policySpecial"), policyModeReminder: $("policyModeReminder"), policyModeMandatory: $("policyModeMandatory"), passwordPolicyError: $("passwordPolicyError"), passwordPolicySubmit: $("passwordPolicySubmit"), passwordPolicyCancel: $("passwordPolicyCancel"), requireAllResetBtn: $("requireAllResetBtn") };
+    const ui = { notice: $("notice"), teacherList: $("teacherList"), classList: $("classList"), classWork: $("classWork"), dialog: $("formDialog"), modalForm: $("modalForm"), modalTitle: $("modalTitle"), modalDescription: $("modalDescription"), modalFields: $("modalFields"), modalError: $("modalError"), modalSubmit: $("modalSubmit"), toast: $("toast"), announcementDot: $("announcementDot"), announcementStatus: $("announcementStatus"), announcementEnabledCheck: $("announcementEnabledCheck"), publishAsNewCheck: $("publishAsNewCheck"), announcementNoticeInput: $("announcementNoticeInput"), changelogList: $("changelogList"), passwordPolicyDialog: $("passwordPolicyDialog"), passwordPolicyForm: $("passwordPolicyForm"), policyEnabled: $("policyEnabled"), policyOptions: $("policyOptions"), policyMinLength: $("policyMinLength"), policyUppercase: $("policyUppercase"), policyLowercase: $("policyLowercase"), policyNumber: $("policyNumber"), policySpecial: $("policySpecial"), policyModeReminder: $("policyModeReminder"), policyModeMandatory: $("policyModeMandatory"), passwordPolicyError: $("passwordPolicyError"), passwordPolicySubmit: $("passwordPolicySubmit"), passwordPolicyCancel: $("passwordPolicyCancel"), requireAllResetBtn: $("requireAllResetBtn"), securityGuardsDialog: $("securityGuardsDialog"), securityGuardsList: $("securityGuardsList") };
     let dialogSubmit = null;
 
     function element(tag, className, text) {
@@ -677,6 +703,80 @@
       ui.passwordPolicyDialog.showModal();
     }
 
+    async function openSecurityGuardsDialog() {
+      ui.securityGuardsDialog.showModal();
+      await loadSecurityGuards();
+    }
+
+    async function loadSecurityGuards() {
+      const listEl = $("securityGuardsList");
+      listEl.replaceChildren();
+      const loading = element("div", "", "正在加载…");
+      loading.style.cssText = "padding:24px;text-align:center;color:var(--muted);font-size:13px";
+      listEl.append(loading);
+      try {
+        const res = await api("/api/admin/security/guards");
+        const guards = res.body?.data?.guards || [];
+        listEl.replaceChildren();
+        if (!guards.length) {
+          const empty = element("div", "", "✅ 当前没有被限制的账号或网络出口，系统运行正常。");
+          empty.style.cssText = "padding:32px;text-align:center;color:var(--muted);font-size:13px";
+          listEl.append(empty);
+          return;
+        }
+        const container = element("div");
+        container.style.cssText = "display:grid;gap:1px;background:var(--line)";
+        for (const g of guards) {
+          const item = element("div");
+          item.style.cssText = "background:var(--surface);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px";
+
+          const info = element("div");
+          const topRow = element("div");
+          topRow.style.cssText = "display:flex;align-items:center;gap:8px;margin-bottom:4px";
+
+          const typeTag = element("span", "tag", g.type === "ip" ? "全局网络" : "账号网络");
+          if (g.type === "ip") {
+            typeTag.style.background = "var(--amber-soft)";
+            typeTag.style.color = "var(--amber)";
+          }
+          const userStrong = element("strong", "", g.username);
+          userStrong.style.fontSize = "13px";
+          const statusBadge = element("span", g.blocked ? "badge warn" : "badge clean", g.blocked ? `锁定中（余 ${g.retryAfter} 秒）` : `频次累积（${g.failureCount} 次）`);
+          topRow.append(typeTag, userStrong, statusBadge);
+
+          const subRow = element("div", "", `来源网络：${g.ipMasked} | 失败次数：${g.failureCount} 次`);
+          subRow.style.cssText = "font-size:11px;color:var(--muted)";
+          info.append(topRow, subRow);
+
+          const actBox = element("div");
+          const unlockBtn = button("🔓 解除", "btn small", async () => {
+            unlockBtn.disabled = true;
+            try {
+              await api("/api/admin/security/guards/clear", {
+                method: "POST",
+                headers: { "X-CSRF-Token": state.session.csrf },
+                body: { key: g.key },
+              });
+              notify("已解除该锁定");
+              await loadSecurityGuards();
+            } catch (err) {
+              alert("解除失败：" + err.message);
+              unlockBtn.disabled = false;
+            }
+          });
+          actBox.append(unlockBtn);
+          item.append(info, actBox);
+          container.append(item);
+        }
+        listEl.append(container);
+      } catch (error) {
+        listEl.replaceChildren();
+        const errEl = element("div", "", `加载失败：${error.message}`);
+        errEl.style.cssText = "padding:20px;text-align:center;color:var(--danger);font-size:12px";
+        listEl.append(errEl);
+      }
+    }
+
     async function archiveTeacher(teacher) {
       if (!confirm(`归档教师账号 ${teacher.username}？其现有会话会立即失效，之后可恢复。`)) return;
       try { await patchCatalog({ type: "teacher.archive", username: teacher.username, expectedVersion: teacher.version }, "教师账号已归档"); } catch { /* Banner already explains failure. */ }
@@ -1027,6 +1127,28 @@
       finally { ui.modalSubmit.disabled = false; }
     });
     $("modalCancel").addEventListener("click", () => ui.dialog.close());
+    $("securityGuardsBtn").addEventListener("click", openSecurityGuardsDialog);
+    $("refreshSecurityGuardsBtn").addEventListener("click", loadSecurityGuards);
+    $("closeSecurityGuardsBtn").addEventListener("click", () => ui.securityGuardsDialog.close());
+    $("closeSecurityGuardsX").addEventListener("click", () => ui.securityGuardsDialog.close());
+    $("clearAllSecurityGuardsBtn").addEventListener("click", async () => {
+      if (!confirm("确定要解除当前所有的登录锁定与失败限制吗？")) return;
+      const btn = $("clearAllSecurityGuardsBtn");
+      btn.disabled = true;
+      try {
+        const res = await api("/api/admin/security/guards/clear", {
+          method: "POST",
+          headers: { "X-CSRF-Token": state.session.csrf },
+          body: { all: true },
+        });
+        notify(`已解除所有锁定（共清除 ${res.body?.data?.cleared || 0} 项）`);
+        await loadSecurityGuards();
+      } catch (err) {
+        alert("解除失败：" + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    });
     $("passwordPolicyBtn").addEventListener("click", openPasswordPolicyDialog);
     ui.policyEnabled.addEventListener("change", syncPasswordPolicyUI);
     ui.passwordPolicyCancel.addEventListener("click", () => ui.passwordPolicyDialog.close());
