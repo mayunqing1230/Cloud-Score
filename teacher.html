@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-tOSg3aIRmV0FYS/tGK2yneGVOYatPOw7iMR+KLBt6QU='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-V1x4ffmCXbyCZG8LbiM4GpArsbXsQAu2VwtIJkBxW+o='; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'">
   <title>教师积分台 · Cloud Score</title>
   <style>
     :root{color-scheme:light;--ink:#18332f;--muted:#647773;--paper:#f5f5ee;--surface:#fffef9;--line:#dce4df;--brand:#176b61;--brand-dark:#104b45;--brand-soft:#dceeea;--amber:#c98424;--amber-soft:#fff0d4;--danger:#b3473d;--danger-soft:#fae7e3;--shadow:0 18px 50px rgba(24,51,47,.12);--radius:14px;--name-width:140px;--total-width:80px;--project-width:120px;--control-bg:#fff;--table-bg:#fff;--table-head-bg:#f1f5f2;--table-head-color:#49615c;--name-cell-bg:#fbfcf8;--total-cell-bg:#e8f2ef;--group-total-bg:#fff8e9;--group-total-color:#8c5c15;--hover-bg:#f6faf8;--preview-card-bg:#edf5f2;--modal-bg:#fff;--empty-bg:rgba(255,255,255,.55);--dialog-backdrop:rgba(15,33,30,.46)}
@@ -71,9 +71,24 @@
     #periodLockBtn.is-locked:hover{background:var(--amber);color:#fff}
     #periodLockBtn.is-unlocked{background:var(--control-bg);color:var(--muted);border-color:var(--line)}
     #periodLockBtn.is-unlocked:hover{background:var(--hover-bg);color:var(--brand);border-color:var(--brand)}
+    .tutorial-btn-text-short{display:none}
+    .tutorial-modal-body{padding:20px;display:flex;flex-direction:column;max-height:85vh;box-sizing:border-box}
+    .tutorial-nav-pills{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px;margin-bottom:8px;border-bottom:1px solid var(--line);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .tutorial-nav-pills::-webkit-scrollbar{display:none}
+    .tutorial-pill-btn{white-space:nowrap;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:0 12px;font-size:12px;font-weight:800;height:30px;min-height:30px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;flex-shrink:0}
+    .tutorial-pill-btn:hover{background:var(--brand-soft);color:var(--brand-dark);border-color:var(--brand)}
+    .tutorial-scroll{overflow-y:auto;padding-right:4px;margin:8px 0 16px;max-height:calc(85vh - 160px);display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+    .tutorial-card{background:var(--preview-card-bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+    .tutorial-card-title{font-size:14px;font-weight:900;color:var(--brand-dark);display:flex;align-items:center;gap:6px;margin:0}
+    .tutorial-list{margin:0;padding-left:18px;font-size:12px;line-height:1.65;color:var(--ink);display:flex;flex-direction:column;gap:4px}
+    .tutorial-list strong{color:var(--brand-dark)}
+    .tutorial-tip{background:var(--surface);border-left:3px solid var(--brand);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--muted);line-height:1.5;margin-top:2px}
+    .tutorial-tip.warn{border-left-color:var(--amber);background:var(--amber-soft);color:var(--amber)}
+    .tutorial-dialog-footer{display:flex;align-items:center;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--line);margin-top:auto}
     @media(max-width:1120px){.topbar-repo-url{display:none}}
     @media(max-width:980px){.workspace-head{align-items:center}.revision-card{display:none}.topbar-opensource{display:none}}
-    @media(max-width:768px){:root{--name-width:58px;--total-width:38px;--project-width:46px}.topbar{height:44px;padding:0 10px}.topbar-opensource{display:none!important}.mobile-opensource{display:flex;align-items:center;justify-content:center;padding:2px 4px 6px;margin-bottom:2px}.mobile-opensource a{display:inline-flex;align-items:center;justify-content:center;gap:4px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:750;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-opensource svg{width:13px;height:13px;fill:currentColor;flex:0 0 auto}.brand{gap:6px;font-size:13px}.brand-mark{width:24px;height:24px;border-radius:7px;font-size:12px}.brand small{display:none}.user-cluster{gap:5px}.user-pill{padding:3px 6px;font-size:11px;max-width:80px;overflow:hidden;text-overflow:ellipsis}.topbar .btn{min-height:28px;height:28px;padding:0 6px;font-size:11px;border-radius:8px}main{padding:8px 6px 20px}.workspace-head{display:none}.toolbar{position:sticky;top:48px;padding:6px 8px;gap:6px;border-radius:12px;margin-bottom:8px;flex-direction:column;align-items:stretch}.toolbar-main{display:flex;align-items:center;gap:4px;width:100%;flex-wrap:wrap}.toolbar-main .field-inline{flex:1;min-width:68px}.toolbar-main .field-inline label{display:none}.toolbar-main .select{height:32px;min-height:32px;padding:0 18px 0 6px;font-size:12px;font-weight:800;border-radius:8px}.toolbar-main #periodSelect{max-width:130px;font-size:11px;padding:0 16px 0 6px}.toolbar-main #newPeriodBtn,.toolbar-main #periodLockBtn{height:32px;min-height:32px;padding:0 6px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #periodSettingsBtn{height:32px;min-height:32px;width:30px;min-width:30px;padding:0;border-radius:8px}.toolbar-main .segmented{height:32px;padding:2px;border-radius:8px;gap:2px}.toolbar-main .segmented button{height:28px;min-height:28px;padding:0 6px;font-size:11px;font-weight:800;border-radius:6px}.toolbar-main #structureBtn{height:32px;min-height:32px;padding:0 7px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #saveButton{height:32px;min-height:32px;padding:0 9px;font-size:12px;font-weight:900;white-space:nowrap;border-radius:8px}.toolbar-sub{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}.toolbar-status{flex:1;min-width:0;font-size:10px;gap:4px}.status-dot{width:6px;height:6px}.toolbar-status #statusText{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-sub-actions{display:flex;align-items:center;gap:6px}.toolbar-sub-actions .toggle{font-size:10px;gap:3px}.toolbar-sub-actions .toggle input{width:13px;height:13px}.toolbar-sub-actions #refreshButton{height:24px;min-height:24px;padding:0 6px;font-size:10px;border-radius:6px}.table-meta{min-height:28px;height:auto;padding:4px 8px;font-size:10px;flex-wrap:wrap;gap:4px 8px}.table-meta-left{width:100%;justify-content:space-between;gap:6px}.sort-badge{font-size:10px;padding:2px 6px 2px 8px;max-width:100%}.sort-badge-desc{max-width:180px}.adv-sort-modal{padding:14px 12px}.adv-sort-row{flex-wrap:wrap;gap:6px;padding:8px}.adv-sort-priority{width:100%;font-size:11px;color:var(--muted)}.adv-sort-field-select{flex:1 1 54%;min-width:100px;height:32px;min-height:32px;font-size:11px}.adv-sort-dir-select{flex:1 1 36%;min-width:85px;height:32px;min-height:32px;font-size:11px}.adv-sort-row-actions{width:100%;justify-content:flex-end;gap:6px}.adv-sort-add-bar{flex-direction:column;align-items:flex-start;gap:6px}.adv-sort-footer{flex-direction:column-reverse;gap:8px}.adv-sort-footer .btn{width:100%}.adv-sort-footer-right{width:100%;display:flex;gap:6px}.adv-sort-footer-right .btn{flex:1}.legend{gap:6px}.legend i{width:6px;height:6px}.table-scroll{max-height:calc(100vh - 150px);min-height:200px;-webkit-overflow-scrolling:touch}.score-table th{height:34px!important;padding:0!important}.th-sort-btn{padding:1px;gap:1px;flex-direction:column;justify-content:center;line-height:1}.th-label{font-size:10px;line-height:1.1;max-width:44px;text-align:center}.th-sort-icon{font-size:8px;line-height:1}.th-sort-btn:not(.is-sorted) .th-sort-icon{opacity:.35;font-size:7px}.name-cell{padding:3px 2px!important}.name-main{font-size:11px;font-weight:850;text-align:center;line-height:1.2}.group-chip{font-size:8px;padding:1px 3px;margin:1px auto 0;max-width:52px;display:block;text-align:center}.score-button{height:38px;min-height:38px;padding:2px 1px;gap:1px}.score-button.draft-cell:after{top:2px;right:2px;width:4px;height:4px}.cell-text{font-size:9px;line-height:1.1;max-width:44px;text-align:center}.cell-text.placeholder{font-size:8px;opacity:.5}.cell-score{font-size:10px;font-weight:850;line-height:1.1;justify-content:center;gap:0}.cell-warning{font-size:7px}.total-cell{font-size:11px!important;font-weight:900;padding:2px!important}.group-total-cell{font-size:10px!important;font-weight:850;padding:2px!important}.editor{display:block}.editor-panel{position:absolute;top:12px;left:50%;right:auto;bottom:auto;width:calc(100vw - 20px);max-width:390px;max-height:calc(100dvh - 24px);overflow:auto;border-radius:16px;padding:14px 12px;opacity:0;transform:translate(-50%,-12px);transition:.2s ease}.editor.open .editor-panel{opacity:1;transform:translate(-50%,0)}.editor textarea{min-height:72px;height:76px;margin:8px 0 6px;padding:8px 10px;font-size:13px}.preview-card{padding:6px 9px;margin-bottom:8px}.preview-score{font-size:18px}.editor-nav,.editor-actions{gap:6px}.editor-actions{margin-top:8px}.editor-nav .btn,.editor-actions .btn{min-height:32px;height:32px;font-size:12px}.editor-title h2{font-size:16px}.editor-title p{font-size:11px}.conflict-values{grid-template-columns:1fr}.entity-row{grid-template-columns:36px 1fr;padding:6px 8px}.entity-row>div:nth-child(3){grid-column:2}.entity-row .row-actions{grid-column:2;justify-content:flex-start}.ann-modal-body{padding:14px 12px;max-height:85vh}.ann-modal-scroll{max-height:calc(85vh - 120px);margin:10px 0 12px;gap:10px}.ann-dialog-footer{flex-direction:column;align-items:stretch;gap:10px}.ann-dialog-footer .btn{width:100%}.ann-notice-card{padding:10px 12px}.ann-notice-text{font-size:12px}.ann-log-item{padding:10px 12px}}
+    @media(max-width:768px){:root{--name-width:58px;--total-width:38px;--project-width:46px}.topbar{height:44px;padding:0 10px}.topbar-opensource{display:none!important}.mobile-opensource{display:flex;align-items:center;justify-content:center;padding:2px 4px 6px;margin-bottom:2px}.mobile-opensource a{display:inline-flex;align-items:center;justify-content:center;gap:4px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:750;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-opensource svg{width:13px;height:13px;fill:currentColor;flex:0 0 auto}.brand{gap:6px;font-size:13px}.brand-mark{width:24px;height:24px;border-radius:7px;font-size:12px}.brand small{display:none}.user-cluster{gap:5px}.user-pill{padding:3px 6px;font-size:11px;max-width:80px;overflow:hidden;text-overflow:ellipsis}.topbar .btn{min-height:28px;height:28px;padding:0 6px;font-size:11px;border-radius:8px}main{padding:8px 6px 20px}.workspace-head{display:none}.toolbar{position:sticky;top:48px;padding:6px 8px;gap:6px;border-radius:12px;margin-bottom:8px;flex-direction:column;align-items:stretch}.toolbar-main{display:flex;align-items:center;gap:4px;width:100%;flex-wrap:wrap}.toolbar-main .field-inline{flex:1;min-width:68px}.toolbar-main .field-inline label{display:none}.toolbar-main .select{height:32px;min-height:32px;padding:0 18px 0 6px;font-size:12px;font-weight:800;border-radius:8px}.toolbar-main #periodSelect{max-width:130px;font-size:11px;padding:0 16px 0 6px}.toolbar-main #newPeriodBtn,.toolbar-main #periodLockBtn{height:32px;min-height:32px;padding:0 6px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #periodSettingsBtn{height:32px;min-height:32px;width:30px;min-width:30px;padding:0;border-radius:8px}.toolbar-main .segmented{height:32px;padding:2px;border-radius:8px;gap:2px}.toolbar-main .segmented button{height:28px;min-height:28px;padding:0 6px;font-size:11px;font-weight:800;border-radius:6px}.toolbar-main #structureBtn{height:32px;min-height:32px;padding:0 7px;font-size:11px;white-space:nowrap;border-radius:8px}.toolbar-main #saveButton{height:32px;min-height:32px;padding:0 9px;font-size:12px;font-weight:900;white-space:nowrap;border-radius:8px}.toolbar-sub{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}.toolbar-status{flex:1;min-width:0;font-size:10px;gap:4px}.status-dot{width:6px;height:6px}.toolbar-status #statusText{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-sub-actions{display:flex;align-items:center;gap:6px}.toolbar-sub-actions .toggle{font-size:10px;gap:3px}.toolbar-sub-actions .toggle input{width:13px;height:13px}.toolbar-sub-actions #refreshButton{height:24px;min-height:24px;padding:0 6px;font-size:10px;border-radius:6px}.table-meta{min-height:28px;height:auto;padding:4px 8px;font-size:10px;flex-wrap:wrap;gap:4px 8px}.table-meta-left{width:100%;justify-content:space-between;gap:6px}.sort-badge{font-size:10px;padding:2px 6px 2px 8px;max-width:100%}.sort-badge-desc{max-width:180px}.adv-sort-modal{padding:14px 12px}.adv-sort-row{flex-wrap:wrap;gap:6px;padding:8px}.adv-sort-priority{width:100%;font-size:11px;color:var(--muted)}.adv-sort-field-select{flex:1 1 54%;min-width:100px;height:32px;min-height:32px;font-size:11px}.adv-sort-dir-select{flex:1 1 36%;min-width:85px;height:32px;min-height:32px;font-size:11px}.adv-sort-row-actions{width:100%;justify-content:flex-end;gap:6px}.adv-sort-add-bar{flex-direction:column;align-items:flex-start;gap:6px}.adv-sort-footer{flex-direction:column-reverse;gap:8px}.adv-sort-footer .btn{width:100%}.adv-sort-footer-right{width:100%;display:flex;gap:6px}.adv-sort-footer-right .btn{flex:1}.legend{gap:6px}.legend i{width:6px;height:6px}.table-scroll{max-height:calc(100vh - 150px);min-height:200px;-webkit-overflow-scrolling:touch}.score-table th{height:34px!important;padding:0!important}.th-sort-btn{padding:1px;gap:1px;flex-direction:column;justify-content:center;line-height:1}.th-label{font-size:10px;line-height:1.1;max-width:44px;text-align:center}.th-sort-icon{font-size:8px;line-height:1}.th-sort-btn:not(.is-sorted) .th-sort-icon{opacity:.35;font-size:7px}.name-cell{padding:3px 2px!important}.name-main{font-size:11px;font-weight:850;text-align:center;line-height:1.2}.group-chip{font-size:8px;padding:1px 3px;margin:1px auto 0;max-width:52px;display:block;text-align:center}.score-button{height:38px;min-height:38px;padding:2px 1px;gap:1px}.score-button.draft-cell:after{top:2px;right:2px;width:4px;height:4px}.cell-text{font-size:9px;line-height:1.1;max-width:44px;text-align:center}.cell-text.placeholder{font-size:8px;opacity:.5}.cell-score{font-size:10px;font-weight:850;line-height:1.1;justify-content:center;gap:0}.cell-warning{font-size:7px}.total-cell{font-size:11px!important;font-weight:900;padding:2px!important}.group-total-cell{font-size:10px!important;font-weight:850;padding:2px!important}.editor{display:block}.editor-panel{position:absolute;top:12px;left:50%;right:auto;bottom:auto;width:calc(100vw - 20px);max-width:390px;max-height:calc(100dvh - 24px);overflow:auto;border-radius:16px;padding:14px 12px;opacity:0;transform:translate(-50%,-12px);transition:.2s ease}.editor.open .editor-panel{opacity:1;transform:translate(-50%,0)}.editor textarea{min-height:72px;height:76px;margin:8px 0 6px;padding:8px 10px;font-size:13px}.preview-card{padding:6px 9px;margin-bottom:8px}.preview-score{font-size:18px}.editor-nav,.editor-actions{gap:6px}.editor-actions{margin-top:8px}.editor-nav .btn,.editor-actions .btn{min-height:32px;height:32px;font-size:12px}.editor-title h2{font-size:16px}.editor-title p{font-size:11px}.conflict-values{grid-template-columns:1fr}.entity-row{grid-template-columns:36px 1fr;padding:6px 8px}.entity-row>div:nth-child(3){grid-column:2}.entity-row .row-actions{grid-column:2;justify-content:flex-start}.ann-modal-body{padding:14px 12px;max-height:85vh}.ann-modal-scroll{max-height:calc(85vh - 120px);margin:10px 0 12px;gap:10px}.ann-dialog-footer{flex-direction:column;align-items:stretch;gap:10px}.ann-dialog-footer .btn{width:100%}.ann-notice-card{padding:10px 12px}.ann-notice-text{font-size:12px}.ann-log-item{padding:10px 12px}.tutorial-btn-text-full{display:none}.tutorial-btn-text-short{display:inline}#tutorialBtn{padding:0 5px}.tutorial-modal-body{padding:14px 12px;max-height:85vh}.tutorial-scroll{max-height:calc(85vh - 140px);margin:8px 0 12px;gap:10px}.tutorial-card{padding:10px 12px;border-radius:12px}.tutorial-card-title{font-size:13px}.tutorial-list{font-size:11px;padding-left:16px;line-height:1.55}.tutorial-dialog-footer .btn{width:100%}}
+    @media(max-width:390px){#tutorialBtn{padding:0 4px;font-size:10px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
@@ -91,7 +106,7 @@
         </a>
       </div>
     </div>
-    <div class="user-cluster"><span class="user-pill" id="userPill">正在验证…</span><button class="btn small icon-btn" id="themeBtn" title="切换浅色/深色主题" aria-label="切换浅色/深色主题" type="button"><span id="themeIcon">🌓</span></button><button class="btn small" id="announcementBtn" type="button" title="查看系统公告与更新记录" style="position:relative">📢 公告<span class="badge-dot hidden" id="announcementBadge" aria-label="有新公告"></span></button><button class="btn small" id="passwordBtn" type="button">修改密码</button><button class="btn small" id="logoutButton" type="button">退出登录</button></div>
+    <div class="user-cluster"><span class="user-pill" id="userPill">正在验证…</span><button class="btn small icon-btn" id="themeBtn" title="切换浅色/深色主题" aria-label="切换浅色/深色主题" type="button"><span id="themeIcon">🌓</span></button><button class="btn small" id="announcementBtn" type="button" title="查看系统公告与更新记录" style="position:relative">📢 公告<span class="badge-dot hidden" id="announcementBadge" aria-label="有新公告"></span></button><button class="btn small" id="tutorialBtn" type="button" title="查看使用教程与速查手册"><span class="tutorial-btn-text-full">📖 使用教程</span><span class="tutorial-btn-text-short">📖 教程</span></button><button class="btn small" id="passwordBtn" type="button">修改密码</button><button class="btn small" id="logoutButton" type="button">退出登录</button></div>
   </header>
   <main>
     <div class="mobile-opensource" aria-label="开源项目地址">
@@ -174,6 +189,91 @@
           <input type="checkbox" id="dontShowAgainCheck"> 无新公告时不再弹出
         </label>
         <button class="btn primary" id="closeAnnouncementBtn" type="button">我知道了</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="tutorialDialog" aria-labelledby="tutorialDialogTitle">
+    <div class="dialog-body tutorial-modal-body">
+      <div class="editor-title">
+        <div>
+          <h2 id="tutorialDialogTitle">📖 教师使用指南与速查手册</h2>
+          <p id="tutorialDialogSubTitle">掌握轻量记分秘诀，让班级管理更轻松</p>
+        </div>
+        <button class="close-btn" id="tutorialCloseBtn" type="button" aria-label="关闭使用教程">×</button>
+      </div>
+      <nav class="tutorial-nav-pills" aria-label="教程主题导航">
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecIntro">🌱 快速入门</button>
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecScore">✍️ 记分与期次</button>
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecLock">🔒 加锁防误触</button>
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecManage">👥 班级管理</button>
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecPurge">🎓 毕业换届</button>
+        <button class="tutorial-pill-btn" type="button" data-target="tutSecSort">⚡ 榜单与解惑</button>
+      </nav>
+      <div class="tutorial-scroll" id="tutorialScroll">
+        <section class="tutorial-card" id="tutSecIntro">
+          <h3 class="tutorial-card-title">🌱 1. 快速入门：认识工作台</h3>
+          <ul class="tutorial-list">
+            <li><strong>负责班级与期次</strong>：在顶部左侧随时切换您任课的班级，期次下拉菜单可自由选择当前记分单或历史期次。</li>
+            <li><strong>状态小圆点</strong>：顶栏右侧圆点实时提示状态 —— <strong>灰色</strong>表示已同步或暂无变动；<strong>橙色闪烁</strong>表示本地有刚修改的分数尚未提交云端；<strong>绿色</strong>表示刚刚安全保存完毕。</li>
+            <li><strong>护眼模式</strong>：点击右上角 <strong>🌓</strong> 按钮，可在浅色白纸底、深色护眼黑夜底或跟随手机/电脑系统之间随心切换。</li>
+          </ul>
+          <div class="tutorial-tip">💡 <strong>温馨提示</strong>：每次打分后，请记得点击右上角醒目的【💾 保存修改】按钮，分数将永久安全存入云端。</div>
+        </section>
+
+        <section class="tutorial-card" id="tutSecScore">
+          <h3 class="tutorial-card-title">✍️ 2. 打字记分与两周期次循环</h3>
+          <ul class="tutorial-list">
+            <li><strong>纯正负号自动算分</strong>：点击任意学生的评分格，输入文字时只要包含带加减号的数字（例如 <code>回答积极+2，迟到-1</code>），系统就会全自动算出得分（<code>+1</code>）。</li>
+            <li><strong>普通数字安全防污染</strong>：输入中出现不带符号的数字（例如 <code>9月1日随堂测验</code>），系统会<strong>自动忽略不计入分值</strong>并给出黄色提示，彻底杜绝日期或序号被误算为积分。</li>
+            <li><strong>两周一期清空循环</strong>：贴合学校每两周班会点评习惯。开完点评班会后，点击【新建期次】，新一期全班积分自动从 0 全新起步，上一期数据自动归档封存。</li>
+            <li><strong>期末总评双模式</strong>：学期末在期次下拉框选择【期末总评】，支持<strong>按期次横向汇总</strong>（看学生每期表现走势）与<strong>按项目合并汇总</strong>（看各项累计总分）。</li>
+          </ul>
+          <div class="tutorial-tip">💡 <strong>记分捷径</strong>：在打分输入框中，可以使用键盘 <code>回车</code> 或点击【上一格】【下一格】无缝切换邻近学生，记分快如飞。</div>
+        </section>
+
+        <section class="tutorial-card" id="tutSecLock">
+          <h3 class="tutorial-card-title">🔒 3. 加锁防误触与草稿保护</h3>
+          <ul class="tutorial-list">
+            <li><strong>班会点评完主动加锁</strong>：每次班会评比公布后，点击顶栏【🔒 锁定】按钮，该期次即刻进入只读保护模式，顶栏常驻 🔒 徽标，防止平时不小心碰触改动分数。</li>
+            <li><strong>发现漏分随时补录</strong>：如果事后发现某位学生有漏记或错记，只需点击顶栏【🔒 已锁定】按钮即可一键解锁，随时恢复补充修改。</li>
+            <li><strong>防手滑误关拦截</strong>：只要本地有未保存的草稿修改，若您不小心误触刷新或误关网页标签页，浏览器会立即触发防误关警告弹窗保护数据。</li>
+          </ul>
+          <div class="tutorial-tip">💡 <strong>草稿自愈</strong>：即使遇到电脑意外断电或网络短暂掉线，重新打开相同班级页面，未保存的草稿分依然会贴心完整恢复。</div>
+        </section>
+
+        <section class="tutorial-card" id="tutSecManage">
+          <h3 class="tutorial-card-title">👥 4. 班级学生、项目与小组管理</h3>
+          <ul class="tutorial-list">
+            <li><strong>管理入口</strong>：点击顶栏【👥 班级学生/项目】按钮，即可进入班级花名册与评分维度配置界面。</li>
+            <li><strong>随时增删改与调序</strong>：支持随时为班级添加新学生、新项目（如考勤、作业、纪律、劳动）和合作小组；点击【↑】【↓】可自由调整显示排列顺序。</li>
+            <li><strong>软归档与彻底删除</strong>：
+              <br>• <strong>归档（推荐）</strong>：学生转学或评分项目暂时停用时点击“归档”，历史所有期次的积分<strong>永久完整保留</strong>，并可随时一键恢复；
+              <br>• <strong>彻底删除</strong>：录错测试人名或脏数据时点击“彻底删除”，从班级中彻底抹除并同步清理该项积分。</li>
+          </ul>
+        </section>
+
+        <section class="tutorial-card" id="tutSecPurge">
+          <h3 class="tutorial-card-title">🎓 5. 毕业换届清空（高危安全锁）</h3>
+          <ul class="tutorial-list">
+            <li><strong>适用场景</strong>：毕业年级（初三/高三）学生毕业离校，或新学年全班大换届。</li>
+            <li><strong>保留规则，清空全员</strong>：一键原子清空全班学生花名册与各期次个人历史得分，<strong>完整保留您精心设计的全部评分项目、期次规则与小组结构</strong>，开学直接输入新一届学生名字即可继续使用。</li>
+            <li><strong>三重防误触安全锁</strong>：该操作配备三重最高防线 —— <strong>① 强制 10 秒冷静倒计时</strong>（防下意识点击） → <strong>② 动态随机心算算术题</strong>（如 <code>18 + 7 = ?</code>，防误操作） → <strong>③ 浏览器原生最终确认</strong>，彻底杜绝误触。</li>
+          </ul>
+          <div class="tutorial-tip warn">⚠️ <strong>极其注意</strong>：毕业清空学生不可逆，请仅在学生毕业离校或新学年换届交接时执行。</div>
+        </section>
+
+        <section class="tutorial-card" id="tutSecSort">
+          <h3 class="tutorial-card-title">⚡ 6. 榜单排序与常见小解惑</h3>
+          <ul class="tutorial-list">
+            <li><strong>表头单击一键排序</strong>：点击表格顶部的“学生姓名”，可在<strong>拼音 A-Z 升序 → 拼音 Z-A 降序 → 默认顺序</strong>之间循环切换；点击任意评分项目或总分，直接按分数高低排序。</li>
+            <li><strong>高级多级排序</strong>：点击【⚡ 高级排序】，可配置多个优先规则（例如“第一看总分降序，同分看考勤降序”）；如果所有条件分值都完全相同，系统<strong>强制按汉字拼音 A-Z 升序保底</strong>，确保排名绝对清晰、无争议。</li>
+            <li><strong>多人同时记分不怕冲突</strong>：多位任课教师同时打开同一个班级打分时，只要打分的不是同一个学生的同一格，系统自动安全合并；如果刚好碰巧修改了同一个格，会自动弹出双版本对比框供您选择保留哪一位老师的版本。</li>
+          </ul>
+        </section>
+      </div>
+      <div class="tutorial-dialog-footer">
+        <button class="btn primary" id="closeTutorialBtn" type="button">我知道了</button>
       </div>
     </div>
   </dialog>
@@ -399,7 +499,7 @@
     const state = { session:null, classData:null, etag:"", scope:"student", drafts:new Map(), draftStructureRevision:null, positions:[], activeIndex:0, editor:null, conflicts:[], saving:false, lastSaveAttempt:0, structureTab:"student", sort:{column:null, direction:null}, announcement:null, advSort:{active:false, rules:[]}, currentPeriodId:null, summaryMode:"period", unlockedPeriods:new Set() };
     const isLocalDemo = ["localhost","127.0.0.1"].includes(location.hostname) && new URLSearchParams(location.search).get("demo") === "1";
     const pinyinCollator = new Intl.Collator("zh-Hans-CN", { numeric: true, sensitivity: "base" });
-    const els = { userPill:$("userPill"), themeBtn:$("themeBtn"), themeIcon:$("themeIcon"), announcementBtn:$("announcementBtn"), announcementBadge:$("announcementBadge"), announcementDialog:$("announcementDialog"), announcementCloseBtn:$("announcementCloseBtn"), announcementNoticeSection:$("announcementNoticeSection"), announcementNoticeText:$("announcementNoticeText"), announcementChangelogSection:$("announcementChangelogSection"), announcementChangelogList:$("announcementChangelogList"), dontShowAgainCheck:$("dontShowAgainCheck"), closeAnnouncementBtn:$("closeAnnouncementBtn"), advSortBtn:$("advSortBtn"), sortBadgeWrap:$("sortBadgeWrap"), advSortDialog:$("advSortDialog"), advSortCloseBtn:$("advSortCloseBtn"), advSortList:$("advSortList"), addAdvSortRuleBtn:$("addAdvSortRuleBtn"), advSortHint:$("advSortHint"), resetAdvSortBtn:$("resetAdvSortBtn"), cancelAdvSortBtn:$("cancelAdvSortBtn"), applyAdvSortBtn:$("applyAdvSortBtn"), classSelect:$("classSelect"), periodSelect:$("periodSelect"), newPeriodBtn:$("newPeriodBtn"), periodLockBtn:$("periodLockBtn"), periodSettingsBtn:$("periodSettingsBtn"), scopeSegmented:$("scopeSegmented"), summaryModeSegmented:$("summaryModeSegmented"), summaryPeriodTab:$("summaryPeriodTab"), summaryProjectTab:$("summaryProjectTab"), groupTotalWrap:$("groupTotalWrap"), studentTab:$("studentTab"), groupTab:$("groupTab"), statusDot:$("statusDot"), statusText:$("statusText"), refreshButton:$("refreshButton"), saveButton:$("saveButton"), dirtyCount:$("dirtyCount"), groupTotalToggle:$("groupTotalToggle"), notice:$("notice"), emptyState:$("emptyState"), tableCard:$("tableCard"), scoreTable:$("scoreTable"), tableSummary:$("tableSummary"), revisionValue:$("revisionValue"), updatedValue:$("updatedValue"), pageTitle:$("pageTitle"), cellEditor:$("cellEditor"), editorHeading:$("editorHeading"), editorContext:$("editorContext"), scoreInput:$("scoreInput"), scorePreview:$("scorePreview"), parserHint:$("parserHint"), conflictDialog:$("conflictDialog"), conflictTitle:$("conflictTitle"), conflictDescription:$("conflictDescription"), conflictList:$("conflictList"), passwordDialog:$("passwordDialog"), passwordForm:$("passwordForm"), passwordError:$("passwordError"), initialPasswordNotice:$("initialPasswordNotice"), passwordPolicyRules:$("passwordPolicyRules"), newPasswordHint:$("newPasswordHint"), passwordCancel:$("passwordCancel"), passwordSubmit:$("passwordSubmit"), structureDialog:$("structureDialog"), structureTabs:$("structureTabs"), structureList:$("structureList"), structureCountInfo:$("structureCountInfo"), addEntityBtn:$("addEntityBtn"), tabStudent:$("tabStudent"), tabProject:$("tabProject"), tabGroup:$("tabGroup"), entityDialog:$("entityDialog"), entityForm:$("entityForm"), entityFormTitle:$("entityFormTitle"), entityFormDesc:$("entityFormDesc"), entityFormFields:$("entityFormFields"), entityFormError:$("entityFormError"), newPeriodDialog:$("newPeriodDialog"), newPeriodForm:$("newPeriodForm"), newPeriodCloseBtn:$("newPeriodCloseBtn"), newPeriodNameInput:$("newPeriodNameInput"), newPeriodStartInput:$("newPeriodStartInput"), newPeriodEndInput:$("newPeriodEndInput"), newPeriodNoteInput:$("newPeriodNoteInput"), newPeriodError:$("newPeriodError"), newPeriodCancelBtn:$("newPeriodCancelBtn"), newPeriodSubmitBtn:$("newPeriodSubmitBtn"), periodSettingsDialog:$("periodSettingsDialog"), periodSettingsForm:$("periodSettingsForm"), periodSettingsCloseBtn:$("periodSettingsCloseBtn"), editPeriodNameInput:$("editPeriodNameInput"), editPeriodStartInput:$("editPeriodStartInput"), editPeriodEndInput:$("editPeriodEndInput"), editPeriodNoteInput:$("editPeriodNoteInput"), periodSettingsError:$("periodSettingsError"), lockPeriodSettingBtn:$("lockPeriodSettingBtn"), deletePeriodBtn:$("deletePeriodBtn"), archivePeriodBtn:$("archivePeriodBtn"), periodSettingsCancelBtn:$("periodSettingsCancelBtn"), periodSettingsSubmitBtn:$("periodSettingsSubmitBtn"), openPurgeStudentsBtn:$("openPurgeStudentsBtn"), purgeStudentsDialog:$("purgeStudentsDialog"), purgeStudentsClose:$("purgeStudentsClose"), purgeCountdownBox:$("purgeCountdownBox"), purgeTimerCount:$("purgeTimerCount"), purgeChallengeBox:$("purgeChallengeBox"), purgeRefreshMathBtn:$("purgeRefreshMathBtn"), purgeMathQuestion:$("purgeMathQuestion"), purgeAnswerInput:$("purgeAnswerInput"), purgeAnswerHint:$("purgeAnswerHint"), purgeCancelBtn:$("purgeCancelBtn"), purgeConfirmBtn:$("purgeConfirmBtn"), toast:$("toast") };
+    const els = { userPill:$("userPill"), themeBtn:$("themeBtn"), themeIcon:$("themeIcon"), announcementBtn:$("announcementBtn"), announcementBadge:$("announcementBadge"), announcementDialog:$("announcementDialog"), announcementCloseBtn:$("announcementCloseBtn"), announcementNoticeSection:$("announcementNoticeSection"), announcementNoticeText:$("announcementNoticeText"), announcementChangelogSection:$("announcementChangelogSection"), announcementChangelogList:$("announcementChangelogList"), dontShowAgainCheck:$("dontShowAgainCheck"), closeAnnouncementBtn:$("closeAnnouncementBtn"), tutorialBtn:$("tutorialBtn"), tutorialDialog:$("tutorialDialog"), tutorialCloseBtn:$("tutorialCloseBtn"), closeTutorialBtn:$("closeTutorialBtn"), advSortBtn:$("advSortBtn"), sortBadgeWrap:$("sortBadgeWrap"), advSortDialog:$("advSortDialog"), advSortCloseBtn:$("advSortCloseBtn"), advSortList:$("advSortList"), addAdvSortRuleBtn:$("addAdvSortRuleBtn"), advSortHint:$("advSortHint"), resetAdvSortBtn:$("resetAdvSortBtn"), cancelAdvSortBtn:$("cancelAdvSortBtn"), applyAdvSortBtn:$("applyAdvSortBtn"), classSelect:$("classSelect"), periodSelect:$("periodSelect"), newPeriodBtn:$("newPeriodBtn"), periodLockBtn:$("periodLockBtn"), periodSettingsBtn:$("periodSettingsBtn"), scopeSegmented:$("scopeSegmented"), summaryModeSegmented:$("summaryModeSegmented"), summaryPeriodTab:$("summaryPeriodTab"), summaryProjectTab:$("summaryProjectTab"), groupTotalWrap:$("groupTotalWrap"), studentTab:$("studentTab"), groupTab:$("groupTab"), statusDot:$("statusDot"), statusText:$("statusText"), refreshButton:$("refreshButton"), saveButton:$("saveButton"), dirtyCount:$("dirtyCount"), groupTotalToggle:$("groupTotalToggle"), notice:$("notice"), emptyState:$("emptyState"), tableCard:$("tableCard"), scoreTable:$("scoreTable"), tableSummary:$("tableSummary"), revisionValue:$("revisionValue"), updatedValue:$("updatedValue"), pageTitle:$("pageTitle"), cellEditor:$("cellEditor"), editorHeading:$("editorHeading"), editorContext:$("editorContext"), scoreInput:$("scoreInput"), scorePreview:$("scorePreview"), parserHint:$("parserHint"), conflictDialog:$("conflictDialog"), conflictTitle:$("conflictTitle"), conflictDescription:$("conflictDescription"), conflictList:$("conflictList"), passwordDialog:$("passwordDialog"), passwordForm:$("passwordForm"), passwordError:$("passwordError"), initialPasswordNotice:$("initialPasswordNotice"), passwordPolicyRules:$("passwordPolicyRules"), newPasswordHint:$("newPasswordHint"), passwordCancel:$("passwordCancel"), passwordSubmit:$("passwordSubmit"), structureDialog:$("structureDialog"), structureTabs:$("structureTabs"), structureList:$("structureList"), structureCountInfo:$("structureCountInfo"), addEntityBtn:$("addEntityBtn"), tabStudent:$("tabStudent"), tabProject:$("tabProject"), tabGroup:$("tabGroup"), entityDialog:$("entityDialog"), entityForm:$("entityForm"), entityFormTitle:$("entityFormTitle"), entityFormDesc:$("entityFormDesc"), entityFormFields:$("entityFormFields"), entityFormError:$("entityFormError"), newPeriodDialog:$("newPeriodDialog"), newPeriodForm:$("newPeriodForm"), newPeriodCloseBtn:$("newPeriodCloseBtn"), newPeriodNameInput:$("newPeriodNameInput"), newPeriodStartInput:$("newPeriodStartInput"), newPeriodEndInput:$("newPeriodEndInput"), newPeriodNoteInput:$("newPeriodNoteInput"), newPeriodError:$("newPeriodError"), newPeriodCancelBtn:$("newPeriodCancelBtn"), newPeriodSubmitBtn:$("newPeriodSubmitBtn"), periodSettingsDialog:$("periodSettingsDialog"), periodSettingsForm:$("periodSettingsForm"), periodSettingsCloseBtn:$("periodSettingsCloseBtn"), editPeriodNameInput:$("editPeriodNameInput"), editPeriodStartInput:$("editPeriodStartInput"), editPeriodEndInput:$("editPeriodEndInput"), editPeriodNoteInput:$("editPeriodNoteInput"), periodSettingsError:$("periodSettingsError"), lockPeriodSettingBtn:$("lockPeriodSettingBtn"), deletePeriodBtn:$("deletePeriodBtn"), archivePeriodBtn:$("archivePeriodBtn"), periodSettingsCancelBtn:$("periodSettingsCancelBtn"), periodSettingsSubmitBtn:$("periodSettingsSubmitBtn"), openPurgeStudentsBtn:$("openPurgeStudentsBtn"), purgeStudentsDialog:$("purgeStudentsDialog"), purgeStudentsClose:$("purgeStudentsClose"), purgeCountdownBox:$("purgeCountdownBox"), purgeTimerCount:$("purgeTimerCount"), purgeChallengeBox:$("purgeChallengeBox"), purgeRefreshMathBtn:$("purgeRefreshMathBtn"), purgeMathQuestion:$("purgeMathQuestion"), purgeAnswerInput:$("purgeAnswerInput"), purgeAnswerHint:$("purgeAnswerHint"), purgeCancelBtn:$("purgeCancelBtn"), purgeConfirmBtn:$("purgeConfirmBtn"), toast:$("toast") };
     let entitySubmitCallback = null;
     let modalDraftRules = [];
 
@@ -1744,6 +1844,31 @@
       els.announcementDialog.close();
     }
 
+    function handleOpenTutorial() {
+      if (els.tutorialDialog) {
+        els.tutorialDialog.showModal();
+      }
+    }
+
+    function handleCloseTutorial() {
+      if (els.tutorialDialog) {
+        els.tutorialDialog.close();
+      }
+    }
+
+    function setupTutorialNav() {
+      const navButtons = document.querySelectorAll(".tutorial-pill-btn");
+      navButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
+          const targetEl = $(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+    }
+
     function checkPasswordChangeRequirement() {
       if (state.session?.initialPasswordChanged === false) {
         openPasswordModal(true);
@@ -1808,6 +1933,17 @@
     els.announcementBtn.addEventListener("click", handleOpenAnnouncement);
     els.announcementCloseBtn.addEventListener("click", handleCloseAnnouncement);
     els.closeAnnouncementBtn.addEventListener("click", handleCloseAnnouncement);
+    if (els.tutorialBtn) els.tutorialBtn.addEventListener("click", handleOpenTutorial);
+    if (els.tutorialCloseBtn) els.tutorialCloseBtn.addEventListener("click", handleCloseTutorial);
+    if (els.closeTutorialBtn) els.closeTutorialBtn.addEventListener("click", handleCloseTutorial);
+    if (els.tutorialDialog) {
+      els.tutorialDialog.addEventListener("click", (e) => {
+        if (e.target === els.tutorialDialog) {
+          handleCloseTutorial();
+        }
+      });
+    }
+    setupTutorialNav();
     els.advSortBtn.addEventListener("click", openAdvSortDialog);
     els.advSortCloseBtn.addEventListener("click", () => els.advSortDialog.close());
     els.cancelAdvSortBtn.addEventListener("click", () => els.advSortDialog.close());

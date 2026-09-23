@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/mayunqing1230/Cloud-Score"><img src="https://img.shields.io/badge/GitHub-mayunqing1230%2FCloud--Score-blue?logo=github" alt="GitHub Repo"></a>
-  <img src="https://img.shields.io/badge/Version-v1.8.0-brightgreen.svg" alt="Version: v1.8.0">
+  <img src="https://img.shields.io/badge/Version-v1.9.0-brightgreen.svg" alt="Version: v1.9.0">
   <img src="https://img.shields.io/badge/Architecture-Serverless%20%7C%204--Files-orange.svg" alt="Serverless">
   <img src="https://img.shields.io/badge/Tests-40%2F40%20Pass-success.svg" alt="Tests">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
@@ -30,7 +30,14 @@
 - **Teacher**: Supports self-service password changes. Manages students, scoring projects, groups, and periods within authorized classes (add, edit, reorder, soft-archive, delete permanently, and whole-class graduation purge).
 - **Strict Path Whitelist & Mutual Isolation**: Only `/login`, `/admin`, `/teacher`, and `/api/*` are accessible. All unauthorized probes, hidden files, and root path requests are strictly 302 redirected to `/login.html`. Teachers cannot access the admin console; admins cannot access the teacher ledger; unauthenticated requests are strictly blocked.
 
-### 3. Periodic Score Archiving, Bi-directional Locking & Term-End Summary Views (v1.7.1 Upgraded)
+### 3. Teacher Tutorial Center & Mobile Anti-Line-Break Adaptation (v1.9.0 New)
+- **Zero Backend Changes & Pure Frontend**: 100% natively implemented in `teacher.html` with zero external dependencies, zero additional network round-trips, and zero R2 storage overhead.
+- **Teacher-Centric Plain Language**: Avoids technical jargon, using classroom-friendly explanations for signed number scoring, unsigned number filtering, bi-weekly clean-slate cycles, term-end dual summaries, post-meeting locking & unlocking, roster management with soft archiving, graduation cohort purges, and multi-level priority sorting with Pinyin fallback.
+- **6 Fast Navigation Topic Pills**: Quick Start, Scoring & Periods, Locking & Anti-Misclick, Class Management, Graduation Purge, and Leaderboard & FAQs with smooth scrolling (`scrollIntoView`).
+- **Compact Mobile Header without Line Breaks**: Displays `📖 使用教程` on desktop and auto-collapses to `📖 教程` on mobile viewports ($\le$768px and $\le$390px) with tuned padding, guaranteeing a 100% single-line header without wrapping or horizontal overflow.
+- **Effortless Instant Exit**: Closeable via top-right `×` button, bottom primary button, keyboard `Esc`, or touching the dark modal backdrop anytime without mandatory multi-step tutorials.
+
+### 4. Periodic Score Archiving, Bi-directional Locking & Term-End Summary Views (v1.7.1 Upgraded)
 - **Bi-Weekly Cycles & Fresh Starts**: Tailored for schools conducting class meetings every two weeks. When reviewing is complete, teachers tap **[+ New Period]**. The previous cycle is automatically locked and archived, all rosters and custom evaluation projects are inherited, and score cells start fresh from zero.
 - **Bi-directional Period Locking & Active Misclick Prevention (v1.7.1 New)**:
   - **Persistent Topbar Lock Button**: Always visible in regular period views, displaying `🔓 Editable (Click to Lock)` when unlocked, and `🔒 Locked (Click to Unlock)` with an amber alert style when locked; 1-click seamless toggle;
@@ -43,7 +50,7 @@
   - **Mode B (By Project Cumulative)**: Columns display semester-long totals grouped by individual evaluation projects (`Name | Chinese Total | Math Total | ... | Grand Total`).
 - **Seamless Backwards Compatibility**: Legacy classes are automatically and non-destructively migrated to "Period 1 (Initial Period)" on first read, guaranteeing zero data loss.
 
-### 4. Full-Entity Physical Deletion & Graduation Purge Security Lock (v1.7.0 New)
+### 5. Full-Entity Physical Deletion & Graduation Purge Security Lock (v1.7.0 New)
 - **Complete Permanent Physical Deletion**:
   - Supports permanent physical deletion of students, evaluation projects, groups, periods, teacher accounts, and class directories for student graduation, transfers, teacher turnover, or test data cleanup;
   - **Direct Deletion Without Archiving**: In active lists, a **[Delete]** button sits directly beside **[Archive]** for immediate cleanup, alongside permanent deletion options in archived views;
@@ -59,7 +66,7 @@
   - Admin class management fully includes a **[Periods]** tab supporting creation, editing, lock toggling, archiving, and deletion;
   - All direct deletion and graduation purge actions are equally accessible in both teacher and admin panels.
 
-### 5. Global Password Security Policy & Initial Password Tracking (v1.5.0 New)
+### 6. Global Password Security Policy & Initial Password Tracking (v1.5.0 New)
 - **Configurable Global Password Strength Policy**: Administrators can enable/disable password complexity requirements on demand with modular rules:
   - Minimum length (customizable between 6–32 characters);
   - Require uppercase letters (A-Z);
@@ -71,23 +78,23 @@
 - **Teacher Login Password Modal & Real-Time Rule Feedback**: Unmodified accounts automatically trigger a password change modal upon login. Supports both **Reminder Mode** (skippable) and **Mandatory Mode** (blocks exit/Esc). Features real-time dynamic checkmarks (✓/○) beneath the input field as criteria are satisfied.
 - **Emergency Bulk Reset Operation**: Provides a protected **[⚠️ Require All Teachers to Reset Password]** action with double confirmation, resetting all active accounts in one click for school-wide security compliance.
 
-### 6. Pure Frontend Multi-Level Custom Sorting & Fallback Pinyin Collation (v1.4.0 New)
+### 7. Pure Frontend Multi-Level Custom Sorting & Fallback Pinyin Collation (v1.4.0 New)
 - **Pure Frontend Execution**: Sorting calculations run 100% in client-side memory and rendering pipelines without extra API requests or backend storage overhead.
 - **Multi-Level Custom Priority Rules**: Teachers can open the **[⚡ Advanced Sort]** modal to configure multiple sorting levels (Personal Total, Group Total, or any custom scoring project) with independent ascending/descending directions, reordering priority via intuitive [↑] and [↓] controls.
 - **Mandatory Chinese Pinyin A-Z Fallback**: When records tie on all specified sorting levels, the system automatically applies an internationalized Chinese Pinyin (`Intl.Collator("zh-Hans-CN")`) ascending collation fallback, guaranteeing deterministic and stable roster ordering.
 - **Visual Status Badge & Mutual Exclusion**: A colorful status badge appears above the table displaying active priority rules with a 1-click `[×]` clear button. Clicking any single column header gracefully takes precedence. Rules are persisted locally per class and automatically reset to default when switching classes.
 
-### 7. System Announcements & Changelog Timeline (v1.3.0 New)
+### 8. System Announcements & Changelog Timeline (v1.3.0 New)
 - **Dual Modules (Notice & Timeline)**: Admins can publish pinned announcements (with formatted text) and release changelog cards (version number, date, detailed change log).
 - **Active Release vs. Silent Update**: Choose between **Publish as New Announcement** (re-triggers popup for all teachers) or **Silent Update** (fixes typos without re-prompting).
 - **Native Modal with Anti-Fatigue Cookies**: Automatically pops up centered on login using native `<dialog>` elements (zero browser popup blocker issues). Supports "Do not show again unless new announcement" remembered via teacher-isolated cookies. A permanent **[📢 Announcements]** topbar button with an unread indicator allows on-demand review anytime.
 
-### 8. Excel-like Intelligent Scoring & Conflict Resolution
+### 9. Excel-like Intelligent Scoring & Conflict Resolution
 - **Natural Language Score Parsing**: Table cells accept mixed Chinese/English text comments and score values (e.g., `[Active in class +2] Late -1` $\rightarrow$ net score `+1`). Only numbers with explicit `+` or `-` signs are summed; unsigned numbers (e.g. dates like `20260901`) are safely ignored with a friendly visual yellow badge.
 - **Local Draft Caching & Anti-Loss Protection**: Unsaved edits are immediately preserved in `sessionStorage`, seamlessly restored after unexpected page reloads or network drops. Active uncommitted drafts trigger standard browser `beforeunload` dialogs to prevent accidental tab closing.
 - **Optimistic Concurrency Conflict Arbitration**: When multiple teachers update the same student cell simultaneously, an interactive conflict resolution panel lets teachers inspect side-by-side differences and choose between server latest vs. local draft values item-by-item.
 
-### 9. Desktop & Mobile Responsive Experience with Dark Mode
+### 10. Desktop & Mobile Responsive Experience with Dark Mode
 - **Universal Dark Mode**: Defaults to system color scheme (`prefers-color-scheme: dark`) with a manual ☀️/🌙/🌓 three-state toggle persisted to `localStorage`. All screens and modals feature hand-tuned eye-protective color palettes.
 - **Desktop (PC)**: Sticky frozen columns (Student Name on left, Total on right, Header on top); keyboard arrow key navigation for rapid grading; centered popup drawers.
 - **Mobile Responsive Layout (v1.5.1 Anti-Anomaly Design)**:
@@ -96,7 +103,7 @@
   - Compact floating toolbar (~68px height) displaying **6+ scoring projects simultaneously** with smooth horizontal swipe;
   - Top-anchored score editing drawer (`top: 12px`) completely avoiding virtual software keyboard occlusion.
 
-### 10. Enterprise-Grade Security (v1.8.0 Upgraded)
+### 11. Enterprise-Grade Security (v1.8.0 Upgraded)
 - **Pure Mathematics Challenge Captcha**: Dynamic arithmetic challenges (addition, subtraction, multiplication) eliminating image rendering and mobile browser compatibility glitches.
 - **Compound Anti-Brute-Force & Campus Network Misblock Prevention**:
   - **`IP + Account` Composite Key Lock**: 8 consecutive password failures for a specific account only lock that account for 2 minutes; other teachers sharing the same campus network outbound IP (NAT) remain completely unaffected, eliminating the "one teacher wrong, whole school locked" misblocking and student DoS vulnerability;
@@ -115,7 +122,7 @@ The entire production system is composed of strictly 4 pure native core files wi
 ├── _worker.js         # Cloudflare Pages Advanced Mode backend API router & security engine
 ├── login.html         # Login page with theme toggle & math challenge captcha
 ├── admin.html         # Administrator control panel (teachers, classes, period management, password policy, announcements)
-├── teacher.html       # Teacher score ledger, period lock/unlock, graduation purge, advanced sorting & password change
+├── teacher.html       # Teacher score ledger, period lock/unlock, tutorial center, graduation purge, advanced sorting & password change
 ├── LICENSE            # MIT License text
 ├── README.md          # Comprehensive Chinese Documentation
 └── README.en.md       # Comprehensive English Documentation
